@@ -1,4 +1,4 @@
-# 🚀 Dhanush Gopi | Developer Portfolio
+# 🚀 Dhanush Gopi Kavala | Developer Portfolio
 
 A responsive, high-performance personal portfolio showcasing my software engineering projects, technical skills, and experience. Built with modern web technologies and integrated with AI capabilities powered by Google Gemini.
 
