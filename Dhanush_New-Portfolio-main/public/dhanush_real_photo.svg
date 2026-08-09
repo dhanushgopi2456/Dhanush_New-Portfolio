@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600" width="100%" height="100%">
+  <defs>
+    <!-- Background Corporate Glass Entrance Gradient -->
+    <linearGradient id="bg_wall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="35%" stop-color="#475569"/>
+      <stop offset="70%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Glass Reflections -->
+    <linearGradient id="glass_reflect" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <!-- Shirt Beige Horizontal Stripe Pattern -->
+    <linearGradient id="shirt_base" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e8d5c4"/>
+      <stop offset="100%" stop-color="#cbb5a0"/>
+    </linearGradient>
+
+    <!-- Wood Railing Top -->
+    <linearGradient id="wood_rail" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a16207"/>
+      <stop offset="50%" stop-color="#ca8a04"/>
+      <stop offset="100%" stop-color="#854d0e"/>
+    </linearGradient>
+
+    <!-- Chrome Railing Post -->
+    <linearGradient id="chrome_post" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <!-- Skin Tone Gradient -->
+    <linearGradient id="skin" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e29e68"/>
+      <stop offset="100%" stop-color="#c27d48"/>
+    </linearGradient>
+
+    <filter id="bokeh_blur">
+      <feGaussianBlur stdDeviation="25"/>
+    </filter>
+  </defs>
+
+  <!-- 1. Background Architecture: Modern Corporate Glass Entrance -->
+  <rect width="900" height="1600" fill="url(#bg_wall)"/>
+
+  <!-- Glass Entrance Door Frames -->
+  <rect x="50" y="80" width="380" height="1000" fill="none" stroke="#64748b" stroke-width="4" opacity="0.4"/>
+  <rect x="470" y="80" width="380" height="1000" fill="none" stroke="#64748b" stroke-width="4" opacity="0.4"/>
+
+  <!-- Blurred Indoor Ceiling Lights (Bokeh Effect) -->
+  <circle cx="200" cy="220" r="45" fill="#fef08a" opacity="0.35" filter="url(#bokeh_blur)"/>
+  <circle cx="680" cy="220" r="50" fill="#fef08a" opacity="0.35" filter="url(#bokeh_blur)"/>
+  <circle cx="450" cy="180" r="35" fill="#ffffff" opacity="0.4" filter="url(#bokeh_blur)"/>
+
+  <!-- Tiled Flooring -->
+  <path d="M 0 1100 L 900 1100 L 900 1600 L 0 1600 Z" fill="#1e293b"/>
+  <line x1="0" y1="1250" x2="900" y2="1250" stroke="#334155" stroke-width="3"/>
+  <line x1="0" y1="1420" x2="900" y2="1420" stroke="#334155" stroke-width="3"/>
+  <line x1="300" y1="1100" x2="200" y2="1600" stroke="#334155" stroke-width="2"/>
+  <line x1="600" y1="1100" x2="700" y2="1600" stroke="#334155" stroke-width="2"/>
+
+  <!-- 2. Glass Balcony Barrier on Left with Chrome Posts -->
+  <rect x="0" y="750" width="360" height="500" fill="url(#glass_reflect)"/>
+  <rect x="0" y="750" width="360" height="500" fill="none" stroke="#94a3b8" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Chrome Posts -->
+  <rect x="330" y="720" width="24" height="600" fill="url(#chrome_post)"/>
+  <circle cx="342" cy="880" r="12" fill="#475569"/>
+
+  <!-- Wooden Top Handrail Leaned Upon -->
+  <rect x="0" y="710" width="370" height="28" rx="8" fill="url(#wood_rail)" stroke="#78350f" stroke-width="2"/>
+
+  <!-- 3. DHANUSH GOPI KAVALA - Full Body Standing Figure -->
+  
+  <!-- Shadow on Floor -->
+  <ellipse cx="530" cy="1540" rx="160" ry="25" fill="#020617" opacity="0.6"/>
+
+  <!-- Clean White Sneakers -->
+  <!-- Left Shoe -->
+  <path d="M 590 1480 Q 640 1480 665 1510 Q 650 1540 580 1540 Q 560 1520 575 1490 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <path d="M 580 1530 L 655 1530" stroke="#94a3b8" stroke-width="4"/>
+  <!-- Right Shoe -->
+  <path d="M 515 1420 Q 565 1420 585 1450 Q 570 1480 500 1480 Q 480 1460 495 1430 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <path d="M 500 1470 L 575 1470" stroke="#94a3b8" stroke-width="4"/>
+
+  <!-- Slim Fit Black Trousers / Jeans -->
+  <!-- Crossed Legs Pose (Left Leg Crossed Behind Right Leg) -->
+  <path d="M 430 880 L 520 880 L 610 1490 L 550 1490 Z" fill="#0f172a"/>
+  <path d="M 410 880 L 480 880 L 550 1430 L 480 1430 Z" fill="#1e293b"/>
+  <line x1="475" y1="880" x2="550" y2="1490" stroke="#020617" stroke-width="3"/>
+
+  <!-- Tan/Beige Horizontally Striped Shirt Body -->
+  <path d="M 390 420 Q 480 400 580 425 L 630 890 Q 500 930 400 890 Z" fill="url(#shirt_base)"/>
+
+  <!-- White Horizontal Stripes on Shirt -->
+  <line x1="400" y1="480" x2="590" y2="485" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="402" y1="540" x2="600" y2="545" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="405" y1="600" x2="610" y2="605" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="408" y1="660" x2="615" y2="665" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="410" y1="720" x2="620" y2="725" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="412" y1="780" x2="622" y2="785" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+  <line x1="415" y1="840" x2="625" y2="845" stroke="#ffffff" stroke-width="5" opacity="0.8"/>
+
+  <!-- Shirt Collar & Open Placket -->
+  <path d="M 460 410 L 485 490 L 510 410 Z" fill="#f5e6d3"/>
+  <path d="M 485 490 L 485 640" stroke="#b45309" stroke-width="2.5" stroke-dasharray="8,8"/>
+  <!-- Buttons -->
+  <circle cx="485" cy="520" r="3" fill="#78350f"/>
+  <circle cx="485" cy="570" r="3" fill="#78350f"/>
+
+  <!-- Arms -->
+  <!-- Right Arm Leaning on Railing -->
+  <path d="M 390 420 L 300 700 L 350 710 L 430 450 Z" fill="url(#shirt_base)"/>
+  <!-- Rolled Sleeve Cuff -->
+  <rect x="290" y="680" width="60" height="24" rx="4" fill="#f5e6d3" stroke="#b45309" stroke-width="1.5"/>
+  <!-- Forearm and Right Hand on Wood Rail -->
+  <path d="M 300 700 Q 280 715 310 720 Q 340 720 350 705 Z" fill="url(#skin)"/>
+
+  <!-- Left Arm with Hand in Pocket & Smartwatch -->
+  <path d="M 580 425 L 670 650 L 610 820 L 560 810 Z" fill="url(#shirt_base)"/>
+  <rect x="620" y="640" width="50" height="22" rx="4" fill="#f5e6d3" stroke="#b45309" stroke-width="1.5"/>
+  <!-- Left Forearm -->
+  <path d="M 630 660 L 585 810" stroke="#c27d48" stroke-width="32" stroke-linecap="round"/>
+  <!-- White Smartwatch on Left Wrist -->
+  <rect x="600" y="730" width="22" height="28" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <rect x="604" y="734" width="14" height="20" rx="3" fill="#0f172a"/>
+
+  <!-- Neck -->
+  <rect x="460" y="360" width="50" height="60" fill="url(#skin)"/>
+
+  <!-- Head & Face -->
+  <ellipse cx="485" cy="270" rx="75" ry="95" fill="url(#skin)"/>
+
+  <!-- Ears -->
+  <ellipse cx="405" cy="270" rx="14" ry="22" fill="#c27d48"/>
+  <ellipse cx="565" cy="270" rx="14" ry="22" fill="#c27d48"/>
+
+  <!-- Stylish Dark Blue/Black Rectangular Glasses -->
+  <rect x="420" y="240" width="58" height="42" rx="10" fill="none" stroke="#1e3a8a" stroke-width="6"/>
+  <rect x="492" y="240" width="58" height="42" rx="10" fill="none" stroke="#1e3a8a" stroke-width="6"/>
+  <line x1="478" y1="258" x2="492" y2="258" stroke="#1e3a8a" stroke-width="6"/>
+  <line x1="405" y1="255" x2="420" y2="255" stroke="#1e3a8a" stroke-width="4"/>
+  <line x1="550" y1="255" x2="565" y2="255" stroke="#1e3a8a" stroke-width="4"/>
+
+  <!-- Eyes behind Glasses -->
+  <circle cx="449" cy="261" r="8" fill="#0f172a"/>
+  <circle cx="521" cy="261" r="8" fill="#0f172a"/>
+  <circle cx="451" cy="259" r="2.5" fill="#ffffff"/>
+  <circle cx="523" cy="259" r="2.5" fill="#ffffff"/>
+
+  <!-- Eyebrows -->
+  <path d="M 425 232 Q 450 224 475 232" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 495 232 Q 520 224 545 232" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <path d="M 485 260 L 480 295 Q 487 302 494 295 L 490 260" fill="none" stroke="#b45309" stroke-width="3"/>
+
+  <!-- Mustache -->
+  <path d="M 455 312 Q 485 320 515 312 Q 485 316 455 312 Z" fill="#0f172a"/>
+
+  <!-- Confident Smile -->
+  <path d="M 458 328 Q 485 348 512 328" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Styled Black Hair with Volume -->
+  <path d="M 400 240 C 390 140, 580 140, 570 240 C 580 180, 400 180, 400 240 Z" fill="#020617"/>
+  <path d="M 410 230 Q 485 130 560 230 Q 485 170 410 230 Z" fill="#0f172a"/>
+
+  <!-- Overlay Watermark Badge -->
+  <rect x="250" y="1500" width="400" height="60" rx="30" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+  <text x="450" y="1538" font-family="system-ui, sans-serif" font-size="20" font-weight="extrabold" fill="#f0f9ff" text-anchor="middle">DHANUSH GOPI KAVALA</text>
+</svg>
