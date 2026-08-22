@@ -216,8 +216,8 @@ export const RESUME_DATA = {
         "Designed and deployed modular, scalable RESTful APIs using Node.js, Express, and MongoDB/Mongoose to orchestrate secure user, product, and cart management workflows."
       ],
       techStack: ["React", "Vite", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
-      repoUrl: "https://github.com/dhanushgopi2456/FreshMart",
-      demoUrl: "https://freshmart-demo.vercel.app",
+      repoUrl: "https://github.com/dhanushgopi2456/FreshMart-v2",
+      demoUrl: "https://fresh-mart-v2.vercel.app",
       featured: true,
       image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
       mockType: "ecommerce"
