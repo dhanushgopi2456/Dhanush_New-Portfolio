@@ -235,8 +235,8 @@ export const RESUME_DATA = {
         "Designed a highly responsive UI with React.js and Tailwind CSS, integrating real-time state updates, custom filters, and robust Mongoose schemas."
       ],
       techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
-      repoUrl: "https://github.com/dhanushgopi2456/Team-Task-Manager",
-      demoUrl: "https://team-task-manager-demo.vercel.app",
+      repoUrl: "https://github.com/dhanushgopi2456/team-task-manager-v2",
+      demoUrl: "https://client-psi-three-59.vercel.app",
       featured: true,
       image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
       mockType: "kanban"
