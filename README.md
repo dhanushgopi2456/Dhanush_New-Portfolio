@@ -37,7 +37,7 @@
 > **A single place to explore my work, skills, projects, and developer journey.**
 
 🔗 **Live Portfolio:**
-`https://dhanush-portfolio-9tompwtb3-dhanush-gopis-projects.vercel.app`
+`https://dhanush-new-portfolio.vercel.app`
 
 ---
 
