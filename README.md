@@ -1,127 +1,237 @@
-# 🚀 Dhanush Gopi Kavala — Developer Portfolio
+# 🚀 Dhanush Gopi Kavala — Software Engineer Portfolio
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:2563eb,100:06b6d4&height=220&section=header&text=Dhanush%20Gopi%20Kavala&fontSize=45&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Software%20Engineer%20%7C%20Full-Stack%20Developer&descAlignY=58&descSize=18" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:2563eb,100:06b6d4&height=220&section=header&text=Dhanush%20Gopi%20Kavala&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=38" width="100%" />
 </p>
 
 <p align="center">
-  <strong>💻 Software Engineer • ⚡ Full-Stack Developer • 🌐 Web Developer • 🤖 AI/ML Enthusiast</strong>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=1000&color=2563EB&center=true&vCenter=true&width=800&lines=Software+Engineer;Full-Stack+Developer;React+%7C+Node.js+%7C+Python+%7C+Java;Building+Modern+%26+Scalable+Applications;Always+Learning+%7C+Always+Building" alt="Typing SVG" />
 </p>
 
 <p align="center">
-  Building modern, responsive, and practical software applications with a focus on clean UI, scalable architecture, and real-world problem solving.
+  <a href="https://dhanush-new-portfolio.vercel.app">
+    <img src="https://img.shields.io/badge/🌐%20Live%20Portfolio-Visit%20Now-2563EB?style=for-the-badge" />
+  </a>
+  <a href="https://github.com/dhanushgopi2456">
+    <img src="https://img.shields.io/badge/GitHub-Dhanush%20Gopi-181717?style=for-the-badge&logo=github" />
+  </a>
+  <a href="https://www.linkedin.com/in/dhanush-gopi-kavala-a460a528b/">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin" />
+  </a>
 </p>
 
 <p align="center">
-
-<a href="https://dhanush-new-portfolio.vercel.app">
-<img src="https://img.shields.io/badge/🌐%20Live%20Portfolio-Visit%20Website-2563EB?style=for-the-badge" />
-</a>
-
-<a href="https://github.com/dhanushgopi2456">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-</a>
-
-<a href="https://www.linkedin.com/in/dhanush-gopi-kavala-a460a528b/">
-<img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
-</a>
-
+  <img src="https://komarev.com/ghpvc/?username=dhanushgopi2456&label=Portfolio%20Visitors&color=2563eb&style=for-the-badge" />
 </p>
 
 ---
 
-## 🧭 Developer Journey
+## 🌟 About This Portfolio
+
+> **A modern developer portfolio built to showcase real-world projects, technical skills, software engineering experience, and continuous learning.**
+
+This portfolio is designed as more than a traditional resume website.
+
+It brings together:
 
 ```text
-        🎓 Learn
-           │
-           ▼
-      🧠 Explore
-           │
-           ▼
-      💻 Build
-           │
-           ▼
-      🧪 Experiment
-           │
-           ▼
-       🚀 Deploy
-           │
-           ▼
-      📈 Improve
-           │
-           └───────────────► 🔄 Repeat
-```
-
-> **I believe the best way to learn software engineering is to build, break, debug, and build again.**
-
----
-
-# 🌐 Portfolio
-
-<div align="center">
-
-### ✨ One Place. Multiple Projects. One Developer Journey.
-
-| 🧑‍💻 Profile | 🛠️ Projects | 🧠 Skills | 📚 Experience |
-|:---:|:---:|:---:|:---:|
-| Developer Journey | Full-Stack Apps | Modern Tech Stack | Continuous Learning |
-
-<br />
-
-<a href="https://dhanush-new-portfolio.vercel.app">
-<img src="https://img.shields.io/badge/🚀%20EXPLORE%20MY%20PORTFOLIO-Visit%20Now-2563EB?style=for-the-badge&logo=vercel&logoColor=white" />
-</a>
-
-</div>
-
----
-
-# 👋 About Me
-
-I'm **Dhanush Gopi Kavala**, a software developer interested in building modern web applications and solving practical problems through technology.
-
-### 💡 What I Work With
-
-```text
-Frontend       ████████████████████  React • TypeScript • JavaScript
-Backend        ███████████████████   Node.js • Express • Python • Django
-Java Ecosystem ████████████████      Java • Spring Boot
-Databases      █████████████████     MongoDB • MySQL • SQLite
-AI / ML        █████████████         PyTorch • OpenCV
-Cloud          █████████████         Vercel • Netlify • AWS
-```
-
-### 🎯 Current Focus
-
-```text
-⚡ Full-Stack Development
-🏗️ Backend & API Development
-🗄️ Database Design
-☁️ Cloud Deployment
-🤖 AI / Machine Learning
-🧠 Data Structures & Algorithms
+                    ┌─────────────────────────┐
+                    │     👨‍💻 Dhanush Gopi      │
+                    │      Software Engineer   │
+                    └────────────┬────────────┘
+                                 │
+             ┌───────────────────┼───────────────────┐
+             ▼                   ▼                   ▼
+        💻 Projects          🧠 Skills          🚀 Experience
+             │                   │                   │
+             └───────────────────┼───────────────────┘
+                                 ▼
+                       🌐 Developer Portfolio
+                                 │
+                                 ▼
+                    🤝 Recruiters & Collaborators
 ```
 
 ---
 
-# 🏆 Project Highlights
+# ✨ Portfolio Highlights
 
-<div align="center">
+<table>
+<tr>
+<td width="50%">
 
-### 🚀 Selected Projects
+### 💻 Project Showcase
 
-</div>
+Explore full-stack and software engineering projects with:
 
-| Project | Description | Technologies |
-|---|---|---|
-| 🛒 **FreshMart** | Full-stack grocery e-commerce platform | React • TypeScript • Node.js • MongoDB |
-| 📋 **Team Task Manager** | Team productivity platform with RBAC and Kanban | React • Node.js • Express • MongoDB |
-| 🚛 **HOS Route Planner** | Commercial HOS route planning & ELD log generator | React • TypeScript • Express • Leaflet |
-| 💳 **1Fi Marketplace** | E-commerce & mutual-fund-backed EMI concept | React • Express • Prisma |
-| 🏬 **Online Stall Booking** | Event stall reservation and management system | React • Spring Boot • MySQL |
-| 👨‍💼 **Employee Management** | Django CRUD employee management system | Python • Django • SQLite |
-| 🏦 **N7 Modern Banking** | Modern responsive banking UI | React • Vite • Tailwind CSS |
+- 🔗 Live demonstrations
+- 📂 GitHub repositories
+- 🛠️ Technology stacks
+- 🎯 Key functionality
+- 🧩 Architecture details
+- 📈 Development highlights
+
+</td>
+
+<td width="50%">
+
+### 🧠 Technical Profile
+
+A structured overview of my development skills:
+
+- ⚛️ Frontend Engineering
+- 🟢 Backend Development
+- 🐍 Python Development
+- ☕ Java & Spring Boot
+- 🗄️ Databases
+- ☁️ Deployment & Cloud
+- 🤖 AI / ML
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+### 📱 Responsive Experience
+
+Designed for:
+
+📱 Mobile  
+⬇️  
+📲 Tablet  
+⬇️  
+💻 Desktop  
+⬇️  
+🖥️ Large Displays
+
+</td>
+
+<td>
+
+### 🎨 Modern UI
+
+Focused on:
+
+- Smooth interactions
+- Clean layouts
+- Responsive components
+- Modern typography
+- Visual hierarchy
+- Accessible interfaces
+
+</td>
+</tr>
+</table>
+
+---
+
+# 🚀 Featured Projects
+
+## 🧑‍💼 Team Task Manager
+
+> **Smart Teamwork. Clear Tasks. Better Results.**
+
+A full-stack team productivity platform featuring project management, Kanban workflows, analytics, notifications, and role-based access control.
+
+**Stack:**
+
+`React` `TypeScript` `Node.js` `Express` `MongoDB` `Tailwind CSS`
+
+**Highlights:**
+
+```text
+🔐 Authentication
+        ↓
+👥 Role-Based Access
+        ↓
+📁 Projects
+        ↓
+🗂️ Kanban Board
+        ↓
+✅ Task Management
+        ↓
+📊 Analytics
+        ↓
+🔔 Notifications
+```
+
+---
+
+## 🚛 HOS Route Planner & ELD Generator
+
+> **Commercial HOS Route Planning & FMCSA ELD Log Generation**
+
+A route-planning application designed around commercial Hours-of-Service workflows, route visualization, daily log generation, and automated rule validation.
+
+**Stack:**
+
+`React 19` `TypeScript` `Tailwind CSS` `Express` `Leaflet` `Motion`
+
+**Highlights:**
+
+- 🛣️ Route planning
+- 🗺️ Interactive maps
+- ⏱️ HOS scheduling
+- 📋 ELD daily logs
+- 🔍 Automated compliance checks
+- 📄 PDF generation
+- 🚀 Vercel-ready architecture
+
+---
+
+## 📱 1Fi Marketplace
+
+> **Next-Generation E-Commerce & Fintech Experience**
+
+A modern e-commerce platform combining product discovery, flexible EMI workflows, mutual-fund-backed credit concepts, authentication, and repayment dashboards.
+
+**Stack:**
+
+`React 19` `Vite` `Tailwind CSS` `Express` `Prisma` `SQLite/PostgreSQL`
+
+**Highlights:**
+
+```text
+🛍️ Product Discovery
+       ↓
+📦 Product Variants
+       ↓
+💳 Credit / EMI Flow
+       ↓
+📊 Repayment Dashboard
+       ↓
+🔐 Secure Authentication
+```
+
+---
+
+## 🏬 Online Stall Booking System
+
+A full-stack booking platform for exhibitions, trade fairs, and events.
+
+**Features:**
+
+- 👤 User registration
+- 🔐 Authentication
+- 🏪 Stall availability
+- 📅 Booking management
+- 🛠️ Admin dashboard
+- 📊 Booking monitoring
+
+**Stack:**
+
+`React` `Vite` `Java` `Spring Boot` `MySQL`
+
+---
+
+## 🧑‍💼 Employee Management System
+
+A Django-based employee management application implementing CRUD operations and database-driven administration.
+
+**Stack:**
+
+`Python` `Django` `SQLite` `HTML` `CSS` `Bootstrap`
 
 ---
 
@@ -129,156 +239,75 @@ Cloud          █████████████         Vercel • Netlif
 
 <p align="center">
 
-<img src="https://skillicons.dev/icons?i=react,typescript,javascript,html,css,tailwind,vite,nodejs,express,python,django,flask,java,spring,mongodb,mysql,sqlite,git,github,vercel,aws&perline=7" />
+### ⚛️ Frontend
+
+<img src="https://skillicons.dev/icons?i=react,typescript,javascript,html,css,tailwind,vite" />
+
+### ⚙️ Backend
+
+<img src="https://skillicons.dev/icons?i=nodejs,express,python,django,flask,java,spring" />
+
+### 🗄️ Databases
+
+<img src="https://skillicons.dev/icons?i=mongodb,mysql,postgres,sqlite" />
+
+### 🤖 AI / ML
+
+<img src="https://skillicons.dev/icons?i=python,pytorch,opencv" />
+
+### ☁️ Tools & Deployment
+
+<img src="https://skillicons.dev/icons?i=git,github,vscode,vercel,netlify,aws" />
 
 </p>
 
 ---
 
-# ⚛️ Frontend
-
-<div align="center">
-
-| Technology | Purpose |
-|:---:|:---|
-| ⚛️ React | Interactive UI |
-| 📘 TypeScript | Type-safe development |
-| 🟨 JavaScript | Web application logic |
-| ⚡ Vite | Fast development & build |
-| 🎨 Tailwind CSS | Modern responsive styling |
-| 🧩 Lucide Icons | UI iconography |
-| 🎬 Framer Motion / Motion | Animations & interactions |
-
-</div>
-
----
-
-# ⚙️ Backend & APIs
+# 📊 Development Focus
 
 ```text
-┌─────────────────────────────────────────────┐
-│              BACKEND STACK                 │
-├─────────────────────────────────────────────┤
-│                                             │
-│  🟢 Node.js          → Server Runtime       │
-│  🚂 Express.js       → REST APIs            │
-│  🐍 Python           → Backend / ML         │
-│  🎯 Django           → Web Applications     │
-│  🧪 Flask            → Lightweight APIs     │
-│  ☕ Java             → Enterprise Backend   │
-│  🌱 Spring Boot      → REST Applications    │
-│                                             │
-└─────────────────────────────────────────────┘
+                    SOFTWARE ENGINEERING
+                            │
+          ┌─────────────────┼─────────────────┐
+          │                 │                 │
+          ▼                 ▼                 ▼
+      FRONTEND           BACKEND           DATABASE
+          │                 │                 │
+       React             Node.js          MongoDB
+       TypeScript        Express          MySQL
+       Tailwind          Python           PostgreSQL
+       Vite              Django           SQLite
+                         Flask
+                         Java
+                         Spring Boot
 ```
-
----
-
-# 🗄️ Database Technologies
-
-<p align="center">
-
-<img src="https://skillicons.dev/icons?i=mongodb,mysql,sqlite,postgresql&perline=4" />
-
-</p>
-
-### Database Experience
-
-```text
-MongoDB       → NoSQL applications
-MySQL         → Relational applications
-SQLite        → Lightweight development
-PostgreSQL    → Production-oriented systems
-```
-
----
-
-# 🤖 AI / ML & Data
-
-```text
-                 🤖 AI / ML
-                     │
-       ┌─────────────┼─────────────┐
-       │             │             │
-       ▼             ▼             ▼
-   📊 Data       🧠 ML Models    👁️ Computer
-   Analysis                       Vision
-       │             │             │
-       ▼             ▼             ▼
-   NumPy         Regression     OpenCV
-   Pandas        Trees          PyTorch
-   Matplotlib    Random Forest
-   Seaborn       Clustering
-```
-
----
-
-# 🔐 Security & Networking
-
-My technical learning also covers core networking and security concepts:
-
-<p align="center">
-
-<img src="https://img.shields.io/badge/TCP%2FIP-00599C?style=for-the-badge" />
-<img src="https://img.shields.io/badge/HTTP%2FHTTPS-FF6F00?style=for-the-badge" />
-<img src="https://img.shields.io/badge/DNS-4285F4?style=for-the-badge" />
-<img src="https://img.shields.io/badge/TLS%2FSSL-2E7D32?style=for-the-badge" />
-<img src="https://img.shields.io/badge/IPsec-6A1B9A?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Kerberos-37474F?style=for-the-badge" />
-
-</p>
-
----
-
-# 📊 Skills Overview
-
-<div align="center">
-
-```text
-Frontend Development       ████████████████████
-Backend Development        ███████████████████
-Database Development      ██████████████████
-REST API Development      ███████████████████
-Full-Stack Development    ███████████████████
-Python Development        █████████████████
-Java Development          ███████████████
-AI / ML                    ███████████████
-Cloud & Deployment        ███████████████
-DSA & Problem Solving     █████████████████
-```
-
-</div>
 
 ---
 
 # 🏗️ Portfolio Architecture
 
 ```text
-                           🌐 VISITOR
-                              │
-                              ▼
-                 ┌─────────────────────────┐
-                 │      React Frontend     │
-                 │                         │
-                 │  ┌───────────────────┐  │
-                 │  │     Hero          │  │
-                 │  ├───────────────────┤  │
-                 │  │     About         │  │
-                 │  ├───────────────────┤  │
-                 │  │     Skills        │  │
-                 │  ├───────────────────┤  │
-                 │  │     Projects      │  │
-                 │  ├───────────────────┤  │
-                 │  │     Experience    │  │
-                 │  ├───────────────────┤  │
-                 │  │     Contact       │  │
-                 │  └───────────────────┘  │
-                 └────────────┬────────────┘
-                              │
-                              ▼
-                    ┌──────────────────┐
-                    │      Vercel      │
-                    │   Deployment     │
-                    └──────────────────┘
+                         🌐 VISITOR
+                             │
+                             ▼
+                  ┌─────────────────────┐
+                  │   Portfolio UI      │
+                  │ React + TypeScript  │
+                  └──────────┬──────────┘
+                             │
+          ┌──────────────────┼──────────────────┐
+          ▼                  ▼                  ▼
+     👨‍💻 About           💻 Projects        🧠 Skills
+          │                  │                  │
+          └──────────────────┼──────────────────┘
+                             ▼
+                       📬 Contact
+                             │
+                             ▼
+                    🚀 Deployment Layer
+                             │
+                             ▼
+                          Vercel
 ```
 
 ---
@@ -289,87 +318,61 @@ DSA & Problem Solving     █████████████████
 Dhanush_New-Portfolio/
 │
 ├── 📁 public/
-│   └── assets/
+│   └── 📁 assets/
 │
 ├── 📁 src/
-│   ├── components/
-│   ├── sections/
-│   ├── pages/
-│   ├── data/
-│   ├── assets/
-│   └── ...
+│   ├── 📁 components/
+│   ├── 📁 sections/
+│   ├── 📁 pages/
+│   ├── 📁 data/
+│   ├── 📁 assets/
+│   ├── App.tsx
+│   └── main.tsx
 │
 ├── 📄 package.json
-├── ⚙️ vite.config.ts
-├── 🎨 tailwind.config.*
-└── 📖 README.md
+├── 📄 vite.config.ts
+├── 📄 tailwind.config.*
+├── 📄 tsconfig.json
+└── 📄 README.md
 ```
 
 ---
 
-# 🖥️ Responsive Experience
+# ⚡ Performance & Design
 
-The portfolio is designed to adapt across different screen sizes.
+The portfolio is built with a strong focus on:
 
-```text
-        📱 MOBILE
-           │
-           ▼
-       📲 TABLET
-           │
-           ▼
-       💻 LAPTOP
-           │
-           ▼
-      🖥️ DESKTOP
-           │
-           ▼
-     🖥️ LARGE DISPLAY
-```
-
-### Design Principles
-
-- 🎨 Clean visual hierarchy
-- ⚡ Fast interactions
-- 📱 Mobile-first layout
-- 🧩 Reusable components
-- ✨ Smooth animations
-- ♿ Accessibility-conscious UI
-- 🖥️ Responsive layouts
+| ⚡ Performance | 🎨 Design | 📱 UX |
+|---|---|---|
+| Vite | Modern UI | Responsive |
+| Optimized assets | Visual hierarchy | Mobile-first |
+| Component reuse | Smooth interactions | Accessible |
+| Efficient rendering | Clean layouts | Fast navigation |
 
 ---
 
 # 🚦 Run Locally
 
-## Prerequisites
-
-```text
-Node.js 18+
-npm
-Git
-VS Code
-```
-
-### Clone
+### 1️⃣ Clone
 
 ```bash
 git clone https://github.com/dhanushgopi2456/Dhanush_New-Portfolio.git
 cd Dhanush_New-Portfolio
 ```
 
-### Install
+### 2️⃣ Install
 
 ```bash
 npm install
 ```
 
-### Start
+### 3️⃣ Start
 
 ```bash
 npm run dev
 ```
 
-Open:
+### 4️⃣ Open
 
 ```text
 http://localhost:5173
@@ -379,131 +382,141 @@ http://localhost:5173
 
 # ⚙️ Available Scripts
 
-| Command | Description |
+| Command | Purpose |
 |---|---|
 | `npm run dev` | ⚡ Start development server |
-| `npm run build` | 📦 Build production application |
-| `npm run preview` | 👀 Preview production build |
-| `npm run lint` | 🔍 Run ESLint |
+| `npm run build` | 📦 Create production build |
+| `npm run preview` | 🔍 Preview production build |
+| `npm run lint` | 🧹 Run lint checks |
 
 ---
 
-# ☁️ Deployment
+# 🚀 Deployment
 
-### 🚀 Vercel Deployment Pipeline
+<p align="center">
 
 ```text
-       💻 Local Development
-                │
-                ▼
-           📦 Git Commit
-                │
-                ▼
-          🐙 GitHub Push
-                │
-                ▼
-        ▲ Vercel Build
-                │
-                ▼
-        ⚡ Production Deploy
-                │
-                ▼
-       🌐 Live Portfolio
+             💻 Local Development
+                     │
+                     ▼
+                 Git Commit
+                     │
+                     ▼
+                  GitHub
+                     │
+                     ▼
+                  Vercel
+                     │
+                     ▼
+              🌐 Production
 ```
 
-### 🔗 Production
+</p>
 
-**Portfolio:**  
-https://dhanush-new-portfolio.vercel.app
+### 🌐 Live Portfolio
 
----
-
-# 🎯 Design Philosophy
-
-<div align="center">
-
-| ⚡ Performance | 🎨 Design | 📱 Responsive | 💼 Professional |
-|:---:|:---:|:---:|:---:|
-| Fast & efficient | Modern UI | Every screen | Recruiter-friendly |
-
-</div>
-
-The portfolio is designed to communicate **who I am, what I build, and what technologies I work with** without making the visitor search through unnecessary information.
+<p align="center">
+  <a href="https://dhanush-new-portfolio.vercel.app">
+    <img src="https://img.shields.io/badge/🚀%20OPEN%20LIVE%20PORTFOLIO-2563EB?style=for-the-badge&labelColor=0F172A" />
+  </a>
+</p>
 
 ---
 
-# 🔮 Roadmap
+# 📈 Developer Journey
 
 ```text
-                     🚀 CURRENT
-                        │
-        ┌───────────────┼────────────────┐
-        │               │                │
-        ▼               ▼                ▼
-      📝 Blog       📊 Analytics    🐙 GitHub
-                                   Integration
-        │               │                │
-        └───────────────┼────────────────┘
-                        │
-                        ▼
-                  🎯 FUTURE
+🎓 Computer Science
+        │
+        ▼
+🐍 Python & Programming
+        │
+        ▼
+🌐 Web Development
+        │
+        ▼
+⚛️ React & TypeScript
+        │
+        ▼
+⚙️ Backend Engineering
+        │
+        ▼
+🗄️ Database Development
+        │
+        ▼
+☁️ Cloud & Deployment
+        │
+        ▼
+🚀 Full-Stack Applications
+        │
+        ▼
+📚 Continuous Learning
 ```
 
-### Planned Improvements
+---
 
-- [ ] 📝 Technical blog
-- [ ] 🐙 GitHub activity integration
-- [ ] 📊 Dynamic GitHub statistics
-- [ ] 🔎 Project filtering
+# 🎯 Engineering Principles
+
+### 🧩 Build Real Projects
+
+Focus on practical applications rather than only tutorials.
+
+### ⚡ Keep Learning
+
+Continuously explore modern frameworks, tools, and engineering practices.
+
+### 🛡️ Write Better Software
+
+Focus on maintainability, security, scalability, and clean architecture.
+
+### 🚀 Ship
+
+Turn ideas into working applications and continuously improve them.
+
+---
+
+# 🔮 Future Roadmap
+
+- [ ] 📝 Technical blog section
+- [ ] 📊 GitHub activity integration
+- [ ] 🔥 GitHub repository statistics
+- [ ] 🔎 Advanced project filtering
+- [ ] 🌙 Enhanced theme system
 - [ ] 📄 Resume download
-- [ ] 📈 Visitor analytics
+- [ ] 📈 Portfolio analytics
 - [ ] ♿ Accessibility improvements
-- [ ] 🎮 More interactive project demonstrations
+- [ ] 🧪 Interactive project demos
+- [ ] 🎥 Project walkthrough videos
 
 ---
 
-# 📈 Developer Stats
+# 📊 GitHub Activity
 
 <p align="center">
-
-<img src="https://github-readme-stats.vercel.app/api?username=dhanushgopi2456&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github" height="170" />
-
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=dhanushgopi2456&layout=compact&theme=tokyonight&hide_border=true" height="170" />
-
+  <img src="https://github-readme-stats.vercel.app/api?username=dhanushgopi2456&show_icons=true&theme=tokyonight&hide_border=true&border_radius=12" height="170" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=dhanushgopi2456&layout=compact&theme=tokyonight&hide_border=true&border_radius=12" height="170" />
 </p>
 
 <p align="center">
-
-<img src="https://streak-stats.demolab.com?user=dhanushgopi2456&theme=tokyonight&hide_border=true" />
-
+  <img src="https://streak-stats.demolab.com?user=dhanushgopi2456&theme=tokyonight&hide_border=true&border_radius=12" width="70%" />
 </p>
 
 ---
 
-# 🏆 Featured Technologies
+# 🌐 Connect With Me
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=react,typescript,nodejs,python,java,spring,mongodb,mysql,django,flask,tailwind,vite,git,github,vercel&perline=5" />
-
-</p>
-
----
-
-# 🤝 Let's Connect
-
-<p align="center">
-
-<a href="https://dhanush-new-portfolio.vercel.app">
-<img src="https://img.shields.io/badge/🌐%20Portfolio-2563EB?style=for-the-badge" />
-</a>
 
 <a href="https://github.com/dhanushgopi2456">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+<img src="https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github" />
 </a>
 
 <a href="https://www.linkedin.com/in/dhanush-gopi-kavala-a460a528b/">
-<img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+<img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin" />
+</a>
+
+<a href="https://dhanush-new-portfolio.vercel.app">
+<img src="https://img.shields.io/badge/Portfolio-Visit-2563EB?style=for-the-badge&logo=vercel" />
 </a>
 
 </p>
@@ -513,10 +526,6 @@ The portfolio is designed to communicate **who I am, what I build, and what tech
 <p align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:06b6d4,50:2563eb,100:0f172a&height=120&section=footer" width="100%" />
-
-</p>
-
-<p align="center">
 
 ### 🚀 Build. Learn. Ship. Repeat.
 
