@@ -529,7 +529,7 @@ Turn ideas into working applications and continuously improve them.
 
 ### 🚀 Build. Learn. Ship. Repeat.
 
-**Thanks for visiting my portfolio repository!**
+**Thanks for visiting my portfolio repository**
 
 ⭐ If you like the project, consider giving it a star.
 
