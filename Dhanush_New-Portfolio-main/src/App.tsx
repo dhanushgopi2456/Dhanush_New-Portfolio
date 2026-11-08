@@ -1,174 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence } from 'motion/react';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { About } from './components/About';
-import { CodingProfiles } from './components/CodingProfiles';
-import { InteractiveSkills } from './components/InteractiveSkills';
-import { ExperienceTimeline } from './components/ExperienceTimeline';
-import { Projects } from './components/Projects';
-import { Certifications } from './components/Certifications';
-import { Contact } from './components/Contact';
-import { Footer } from './components/Footer';
-import { ResumePdfModal } from './components/ResumePdfModal';
-import { TerminalView } from './components/TerminalView';
-import { AiAssistantDrawer } from './components/AiAssistantDrawer';
-import { Preloader } from './components/Preloader';
-import { CustomCursor } from './components/CustomCursor';
-import { LivingCanvas } from './components/LivingCanvas';
-import { RESUME_DATA } from './data/resumeData';
-import { speakGreetingAndObjective } from './utils/speechUtils';
+import React, { useState, useEffect } from 'react';
+import { JackPortfolio } from './components/jack/JackPortfolio';
+import { DhanushPortfolio } from './components/DhanushPortfolio';
+import { Sparkles, UserCheck } from 'lucide-react';
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState('hero');
-  const [isTerminalMode, setIsTerminalMode] = useState(false);
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
-  const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-
-  const hasAutoSpokenRef = useRef(false);
-
-  // Automatically trigger career objective voice narration when preloader finishes or on first interaction
-  useEffect(() => {
-    if (!isLoading && !hasAutoSpokenRef.current) {
-      const triggerSpeech = () => {
-        if (!hasAutoSpokenRef.current) {
-          hasAutoSpokenRef.current = true;
-          speakGreetingAndObjective(RESUME_DATA.personal.careerObjective);
-        }
-      };
-
-      // 1. Immediate attempt after preloader
-      const timer = setTimeout(() => {
-        triggerSpeech();
-      }, 500);
-
-      // 2. User interaction listener in case browser blocked autoplay
-      const handleUserGesture = () => {
-        triggerSpeech();
-        window.removeEventListener('pointerdown', handleUserGesture);
-        window.removeEventListener('keydown', handleUserGesture);
-        window.removeEventListener('scroll', handleUserGesture);
-      };
-
-      window.addEventListener('pointerdown', handleUserGesture);
-      window.addEventListener('keydown', handleUserGesture);
-      window.addEventListener('scroll', handleUserGesture);
-
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('pointerdown', handleUserGesture);
-        window.removeEventListener('keydown', handleUserGesture);
-        window.removeEventListener('scroll', handleUserGesture);
-      };
+  const [view, setView] = useState<'jack' | 'dhanush'>(() => {
+    if (typeof window !== 'undefined') {
+      const param = new URLSearchParams(window.location.search).get('view');
+      if (param === 'dhanush') return 'dhanush';
     }
-  }, [isLoading]);
+    return 'jack';
+  });
 
-  // Section Observer to synchronize the floating navbar active pill automatically on scroll
-  useEffect(() => {
-    if (isTerminalMode) return;
-
-    const sectionIds = [
-      'hero',
-      'about',
-      'coding-profiles',
-      'skills',
-      'experience',
-      'projects',
-      'certifications',
-      'contact'
-    ];
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 250;
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const id = sectionIds[i];
-        const el = document.getElementById(id);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveSection(id);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isTerminalMode]);
-
-  const handleExploreClick = () => {
-    setActiveSection('projects');
-    const projectsEl = document.getElementById('projects');
-    if (projectsEl) {
-      projectsEl.scrollIntoView({ behavior: 'smooth' });
+  const toggleView = () => {
+    const nextView = view === 'jack' ? 'dhanush' : 'jack';
+    setView(nextView);
+    const url = new URL(window.location.href);
+    if (nextView === 'dhanush') {
+      url.searchParams.set('view', 'dhanush');
+    } else {
+      url.searchParams.delete('view');
     }
+    window.history.replaceState({}, '', url.toString());
   };
 
+  useEffect(() => {
+    if (view === 'jack') {
+      document.title = 'Jack -- 3D Creator';
+    } else {
+      document.title = 'Dhanush Gopi - Full Stack AI Engineer';
+    }
+  }, [view]);
+
   return (
-    <>
-      {/* Animated Futuristic Sci-Fi Preloader */}
-      <AnimatePresence>
-        {isLoading && (
-          <Preloader onComplete={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
+    <div className="relative min-h-screen bg-[#0C0C0C]">
+      {/* Portfolio Selector Floating Switcher */}
+      <div className="fixed bottom-4 left-4 z-50">
+        <button
+          onClick={toggleView}
+          className="group flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-xl border border-white/10 hover:border-cyan-500/50 text-xs tracking-wider uppercase text-slate-300 hover:text-white transition-all shadow-xl cursor-pointer"
+          title="Switch Portfolio View"
+        >
+          {view === 'jack' ? (
+            <>
+              <Sparkles className="w-3.5 h-3.5 text-fuchsia-400 group-hover:rotate-12 transition-transform" />
+              <span>Viewing: <strong className="text-white">Jack (3D Creator)</strong></span>
+              <span className="text-cyan-400 text-[10px] pl-1 font-mono">&rarr; Switch to Dhanush</span>
+            </>
+          ) : (
+            <>
+              <UserCheck className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span>Viewing: <strong className="text-white">Dhanush Gopi</strong></span>
+              <span className="text-fuchsia-400 text-[10px] pl-1 font-mono">&rarr; Switch to Jack</span>
+            </>
+          )}
+        </button>
+      </div>
 
-      {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
-      <LivingCanvas />
-
-      {/* Custom Magnetic Dual-Ring Glowing Cursor with Stardust Trail */}
-      <CustomCursor />
-
-      {isTerminalMode ? (
-        <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
-      ) : (
-        <div className="relative z-10 min-h-screen text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
-          {/* Navigation Header */}
-          <Navbar
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-            isTerminalMode={isTerminalMode}
-            setIsTerminalMode={setIsTerminalMode}
-            onOpenPdfModal={() => setIsPdfModalOpen(true)}
-            onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
-            soundEnabled={soundEnabled}
-            setSoundEnabled={setSoundEnabled}
-          />
-
-          {/* Main Cinematic Sections */}
-          <main>
-            <Hero
-              onOpenPdfModal={() => setIsPdfModalOpen(true)}
-              onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
-              onExploreClick={handleExploreClick}
-            />
-            <About />
-            <CodingProfiles />
-            <InteractiveSkills />
-            <ExperienceTimeline />
-            <Projects />
-            <Certifications />
-            <Contact />
-          </main>
-
-          {/* Footer */}
-          <Footer />
-
-          {/* Modals & Drawers */}
-          <ResumePdfModal
-            isOpen={isPdfModalOpen}
-            onClose={() => setIsPdfModalOpen(false)}
-          />
-
-          <AiAssistantDrawer
-            isOpen={isAiDrawerOpen}
-            onClose={() => setIsAiDrawerOpen(false)}
-          />
-        </div>
-      )}
-    </>
+      {view === 'jack' ? <JackPortfolio /> : <DhanushPortfolio />}
+    </div>
   );
 }
