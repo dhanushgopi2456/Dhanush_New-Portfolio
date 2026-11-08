@@ -16,6 +16,7 @@ import { AiAssistantDrawer } from './components/AiAssistantDrawer';
 import { Preloader } from './components/Preloader';
 import { CustomCursor } from './components/CustomCursor';
 import { VideoBackground } from './components/VideoBackground';
+import { GradientWaveBackground } from './components/GradientWaveBackground';
 import { LivingCanvas } from './components/LivingCanvas';
 import { RESUME_DATA } from './data/resumeData';
 import { speakGreetingAndObjective } from './utils/speechUtils';
@@ -119,6 +120,9 @@ export default function App() {
 
       {/* Cinematic Color-Graded Video Background */}
       <VideoBackground />
+
+      {/* Interactive Fluid Multi-Harmonic Gradient Wave Background */}
+      <GradientWaveBackground />
 
       {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
       <LivingCanvas />
