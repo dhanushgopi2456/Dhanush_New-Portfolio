@@ -12,7 +12,7 @@ export interface Project {
   title: string;
   subtitle: string;
   date: string;
-  category: 'Full Stack' | 'MERN' | 'AI / Computer Vision';
+  category: 'Full Stack' | 'MERN' | 'AI / Computer Vision' | 'AI / Next.js' | string;
   description: string;
   spokenSummary?: string;
   bulletPoints: string[];
@@ -21,7 +21,7 @@ export interface Project {
   demoUrl?: string;
   featured: boolean;
   image: string;
-  mockType: 'ecommerce' | 'kanban' | 'yolo';
+  mockType: 'ecommerce' | 'kanban' | 'yolo' | 'grader';
 }
 
 export interface Experience {
@@ -203,6 +203,26 @@ export const RESUME_DATA = {
   ] as Experience[],
 
   projects: [
+    {
+      id: "veda-ai-grader",
+      title: "VedaAI - AI Answer Sheet Grader",
+      subtitle: "Automated Document Evaluation & Visual Answer Mapping",
+      date: "Feb 2026 - Present",
+      category: "AI / Next.js",
+      description: "AI-powered answer sheet evaluation platform combining Google Gemini Vision, handwritten text transcription, deterministic label-based question mapping, and question-wise automated grading with visual bounding-box answer highlighting.",
+      spokenSummary: "VedaAI is an AI-powered answer sheet evaluation platform built with Next.js, TypeScript, and Google Gemini Vision. It extracts questions from exam papers, maps handwritten answers with bounding boxes, and generates structured marks and constructive feedback.",
+      bulletPoints: [
+        "Engineered an AI-assisted evaluation workflow utilizing Google Gemini Vision and OpenRouter to extract printed question papers and transcribe handwritten student responses.",
+        "Implemented deterministic label-based answer mapping, browser-based PDF rasterization with pdf.js, and multi-page visual bounding-box highlighting for verifiable grading review.",
+        "Designed a responsive Next.js App Router and Tailwind CSS interface with structured JSON-schema constrained evaluation feedback and session-based history."
+      ],
+      techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Google Gemini", "OpenRouter", "pdf.js", "Vision AI", "Node.js"],
+      repoUrl: "https://github.com/dhanushgopi2456/veda-ai-grader",
+      demoUrl: "https://github.com/dhanushgopi2456/veda-ai-grader",
+      featured: true,
+      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800",
+      mockType: "grader"
+    },
     {
       id: "freshmart",
       title: "FreshMart Full-Stack Grocery Web App",

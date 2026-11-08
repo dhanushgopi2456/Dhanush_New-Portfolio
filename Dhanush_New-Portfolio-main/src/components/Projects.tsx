@@ -11,7 +11,9 @@ import {
   CheckCircle2, 
   Sparkles,
   Volume2, 
-  Square
+  Square,
+  FileText,
+  Award
 } from 'lucide-react';
 import { RESUME_DATA, Project } from '../data/resumeData';
 import { speakProjectExplanation, stopSpeech, subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
@@ -77,6 +79,17 @@ export const Projects: React.FC = () => {
   // YOLOv9 State
   const [selectedYoloImage, setSelectedYoloImage] = useState('traffic');
 
+  // VedaAI Grader State
+  const [selectedGraderSample, setSelectedGraderSample] = useState<'algo' | 'dbms'>('algo');
+  const [isGradingScanning, setIsGradingScanning] = useState(false);
+
+  const handleRunGraderScan = () => {
+    setIsGradingScanning(true);
+    setTimeout(() => {
+      setIsGradingScanning(false);
+    }, 1200);
+  };
+
   const toggleFreshMartItem = (id: number) => {
     setFreshMartItems(prev => prev.map(item => {
       if (item.id === id) {
@@ -132,7 +145,7 @@ export const Projects: React.FC = () => {
         </motion.div>
 
         {/* Projects Cards Grid with 3D Tilt & Frosted Glass */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {RESUME_DATA.projects.map((proj, idx) => (
             <motion.div
               key={proj.id}
@@ -517,6 +530,177 @@ export const Projects: React.FC = () => {
                         >
                           <ButtonGlare radius={12} intensity={selectedYoloImage === 'team' ? 0.4 : 0.2} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
                           <span className="relative z-10">Indoor Workstation</span>
+                        </button>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {activeDemoProject.mockType === 'grader' && (
+                    <div className="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-4">
+                      
+                      {/* Simulator Header */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-5 h-5 text-emerald-400" />
+                          <div>
+                            <span className="font-bold text-sm text-white">VedaAI Evaluation Engine</span>
+                            <p className="text-[10px] text-slate-400 font-mono">Google Gemini Vision &bull; Deterministic Label Mapping &bull; pdf.js</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handleRunGraderScan}
+                            disabled={isGradingScanning}
+                            className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1.5"
+                          >
+                            <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.2, g: 0.9, b: 0.5, a: 1 }} />
+                            <Sparkles className={`w-3.5 h-3.5 ${isGradingScanning ? 'animate-spin' : ''}`} />
+                            <span className="relative z-10">{isGradingScanning ? 'Analyzing OCR...' : 'Re-run Evaluation'}</span>
+                          </button>
+                          <span className="text-[11px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 font-bold">
+                            Live Simulation
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Main Dual-View Simulator: Left Answer Sheet with Bounding Boxes, Right Grading Feedback */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        {/* Simulated Handwritten Answer Sheet */}
+                        <div className="relative rounded-xl border border-slate-800 bg-slate-900/90 p-4 overflow-hidden flex flex-col justify-between min-h-[260px]">
+                          {/* Scan Sweep line animation when scanning */}
+                          {isGradingScanning && (
+                            <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_12px_#34d399] animate-pulse top-0 bottom-0 m-auto z-20 pointer-events-none" />
+                          )}
+
+                          <div>
+                            <div className="flex items-center justify-between pb-2 border-b border-slate-800/80 mb-3">
+                              <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                                <FileText className="w-3.5 h-3.5" />
+                                {selectedGraderSample === 'algo' ? 'AnswerSheet_Page_1.pdf' : 'AnswerSheet_Page_2.pdf'}
+                              </span>
+                              <span className="text-[10px] font-mono bg-cyan-950/80 border border-cyan-800 text-cyan-300 px-2 py-0.5 rounded">
+                                {selectedGraderSample === 'algo' ? 'Roll: 21BCE0456' : 'Roll: 21BCE0892'}
+                              </span>
+                            </div>
+
+                            {/* Question Paper Banner */}
+                            <div className="bg-slate-950/90 rounded-lg p-2.5 border border-slate-800/90 mb-3">
+                              <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-1">
+                                <span className="font-bold text-amber-400">Extracted Question (Q1)</span>
+                                <span>Max Marks: 10</span>
+                              </div>
+                              <p className="text-xs text-slate-200 font-medium">
+                                {selectedGraderSample === 'algo' 
+                                  ? 'Explain QuickSort partition scheme and analyze worst-case recurrence relation.'
+                                  : 'Differentiate between 2PL and Strict 2PL. How does Strict 2PL prevent cascading aborts?'}
+                              </p>
+                            </div>
+
+                            {/* Simulated Bounding Box for Handwritten Answer */}
+                            <div className="relative p-3 rounded-lg border-2 border-emerald-400/80 bg-emerald-950/20 shadow-lg shadow-emerald-500/10">
+                              <div className="flex items-center justify-between mb-1.5">
+                                <span className="text-[9px] font-mono font-bold bg-emerald-500 text-slate-950 px-1.5 py-0.5 rounded">
+                                  BBox #1: Label Q1 [98.6% Conf]
+                                </span>
+                                <span className="text-[9px] font-mono text-emerald-400">Page 1 &bull; (x: 48, y: 130)</span>
+                              </div>
+                              <p className="text-xs text-slate-300 italic font-serif leading-relaxed select-none">
+                                {selectedGraderSample === 'algo'
+                                  ? '"In Lomuto partition, we choose the last element as pivot. If already sorted in ascending order, partitions are 0 and n-1: T(n) = T(n-1) + O(n) giving O(n²) worst case."'
+                                  : '"2PL unlocks dynamically in shrinking phase. Strict 2PL holds all Exclusive locks until commit/abort, which guarantees no dirty read cascading aborts occur."'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                            <span>Deterministic Map: <strong className="text-emerald-400">Label Matched</strong></span>
+                            <span>pdf.js Canvas: <strong className="text-cyan-400">Rasterized 300 DPI</strong></span>
+                          </div>
+                        </div>
+
+                        {/* AI Grading & Feedback Card */}
+                        <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 flex flex-col justify-between">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                              <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                                <Award className="w-3.5 h-3.5 text-amber-400" />
+                                Gemini AI Evaluation
+                              </span>
+                              <div className="flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold">
+                                <span>Awarded:</span>
+                                <span className="text-sm font-extrabold text-emerald-200">
+                                  {selectedGraderSample === 'algo' ? '9.5 / 10' : '8.5 / 10'}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Criteria Breakdown */}
+                            <div className="space-y-1.5 text-xs font-mono">
+                              <div className="flex justify-between items-center bg-slate-950/60 px-2.5 py-1.5 rounded-lg border border-slate-800/60">
+                                <span className="text-slate-400">Concept Explanation:</span>
+                                <span className="text-emerald-400 font-bold">{selectedGraderSample === 'algo' ? '4.8 / 5.0' : '4.5 / 5.0'}</span>
+                              </div>
+                              <div className="flex justify-between items-center bg-slate-950/60 px-2.5 py-1.5 rounded-lg border border-slate-800/60">
+                                <span className="text-slate-400">Mathematical / Proof Accuracy:</span>
+                                <span className="text-emerald-400 font-bold">{selectedGraderSample === 'algo' ? '4.7 / 5.0' : '4.0 / 5.0'}</span>
+                              </div>
+                            </div>
+
+                            {/* Structured AI Feedback */}
+                            <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-800/40 text-xs">
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-bold font-mono text-[10px] mb-1">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Structured Rubric Feedback</span>
+                              </div>
+                              <p className="text-slate-300 text-[11px] leading-relaxed">
+                                {selectedGraderSample === 'algo'
+                                  ? 'Flawless recurrence tree formulation and base case analysis. Bounding box confirms full mathematical rigor with correct O(n²) derivation.'
+                                  : 'Strong distinction between standard 2PL and Strict 2PL. Correctly identified serializability and commit-phase exclusivity.'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-slate-800/60">
+                            <span className="text-[9px] font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-800/50 px-2 py-0.5 rounded">
+                              Google Gemini Vision
+                            </span>
+                            <span className="text-[9px] font-mono bg-purple-950/60 text-purple-300 border border-purple-800/50 px-2 py-0.5 rounded">
+                              Deterministic Q-Map
+                            </span>
+                            <span className="text-[9px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 px-2 py-0.5 rounded">
+                              JSON-Schema Enforced
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Sample Exam Switcher */}
+                      <div className="flex items-center gap-2 pt-1">
+                        <span className="text-xs text-slate-400 font-mono font-bold">Exam Sample:</span>
+                        <button
+                          onClick={() => setSelectedGraderSample('algo')}
+                          className={`relative overflow-hidden group px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                            selectedGraderSample === 'algo' 
+                              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' 
+                              : 'bg-slate-900 text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          <ButtonGlare radius={12} intensity={selectedGraderSample === 'algo' ? 0.4 : 0.2} frontColor={{ r: 0.2, g: 0.9, b: 0.5, a: 1 }} />
+                          <span className="relative z-10">Algorithms (CS301)</span>
+                        </button>
+                        <button
+                          onClick={() => setSelectedGraderSample('dbms')}
+                          className={`relative overflow-hidden group px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                            selectedGraderSample === 'dbms' 
+                              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' 
+                              : 'bg-slate-900 text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          <ButtonGlare radius={12} intensity={selectedGraderSample === 'dbms' ? 0.4 : 0.2} frontColor={{ r: 0.2, g: 0.9, b: 0.5, a: 1 }} />
+                          <span className="relative z-10">Database Systems (CS304)</span>
                         </button>
                       </div>
 

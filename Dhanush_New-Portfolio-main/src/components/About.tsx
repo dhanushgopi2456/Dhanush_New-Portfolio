@@ -418,7 +418,7 @@ export const About: React.FC = () => {
                   </a>
 
                   <a
-                    href={RESUME_DATA.projects[2].repoUrl}
+                    href={RESUME_DATA.projects.find(p => p.id === 'yolov9')?.repoUrl || "https://github.com/dhanushgopi2456/Object-Detection-YOLO-v9"}
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2.5 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-2 transition-all border border-purple-500/40 shadow-md"
