@@ -39,10 +39,12 @@ export const ButtonGlare: React.FC<ButtonGlareProps> = ({
 
   const primaryGlow = toRgbaStr(frontColor || coolColor, 'rgba(56, 189, 248, 0.45)');
   const crestGlow = toRgbaStr(crestColor, 'rgba(168, 85, 247, 0.4)');
+  const borderRadiusStyle = Number.isFinite(radius) ? { borderRadius: `${radius}px` } : undefined;
 
   return (
     <div
       className={`absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit] z-0 ${className}`}
+      style={borderRadiusStyle}
       aria-hidden="true"
     >
       {/* Subtle glass rim highlight */}
