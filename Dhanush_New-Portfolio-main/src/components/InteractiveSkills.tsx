@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { SkillSphere } from './SkillSphere';
 import { RESUME_DATA, Skill } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 type CategoryFilter = 'all' | 'frontend' | 'backend' | 'database' | 'language' | 'aiml' | 'tools' | 'soft';
 
@@ -109,14 +110,17 @@ export const InteractiveSkills: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`relative overflow-hidden group flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                   selectedCategory === cat.id
                     ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-lg shadow-blue-500/25 border border-white/20'
                     : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
               >
-                {cat.icon}
-                <span>{cat.label}</span>
+                <ButtonGlare radius={12} intensity={selectedCategory === cat.id ? 0.5 : 0.25} frontColor={{ r: 0.3, g: 0.6, b: 1, a: 1 }} />
+                <span className="relative z-10 flex items-center gap-1.5">
+                  {cat.icon}
+                  <span>{cat.label}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -235,9 +239,10 @@ export const InteractiveSkills: React.FC = () => {
                   </div>
                   <button
                     onClick={() => setActiveSkill(null)}
-                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono transition-colors"
+                    className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono transition-colors"
                   >
-                    Close
+                    <ButtonGlare radius={12} intensity={0.3} />
+                    <span className="relative z-10">Close</span>
                   </button>
                 </div>
 

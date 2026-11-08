@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { speakInternshipSection, stopSpeech, subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
+import { ButtonGlare } from './ui/button-glare';
 
 interface ApiEndpointTest {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -178,23 +179,26 @@ export const ExperienceTimeline: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleSpeakExperience}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border transition-all shadow-md ${
+              className={`relative overflow-hidden group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border transition-all shadow-md ${
                 speechState.isSpeaking && speechState.currentText.includes("Codec Technologies")
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 animate-pulse shadow-amber-500/20'
                   : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
               }`}
             >
-              {speechState.isSpeaking && speechState.currentText.includes("Codec Technologies") ? (
-                <>
-                  <Square className="w-4 h-4 fill-current text-amber-400" />
-                  <span>Stop Internship Narration</span>
-                </>
-              ) : (
-                <>
-                  <Volume2 className="w-4 h-4 text-amber-400" />
-                  <span>Listen to Internship Summary</span>
-                </>
-              )}
+              <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.9, g: 0.6, b: 0.1, a: 1 }} />
+              <span className="relative z-10 flex items-center gap-2">
+                {speechState.isSpeaking && speechState.currentText.includes("Codec Technologies") ? (
+                  <>
+                    <Square className="w-4 h-4 fill-current text-amber-400" />
+                    <span>Stop Internship Narration</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-4 h-4 text-amber-400" />
+                    <span>Listen to Internship Summary</span>
+                  </>
+                )}
+              </span>
             </motion.button>
           </div>
         </motion.div>
@@ -262,50 +266,62 @@ export const ExperienceTimeline: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2 mb-8 p-1.5 rounded-2xl bg-slate-950/80 border border-white/10 backdrop-blur-xl">
                 <button
                   onClick={() => setActiveTab('architecture')}
-                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
+                  className={`relative overflow-hidden group px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
                     activeTab === 'architecture'
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 border border-white/20'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Architecture Flow</span>
+                  <ButtonGlare radius={12} intensity={activeTab === 'architecture' ? 0.5 : 0.25} />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Architecture Flow</span>
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('apiConsole')}
-                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
+                  className={`relative overflow-hidden group px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
                     activeTab === 'apiConsole'
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 border border-white/20'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <Terminal className="w-3.5 h-3.5" />
-                  <span>Live REST API Tester</span>
+                  <ButtonGlare radius={12} intensity={activeTab === 'apiConsole' ? 0.5 : 0.25} />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Terminal className="w-3.5 h-3.5" />
+                    <span>Live REST API Tester</span>
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('sprints')}
-                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
+                  className={`relative overflow-hidden group px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
                     activeTab === 'sprints'
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 border border-white/20'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <GitBranch className="w-3.5 h-3.5" />
-                  <span>Agile Sprints</span>
+                  <ButtonGlare radius={12} intensity={activeTab === 'sprints' ? 0.5 : 0.25} />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <GitBranch className="w-3.5 h-3.5" />
+                    <span>Agile Sprints</span>
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('principles')}
-                  className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
+                  className={`relative overflow-hidden group px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 ${
                     activeTab === 'principles'
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 border border-white/20'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>SE Standards</span>
+                  <ButtonGlare radius={12} intensity={activeTab === 'principles' ? 0.5 : 0.25} />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>SE Standards</span>
+                  </span>
                 </button>
               </div>
 
@@ -371,18 +387,21 @@ export const ExperienceTimeline: React.FC = () => {
                             setSelectedApiIndex(eIdx);
                             setSimulatedResponse(null);
                           }}
-                          className={`p-3 rounded-xl text-left border text-xs font-mono transition-all ${
+                          className={`relative overflow-hidden group p-3 rounded-xl text-left border text-xs font-mono transition-all ${
                             selectedApiIndex === eIdx
                               ? 'bg-slate-900 border-cyan-500 text-white font-bold ring-1 ring-cyan-500/40 shadow-lg'
                               : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
                           }`}
                         >
-                          <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold mr-1.5 ${
-                            ep.method === 'POST' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
-                          }`}>
-                            {ep.method}
+                          <ButtonGlare radius={12} intensity={selectedApiIndex === eIdx ? 0.4 : 0.2} frontColor={{ r: 0.1, g: 0.8, b: 0.9, a: 1 }} />
+                          <span className="relative z-10">
+                            <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold mr-1.5 ${
+                              ep.method === 'POST' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
+                            }`}>
+                              {ep.method}
+                            </span>
+                            <span>{ep.path}</span>
                           </span>
-                          <span>{ep.path}</span>
                         </button>
                       ))}
                     </div>
@@ -400,14 +419,17 @@ export const ExperienceTimeline: React.FC = () => {
                         whileTap={{ scale: 0.97 }}
                         onClick={handleTestApi}
                         disabled={isSimulatingRequest}
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-mono font-bold shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30"
+                        className="relative overflow-hidden group px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-mono font-bold shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition-all border border-emerald-400/30"
                       >
-                        {isSimulatingRequest ? (
-                          <RotateCw className="w-3.5 h-3.5 animate-spin" />
-                        ) : (
-                          <Play className="w-3.5 h-3.5 fill-current" />
-                        )}
-                        <span>{isSimulatingRequest ? 'Executing Endpoint...' : 'Fire Live API Test'}</span>
+                        <ButtonGlare radius={12} intensity={0.5} frontColor={{ r: 0.1, g: 0.9, b: 0.6, a: 1 }} />
+                        <span className="relative z-10 flex items-center gap-2">
+                          {isSimulatingRequest ? (
+                            <RotateCw className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Play className="w-3.5 h-3.5 fill-current" />
+                          )}
+                          <span>{isSimulatingRequest ? 'Executing Endpoint...' : 'Fire Live API Test'}</span>
+                        </span>
                       </motion.button>
 
                       <span className="text-[11px] font-mono text-cyan-400">

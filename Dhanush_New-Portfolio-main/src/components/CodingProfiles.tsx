@@ -14,6 +14,7 @@ import {
   BarChart2,
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 interface TopicDistribution {
   name: string;
@@ -207,20 +208,22 @@ const Interactive3DTiltCard: React.FC<{
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onToggleFlip}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all shadow-md"
+                className="relative overflow-hidden flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all shadow-md group cursor-pointer"
               >
-                <RotateCw className="w-3.5 h-3.5" />
-                <span>Flip Details & Topics 🔄</span>
+                <ButtonGlare radius={12} frontColor={{ r: 1, g: 0.6, b: 0.1, a: 1 }} />
+                <RotateCw className="relative z-10 w-3.5 h-3.5" />
+                <span className="relative z-10">Flip Details & Topics 🔄</span>
               </motion.button>
 
               <a
                 href={profile.profileUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="p-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-semibold transition-all hover:border-amber-500/50 shadow-md group/link"
+                className="relative overflow-hidden p-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-semibold transition-all hover:border-amber-500/50 shadow-md group cursor-pointer"
                 title={`Visit ${profile.platform}`}
               >
-                <ArrowUpRight className="w-4 h-4 text-amber-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                <ButtonGlare radius={12} />
+                <ArrowUpRight className="relative z-10 w-4 h-4 text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
@@ -269,18 +272,24 @@ const Interactive3DTiltCard: React.FC<{
             <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-2">
               <button
                 onClick={() => onCopyUrl(profile.profileUrl, profile.id)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono transition-all"
+                className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono transition-all"
               >
-                {copiedId === profile.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
-                <span>{copiedId === profile.id ? 'URL Copied!' : 'Copy Handle Link'}</span>
+                <ButtonGlare radius={12} intensity={0.4} />
+                <span className="relative z-10 flex items-center gap-1.5">
+                  {copiedId === profile.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
+                  <span>{copiedId === profile.id ? 'URL Copied!' : 'Copy Handle Link'}</span>
+                </span>
               </button>
 
               <button
                 onClick={onToggleFlip}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:from-amber-400 hover:to-amber-500 font-bold text-xs transition-all shadow-md shadow-amber-500/25"
+                className="relative overflow-hidden group flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:from-amber-400 hover:to-amber-500 font-bold text-xs transition-all shadow-md shadow-amber-500/25"
               >
-                <RotateCw className="w-3.5 h-3.5" />
-                <span>Flip Back</span>
+                <ButtonGlare radius={12} intensity={0.5} frontColor={{ r: 1, g: 0.8, b: 0.2, a: 1 }} />
+                <span className="relative z-10 flex items-center gap-2">
+                  <RotateCw className="w-3.5 h-3.5" />
+                  <span>Flip Back</span>
+                </span>
               </button>
             </div>
 

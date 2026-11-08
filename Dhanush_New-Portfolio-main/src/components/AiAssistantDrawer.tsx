@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, X, Send, Bot, User, RefreshCw } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 interface AiAssistantDrawerProps {
   isOpen: boolean;
@@ -88,9 +89,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
+            className="relative overflow-hidden group p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
           >
-            <X className="w-5 h-5" />
+            <ButtonGlare radius={12} intensity={0.3} />
+            <span className="relative z-10">
+              <X className="w-5 h-5" />
+            </span>
           </button>
         </div>
 
@@ -139,9 +143,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
             <button
               key={pIdx}
               onClick={() => handleSend(prompt)}
-              className="px-2.5 py-1 rounded-xl bg-slate-800/80 hover:bg-purple-600/20 border border-slate-700/80 text-slate-300 text-[11px] transition-colors text-left"
+              className="relative overflow-hidden group px-2.5 py-1 rounded-xl bg-slate-800/80 hover:bg-purple-600/20 border border-slate-700/80 text-slate-300 text-[11px] transition-colors text-left"
             >
-              {prompt}
+              <ButtonGlare radius={12} intensity={0.25} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+              <span className="relative z-10">{prompt}</span>
             </button>
           ))}
         </div>
@@ -164,9 +169,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
             />
             <button
               type="submit"
-              className="p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 transition-all shadow-md"
+              className="relative overflow-hidden group p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 transition-all shadow-md"
             >
-              <Send className="w-4 h-4" />
+              <ButtonGlare radius={12} intensity={0.5} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+              <span className="relative z-10">
+                <Send className="w-4 h-4" />
+              </span>
             </button>
           </form>
         </div>

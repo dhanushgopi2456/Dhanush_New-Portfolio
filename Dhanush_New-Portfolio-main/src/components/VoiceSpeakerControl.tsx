@@ -8,6 +8,7 @@ import {
   stopSpeech, 
   VoiceSpeakerState 
 } from '../utils/speechUtils';
+import { ButtonGlare } from './ui/button-glare';
 
 export const VoiceSpeakerControl: React.FC<{ className?: string; compact?: boolean }> = ({ 
   className = '', 
@@ -40,30 +41,33 @@ export const VoiceSpeakerControl: React.FC<{ className?: string; compact?: boole
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleToggleGreeting}
-        className={`relative flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-md overflow-hidden ${
+        className={`relative flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shadow-md overflow-hidden group cursor-pointer ${
           speechState.isSpeaking
             ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 shadow-amber-500/25 ring-2 ring-amber-500/30'
             : 'bg-slate-900/70 text-slate-300 border-slate-700/80 hover:bg-slate-800 hover:text-white hover:border-amber-500/40'
         } ${className}`}
         title={speechState.isSpeaking ? 'Stop Voice Narration' : 'Speak Greeting & Career Objective'}
       >
-        {speechState.isSpeaking ? (
-          <>
-            {/* Animated Live Audio Waveform Visualizer */}
-            <div className="flex items-center gap-0.5 h-3.5">
-              <span className="w-0.5 h-3.5 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.4s]" />
-              <span className="w-0.5 h-2 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.2s]" />
-              <span className="w-0.5 h-3.5 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-              <span className="w-0.5 h-1.5 bg-amber-400 rounded-full animate-bounce" />
-            </div>
-            <span>Stop Narration</span>
-          </>
-        ) : (
-          <>
-            <Volume2 className="w-3.5 h-3.5 text-amber-400" />
-            <span>Voice Guide</span>
-          </>
-        )}
+        <ButtonGlare radius={12} frontColor={{ r: 1, g: 0.6, b: 0.1, a: 1 }} />
+        <span className="relative z-10 flex items-center gap-1.5">
+          {speechState.isSpeaking ? (
+            <>
+              {/* Animated Live Audio Waveform Visualizer */}
+              <div className="flex items-center gap-0.5 h-3.5">
+                <span className="w-0.5 h-3.5 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.4s]" />
+                <span className="w-0.5 h-2 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.2s]" />
+                <span className="w-0.5 h-3.5 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-0.5 h-1.5 bg-amber-400 rounded-full animate-bounce" />
+              </div>
+              <span>Stop Narration</span>
+            </>
+          ) : (
+            <>
+              <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>Voice Guide</span>
+            </>
+          )}
+        </span>
       </motion.button>
     );
   }
@@ -74,12 +78,13 @@ export const VoiceSpeakerControl: React.FC<{ className?: string; compact?: boole
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         onClick={handleToggleGreeting}
-        className={`group relative flex items-center gap-3 px-5 py-3 rounded-2xl border text-xs sm:text-sm font-bold transition-all duration-300 shadow-xl overflow-hidden ${
+        className={`group relative flex items-center gap-3 px-5 py-3 rounded-2xl border text-xs sm:text-sm font-bold transition-all duration-300 shadow-xl overflow-hidden cursor-pointer ${
           speechState.isSpeaking
             ? 'bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 text-amber-200 border-amber-500/60 shadow-amber-500/30 ring-2 ring-amber-500/30'
             : 'bg-slate-900/90 hover:bg-slate-800 text-slate-200 border-slate-700/80 hover:border-amber-500/50 shadow-black/40'
         }`}
       >
+        <ButtonGlare radius={16} frontColor={{ r: 1, g: 0.6, b: 0.1, a: 1 }} />
         {speechState.isSpeaking ? (
           <>
             {/* Animated Live Audio Waveform Visualizer */}

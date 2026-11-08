@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, RotateCw, Play, Pause, Zap, CheckCircle2, Award, Info } from 'lucide-react';
 import { RESUME_DATA, Skill } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 interface SkillNode {
   skill: Skill;
@@ -169,31 +170,37 @@ export const SkillSphere: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsRotating(!isRotating)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-mono font-bold transition-all shadow-md ${
+            className={`relative overflow-hidden group flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-mono font-bold transition-all shadow-md ${
               isRotating
                 ? 'bg-blue-600/25 text-cyan-300 border-cyan-500/40 shadow-cyan-600/20'
                 : 'bg-slate-800 text-slate-300 border-slate-700'
             }`}
           >
-            {isRotating ? (
-              <>
-                <Pause className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Pause Rotation</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Resume Rotation</span>
-              </>
-            )}
+            <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.2, g: 0.7, b: 1, a: 1 }} />
+            <span className="relative z-10 flex items-center gap-2">
+              {isRotating ? (
+                <>
+                  <Pause className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Pause Rotation</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Resume Rotation</span>
+                </>
+              )}
+            </span>
           </motion.button>
 
           <button
             onClick={() => setRotation({ x: 0.25, y: 0.35 })}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs transition-colors"
+            className="relative overflow-hidden group p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs transition-colors"
             title="Reset Orientation"
           >
-            <RotateCw className="w-4 h-4" />
+            <ButtonGlare radius={12} intensity={0.3} />
+            <span className="relative z-10">
+              <RotateCw className="w-4 h-4" />
+            </span>
           </button>
         </div>
       </div>
@@ -330,13 +337,14 @@ export const SkillSphere: React.FC = () => {
               <button
                 key={s.name}
                 onClick={() => setSelectedSkill(s)}
-                className={`px-3 py-1 rounded-xl text-[11px] font-mono transition-all ${
+                className={`relative overflow-hidden group px-3 py-1 rounded-xl text-[11px] font-mono transition-all ${
                   activeSkillToDisplay.name === s.name
                     ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-600/40 ring-1 ring-cyan-400'
                     : 'bg-slate-900/90 text-slate-400 hover:text-slate-200 border border-slate-800'
                 }`}
               >
-                {s.name}
+                <ButtonGlare radius={12} intensity={activeSkillToDisplay.name === s.name ? 0.4 : 0.2} />
+                <span className="relative z-10">{s.name}</span>
               </button>
             ))}
           </div>

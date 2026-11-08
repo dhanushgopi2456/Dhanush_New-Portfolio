@@ -13,6 +13,7 @@ import {
   Sparkles 
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 export const Certifications: React.FC = () => {
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
@@ -79,13 +80,14 @@ export const Certifications: React.FC = () => {
               <button
                 key={iss}
                 onClick={() => setSelectedIssuer(iss)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition-all capitalize ${
+                className={`relative overflow-hidden group px-4 py-2 rounded-xl text-xs font-bold font-mono transition-all capitalize ${
                   selectedIssuer === iss
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/30 border border-white/20'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {iss === 'all' ? 'All Issuers' : iss}
+                <ButtonGlare radius={12} intensity={selectedIssuer === iss ? 0.6 : 0.3} frontColor={{ r: 0.1, g: 0.8, b: 0.6, a: 1 }} />
+                <span className="relative z-10">{iss === 'all' ? 'All Issuers' : iss}</span>
               </button>
             ))}
           </div>
@@ -170,10 +172,13 @@ export const Certifications: React.FC = () => {
                           e.stopPropagation();
                           toggleFlip(idx);
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-mono font-bold transition-all border border-emerald-500/30 shadow-md"
+                        className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-mono font-bold transition-all border border-emerald-500/30 shadow-md"
                       >
-                        <RotateCw className="w-3.5 h-3.5" />
-                        <span>Flip Card 🔄</span>
+                        <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.9, b: 0.6, a: 1 }} />
+                        <span className="relative z-10 flex items-center gap-1.5">
+                          <RotateCw className="w-3.5 h-3.5" />
+                          <span>Flip Card 🔄</span>
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -198,9 +203,10 @@ export const Certifications: React.FC = () => {
                             e.stopPropagation();
                             toggleFlip(idx);
                           }}
-                          className="px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-[11px] font-mono transition-colors"
+                          className="relative overflow-hidden group px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-[11px] font-mono transition-colors"
                         >
-                          Flip Back ↩️
+                          <ButtonGlare radius={8} intensity={0.3} />
+                          <span className="relative z-10">Flip Back ↩️</span>
                         </button>
                       </div>
 
@@ -237,10 +243,13 @@ export const Certifications: React.FC = () => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-bold transition-all shadow-md"
+                          className="relative overflow-hidden group flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-bold transition-all shadow-md"
                         >
-                          <Github className="w-3.5 h-3.5 text-cyan-400" />
-                          <span>GitHub Cert</span>
+                          <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.8, b: 0.9, a: 1 }} />
+                          <span className="relative z-10 flex items-center gap-1.5">
+                            <Github className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>GitHub Cert</span>
+                          </span>
                         </a>
 
                         <a
@@ -248,10 +257,13 @@ export const Certifications: React.FC = () => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition-all"
+                          className="relative overflow-hidden group flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition-all"
                         >
-                          <span>Verify Official</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
+                          <ButtonGlare radius={12} intensity={0.6} frontColor={{ r: 0.2, g: 1, b: 0.7, a: 1 }} />
+                          <span className="relative z-10 flex items-center gap-1.5">
+                            <span>Verify Official</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </span>
                         </a>
                       </div>
                     </div>

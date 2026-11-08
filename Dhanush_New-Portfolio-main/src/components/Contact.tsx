@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Github, Linkedin, Send, Check, Copy, MessageSquare, Sparkles } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 export const Contact: React.FC = () => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -109,10 +110,13 @@ export const Contact: React.FC = () => {
               </div>
               <button
                 onClick={() => handleCopy(RESUME_DATA.personal.email, 'email')}
-                className="p-3 rounded-xl bg-slate-900/90 text-slate-400 hover:text-white border border-slate-700/80 relative z-10 transition-colors shadow-md"
+                className="relative overflow-hidden group p-3 rounded-xl bg-slate-900/90 text-slate-400 hover:text-white border border-slate-700/80 z-10 transition-colors shadow-md"
                 title="Copy Email"
               >
-                {copiedField === 'email' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                <ButtonGlare radius={12} intensity={0.4} />
+                <span className="relative z-10">
+                  {copiedField === 'email' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                </span>
               </button>
             </motion.div>
 
@@ -149,10 +153,13 @@ export const Contact: React.FC = () => {
               </div>
               <button
                 onClick={() => handleCopy(RESUME_DATA.personal.phone, 'phone')}
-                className="p-3 rounded-xl bg-slate-900/90 text-slate-400 hover:text-white border border-slate-700/80 relative z-10 transition-colors shadow-md"
+                className="relative overflow-hidden group p-3 rounded-xl bg-slate-900/90 text-slate-400 hover:text-white border border-slate-700/80 z-10 transition-colors shadow-md"
                 title="Copy Phone"
               >
-                {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+                <span className="relative z-10">
+                  {copiedField === 'phone' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                </span>
               </button>
             </motion.div>
 
@@ -189,20 +196,26 @@ export const Contact: React.FC = () => {
                 href={RESUME_DATA.personal.github}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-white/10 text-xs font-bold transition-all hover:-translate-y-0.5 shadow-lg group"
+                className="relative overflow-hidden group flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-white/10 text-xs font-bold transition-all hover:-translate-y-0.5 shadow-lg"
               >
-                <Github className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                <span>GitHub Profile</span>
+                <ButtonGlare radius={16} intensity={0.4} frontColor={{ r: 0.2, g: 0.8, b: 0.9, a: 1 }} />
+                <span className="relative z-10 flex items-center gap-2.5">
+                  <Github className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <span>GitHub Profile</span>
+                </span>
               </a>
 
               <a
                 href={RESUME_DATA.personal.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-white/10 text-xs font-bold transition-all hover:-translate-y-0.5 shadow-lg group"
+                className="relative overflow-hidden group flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-white/10 text-xs font-bold transition-all hover:-translate-y-0.5 shadow-lg"
               >
-                <Linkedin className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                <span>LinkedIn Network</span>
+                <ButtonGlare radius={16} intensity={0.4} frontColor={{ r: 0.2, g: 0.6, b: 1, a: 1 }} />
+                <span className="relative z-10 flex items-center gap-2.5">
+                  <Linkedin className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <span>LinkedIn Network</span>
+                </span>
               </a>
             </div>
 
@@ -279,23 +292,26 @@ export const Contact: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleApplyTemplate("Hi Dhanush, we reviewed your portfolio and would like to invite you for an interview for a Software Engineer (MERN / Full Stack) position.")}
-                      className="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono transition-all font-semibold"
+                      className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono transition-all font-semibold"
                     >
-                      💼 Hiring Interview Inquiry
+                      <ButtonGlare radius={12} intensity={0.3} frontColor={{ r: 0.1, g: 0.7, b: 0.9, a: 1 }} />
+                      <span className="relative z-10">💼 Hiring Interview Inquiry</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleApplyTemplate("Hi Dhanush, I have an exciting web app project and would love to collaborate with you on MERN development.")}
-                      className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono transition-all font-semibold"
+                      className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono transition-all font-semibold"
                     >
-                      🚀 Project Collaboration
+                      <ButtonGlare radius={12} intensity={0.3} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+                      <span className="relative z-10">🚀 Project Collaboration</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleApplyTemplate("Hello Dhanush, I read your IEEE research paper on YOLOv9 object detection and wanted to discuss AI vision models.")}
-                      className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-mono transition-all font-semibold"
+                      className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-mono transition-all font-semibold"
                     >
-                      🔬 AI Vision Discussion
+                      <ButtonGlare radius={12} intensity={0.3} frontColor={{ r: 0.9, g: 0.6, b: 0.1, a: 1 }} />
+                      <span className="relative z-10">🔬 AI Vision Discussion</span>
                     </button>
                   </div>
 
@@ -313,10 +329,13 @@ export const Contact: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 transition-all border border-blue-400/30"
+                  className="relative overflow-hidden group w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 transition-all border border-blue-400/30"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Direct Email</span>
+                  <ButtonGlare radius={16} intensity={0.6} frontColor={{ r: 0.4, g: 0.6, b: 1, a: 1 }} />
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <Send className="w-4 h-4" />
+                    <span>Send Direct Email</span>
+                  </span>
                 </motion.button>
 
                 {submitted && (

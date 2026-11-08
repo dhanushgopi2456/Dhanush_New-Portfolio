@@ -26,6 +26,7 @@ import { RESUME_DATA } from '../data/resumeData';
 import { PORTFOLIO_PHOTOS } from '../data/photos';
 import { VoiceSpeakerControl } from './VoiceSpeakerControl';
 import { subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
+import { ButtonGlare } from './ui/button-glare';
 
 interface HeroProps {
   onOpenPdfModal: () => void;
@@ -218,10 +219,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
 
               <button
                 onClick={() => setStatusIndex((prev) => (prev + 1) % AVAILABILITY_STATUSES.length)}
-                className="relative z-10 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-emerald-500/40 hover:border-emerald-400 backdrop-blur-xl shadow-lg shadow-emerald-950/20 transition-all hover:scale-105 group"
+                className="relative z-10 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-emerald-500/40 hover:border-emerald-400 backdrop-blur-xl shadow-lg shadow-emerald-950/20 transition-all hover:scale-105 group overflow-hidden cursor-pointer"
                 title="Click to cycle status mode"
               >
-                <span className="relative flex h-2.5 w-2.5">
+                <ButtonGlare radius={Infinity} coolColor={{ r: 0.1, g: 0.85, b: 0.5, a: 1 }} />
+                <span className="relative z-10 flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
@@ -232,7 +234,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -5 }}
                     transition={{ duration: 0.2 }}
-                    className="text-xs font-bold text-emerald-300 tracking-wide uppercase font-mono"
+                    className="relative z-10 text-xs font-bold text-emerald-300 tracking-wide uppercase font-mono"
                   >
                     {AVAILABILITY_STATUSES[statusIndex]}
                   </motion.span>
@@ -252,13 +254,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                 {/* Audio Synth Toggle with Live Visualizer Waveform */}
                 <button
                   onClick={handleToggleAudio}
-                  className={`px-3 py-1.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all ${
+                  className={`relative px-3 py-1.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all overflow-hidden group cursor-pointer ${
                     isPlayingAudio
                       ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-lg shadow-cyan-500/30'
                       : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-700/80 hover:border-cyan-500/40'
                   }`}
                   title="Play audio greeting chime"
                 >
+                  <ButtonGlare radius={12} />
                   {isPlayingAudio ? (
                     <div className="flex items-center gap-0.5 h-3.5">
                       <span className="w-0.5 h-3.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
@@ -344,30 +347,33 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onExploreClick}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group"
+                className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group cursor-pointer"
               >
-                <span>View Projects</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ButtonGlare radius={16} />
+                <span className="relative z-10">View Projects</span>
+                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onOpenAiDrawer}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-sm shadow-lg shadow-purple-950/30 transition-all"
+                className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-sm shadow-lg shadow-purple-950/30 transition-all group cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-                <span>Ask Dhanush AI</span>
+                <ButtonGlare radius={16} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
+                <Sparkles className="relative z-10 w-4 h-4 text-purple-400 animate-pulse" />
+                <span className="relative z-10">Ask Dhanush AI</span>
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onOpenPdfModal}
-                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-sm transition-all shadow-md"
+                className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-sm transition-all shadow-md group cursor-pointer"
               >
-                <FileText className="w-4 h-4 text-cyan-400" />
-                <span>Resume PDF</span>
+                <ButtonGlare radius={16} />
+                <FileText className="relative z-10 w-4 h-4 text-cyan-400" />
+                <span className="relative z-10">Resume PDF</span>
               </motion.button>
             </div>
 
@@ -588,18 +594,24 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                     <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
                       <button
                         onClick={handleCopyEmail}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-mono transition-all"
+                        className="relative overflow-hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-mono transition-all group cursor-pointer"
                       >
-                        {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-cyan-400" />}
-                        <span>Copy Email</span>
+                        <ButtonGlare radius={12} />
+                        <span className="relative z-10 flex items-center gap-1.5">
+                          {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-cyan-400" />}
+                          <span>Copy Email</span>
+                        </span>
                       </button>
 
                       <button
                         onClick={() => setIsPhotoFlipped(false)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all shadow-md shadow-blue-600/30"
+                        className="relative overflow-hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs transition-all shadow-md shadow-blue-600/30 group cursor-pointer"
                       >
-                        <RotateCw className="w-3.5 h-3.5" />
-                        <span>Flip Back to Photo</span>
+                        <ButtonGlare radius={12} />
+                        <span className="relative z-10 flex items-center gap-2">
+                          <RotateCw className="w-3.5 h-3.5" />
+                          <span>Flip Back to Photo</span>
+                        </span>
                       </button>
                     </div>
 

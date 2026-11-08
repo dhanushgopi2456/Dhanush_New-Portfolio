@@ -11,6 +11,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { VoiceSpeakerControl } from './VoiceSpeakerControl';
+import { ButtonGlare } from './ui/button-glare';
 
 interface NavbarProps {
   activeSection: string;
@@ -138,9 +139,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onOpenAiDrawer}
-            className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 border border-purple-500/40 text-xs font-semibold shadow-lg shadow-purple-950/30 transition-all overflow-hidden group"
+            className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 border border-purple-500/40 text-xs font-semibold shadow-lg shadow-purple-950/30 transition-all overflow-hidden group cursor-pointer"
             title="Ask AI Assistant about Dhanush"
           >
+            <ButtonGlare radius={12} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
             {/* Neon Pulse Glow */}
             <span className="absolute -inset-1 rounded-xl bg-purple-500/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
             <Sparkles className="relative z-10 w-3.5 h-3.5 text-purple-400 animate-pulse" />
@@ -152,19 +154,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsTerminalMode(!isTerminalMode)}
-            className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all ${
+            className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all overflow-hidden group cursor-pointer ${
               isTerminalMode 
                 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/60 shadow-lg shadow-emerald-500/25 ring-2 ring-emerald-500/30' 
                 : 'bg-slate-900/70 text-slate-300 border-slate-700/80 hover:bg-slate-800 hover:text-white hover:border-emerald-500/40 shadow-md'
             }`}
             title="Toggle Interactive CLI Terminal Mode"
           >
-            {isTerminalMode ? (
-              <Code className="w-3.5 h-3.5 text-emerald-400" />
-            ) : (
-              <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-            )}
-            <span>{isTerminalMode ? 'GUI Mode' : 'CLI Mode'}</span>
+            <ButtonGlare radius={12} coolColor={{ r: 0.1, g: 0.85, b: 0.5, a: 1 }} />
+            <span className="relative z-10 flex items-center gap-1.5">
+              {isTerminalMode ? (
+                <Code className="w-3.5 h-3.5 text-emerald-400" />
+              ) : (
+                <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+              )}
+              <span>{isTerminalMode ? 'GUI Mode' : 'CLI Mode'}</span>
+            </span>
           </motion.button>
 
           {/* Resume PDF Viewer with Cyan Neon Pulse */}
@@ -172,8 +177,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onOpenPdfModal}
-            className="relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30 group"
+            className="relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30 group overflow-hidden cursor-pointer"
           >
+            <ButtonGlare radius={12} />
             <span className="absolute -inset-1 rounded-xl bg-blue-500/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
             <FileText className="relative z-10 w-3.5 h-3.5" />
             <span className="relative z-10">Resume PDF</span>
@@ -184,14 +190,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-2 rounded-xl bg-slate-900/70 text-slate-400 hover:text-white border border-slate-700/70 hover:border-blue-500/40 transition-colors shadow-md"
+            className="relative p-2 rounded-xl bg-slate-900/70 text-slate-400 hover:text-white border border-slate-700/70 hover:border-blue-500/40 transition-colors shadow-md overflow-hidden group cursor-pointer"
             title={soundEnabled ? 'Mute Interaction Sounds' : 'Enable Interaction Sounds'}
           >
-            {soundEnabled ? (
-              <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
-            ) : (
-              <VolumeX className="w-4 h-4 text-slate-500" />
-            )}
+            <ButtonGlare radius={12} />
+            <span className="relative z-10">
+              {soundEnabled ? (
+                <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
+              ) : (
+                <VolumeX className="w-4 h-4 text-slate-500" />
+              )}
+            </span>
           </motion.button>
         </div>
 

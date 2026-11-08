@@ -17,6 +17,7 @@ import {
   Calculator
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 export const About: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'academic' | 'leadership' | 'research'>('academic');
@@ -68,53 +69,59 @@ export const About: React.FC = () => {
           <div className="p-1.5 bg-slate-900/80 border border-white/10 rounded-2xl inline-flex flex-wrap gap-2 backdrop-blur-xl shadow-2xl">
             <button
               onClick={() => setActiveTab('academic')}
-              className={`relative px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 ${
+              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
                 activeTab === 'academic' ? 'text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
               {activeTab === 'academic' && (
                 <motion.div
                   layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
                   transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                />
+                >
+                  <ButtonGlare radius={12} />
+                </motion.div>
               )}
-              <BookOpen className="w-4 h-4" />
-              <span>Academic Excellence (9.04 CGPA)</span>
+              <BookOpen className="relative z-10 w-4 h-4" />
+              <span className="relative z-10">Academic Excellence (9.04 CGPA)</span>
             </button>
 
             <button
               onClick={() => setActiveTab('leadership')}
-              className={`relative px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 ${
+              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
                 activeTab === 'leadership' ? 'text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
               {activeTab === 'leadership' && (
                 <motion.div
                   layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
                   transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                />
+                >
+                  <ButtonGlare radius={12} />
+                </motion.div>
               )}
-              <Users className="w-4 h-4" />
-              <span>Leadership Trajectory</span>
+              <Users className="relative z-10 w-4 h-4" />
+              <span className="relative z-10">Leadership Trajectory</span>
             </button>
 
             <button
               onClick={() => setActiveTab('research')}
-              className={`relative px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 ${
+              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
                 activeTab === 'research' ? 'text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
               {activeTab === 'research' && (
                 <motion.div
                   layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
                   transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                />
+                >
+                  <ButtonGlare radius={12} />
+                </motion.div>
               )}
-              <FileText className="w-4 h-4" />
-              <span>AIDE-2024 Research Paper</span>
+              <FileText className="relative z-10 w-4 h-4" />
+              <span className="relative z-10">AIDE-2024 Research Paper</span>
             </button>
           </div>
         </div>

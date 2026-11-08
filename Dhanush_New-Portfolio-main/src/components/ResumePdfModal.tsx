@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Printer, Download, Copy, Check, FileText } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 interface ResumePdfModalProps {
   isOpen: boolean;
@@ -163,33 +164,45 @@ VERIFIED CERTIFICATIONS
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyText}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors border border-slate-700"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors border border-slate-700"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
-              <span>{copied ? 'Copied' : 'Copy Text'}</span>
+              <ButtonGlare radius={12} intensity={0.3} />
+              <span className="relative z-10 flex items-center gap-1.5">
+                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
+                <span>{copied ? 'Copied' : 'Copy Text'}</span>
+              </span>
             </button>
 
             <button
               onClick={handleDownloadFile}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
             >
-              <Download className="w-4 h-4 text-emerald-400" />
-              <span>{downloading ? 'Downloading...' : 'Download File'}</span>
+              <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.8, b: 0.6, a: 1 }} />
+              <span className="relative z-10 flex items-center gap-1.5">
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>{downloading ? 'Downloading...' : 'Download File'}</span>
+              </span>
             </button>
 
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
             >
-              <Printer className="w-4 h-4" />
-              <span>Print / Save PDF</span>
+              <ButtonGlare radius={12} intensity={0.5} frontColor={{ r: 0.3, g: 0.6, b: 1, a: 1 }} />
+              <span className="relative z-10 flex items-center gap-1.5">
+                <Printer className="w-4 h-4" />
+                <span>Print / Save PDF</span>
+              </span>
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2 transition-colors"
+              className="relative overflow-hidden group p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2 transition-colors"
             >
-              <X className="w-5 h-5" />
+              <ButtonGlare radius={12} intensity={0.3} />
+              <span className="relative z-10">
+                <X className="w-5 h-5" />
+              </span>
             </button>
           </div>
         </div>

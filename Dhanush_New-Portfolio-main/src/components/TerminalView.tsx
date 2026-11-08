@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { CornerDownLeft, ArrowLeft, Terminal, Sparkles } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
+import { ButtonGlare } from './ui/button-glare';
 
 interface TerminalViewProps {
   onExitTerminal: () => void;
@@ -191,10 +192,13 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ onExitTerminal }) =>
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onExitTerminal}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 hover:bg-slate-800 text-cyan-300 text-xs font-bold transition-all shadow-md"
+          className="relative overflow-hidden group flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 hover:bg-slate-800 text-cyan-300 text-xs font-bold transition-all shadow-md"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Exit to Visual GUI Mode</span>
+          <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.8, b: 0.9, a: 1 }} />
+          <span className="relative z-10 flex items-center gap-2">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Exit to Visual GUI Mode</span>
+          </span>
         </motion.button>
       </div>
 

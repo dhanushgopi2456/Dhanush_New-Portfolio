@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { RESUME_DATA, Project } from '../data/resumeData';
 import { speakProjectExplanation, stopSpeech, subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
+import { ButtonGlare } from './ui/button-glare';
 
 export const Projects: React.FC = () => {
   const [activeDemoProject, setActiveDemoProject] = useState<Project | null>(null);
@@ -193,24 +194,27 @@ export const Projects: React.FC = () => {
                     {/* Audio Overview Button with Live Waveform */}
                     <button
                       onClick={() => handleSpeakProject(proj)}
-                      className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all ${
+                      className={`relative overflow-hidden flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer group ${
                         speechState.isSpeaking && (speechState.currentText.includes(proj.title) || speechState.activeSource === 'mp3')
                           ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 animate-pulse shadow-md shadow-amber-500/20'
                           : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
                       }`}
                       title="Listen to project overview"
                     >
-                      {speechState.isSpeaking && (speechState.currentText.includes(proj.title) || speechState.activeSource === 'mp3') ? (
-                        <>
-                          <Square className="w-3 h-3 fill-current text-amber-400" />
-                          <span>Stop</span>
-                        </>
-                      ) : (
-                        <>
-                          <Volume2 className="w-3 h-3 text-amber-400" />
-                          <span>Audio</span>
-                        </>
-                      )}
+                      <ButtonGlare radius={12} frontColor={{ r: 1, g: 0.6, b: 0.1, a: 1 }} />
+                      <span className="relative z-10 flex items-center gap-1.5">
+                        {speechState.isSpeaking && (speechState.currentText.includes(proj.title) || speechState.activeSource === 'mp3') ? (
+                          <>
+                            <Square className="w-3 h-3 fill-current text-amber-400" />
+                            <span>Stop</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3 h-3 text-amber-400" />
+                            <span>Audio</span>
+                          </>
+                        )}
+                      </span>
                     </button>
                   </div>
 
@@ -248,20 +252,22 @@ export const Projects: React.FC = () => {
                   href={proj.repoUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-bold transition-all shadow-md group/repo"
+                  className="relative overflow-hidden flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-xs font-bold transition-all shadow-md group cursor-pointer"
                 >
-                  <Github className="w-4 h-4 text-slate-400 group-hover/repo:text-white" />
-                  <span>GitHub Repo</span>
+                  <ButtonGlare radius={12} />
+                  <Github className="relative z-10 w-4 h-4 text-slate-400 group-hover:text-white" />
+                  <span className="relative z-10">GitHub Repo</span>
                 </a>
 
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setActiveDemoProject(proj)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
+                  className="relative overflow-hidden flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30 group cursor-pointer"
                 >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Interactive Demo</span>
+                  <ButtonGlare radius={12} />
+                  <Play className="relative z-10 w-3.5 h-3.5 fill-current" />
+                  <span className="relative z-10">Interactive Demo</span>
                 </motion.button>
               </div>
 
@@ -295,31 +301,37 @@ export const Projects: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleSpeakProject(activeDemoProject)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                      className={`relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
                         speechState.isSpeaking && speechState.currentText.includes(activeDemoProject.title)
                           ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 animate-pulse'
                           : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'
                       }`}
                       title="Listen to 2-line explanation"
                     >
-                      {speechState.isSpeaking && speechState.currentText.includes(activeDemoProject.title) ? (
-                        <>
-                          <Square className="w-3.5 h-3.5 fill-current text-amber-400" />
-                          <span>Stop Voice</span>
-                        </>
-                      ) : (
-                        <>
-                          <Volume2 className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Audio Guide</span>
-                        </>
-                      )}
+                      <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 1, g: 0.6, b: 0.1, a: 1 }} />
+                      <span className="relative z-10 flex items-center gap-1.5">
+                        {speechState.isSpeaking && speechState.currentText.includes(activeDemoProject.title) ? (
+                          <>
+                            <Square className="w-3.5 h-3.5 fill-current text-amber-400" />
+                            <span>Stop Voice</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Audio Guide</span>
+                          </>
+                        )}
+                      </span>
                     </button>
 
                     <button
                       onClick={() => setActiveDemoProject(null)}
-                      className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                      className="relative overflow-hidden group p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
                     >
-                      <X className="w-5 h-5" />
+                      <ButtonGlare radius={12} intensity={0.3} />
+                      <span className="relative z-10">
+                        <X className="w-5 h-5" />
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -400,9 +412,10 @@ export const Projects: React.FC = () => {
                         />
                         <button
                           onClick={handleAddTask}
-                          className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 transition-colors"
+                          className="relative overflow-hidden group px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 transition-colors"
                         >
-                          Add Task
+                          <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.4, g: 0.4, b: 1, a: 1 }} />
+                          <span className="relative z-10">Add Task</span>
                         </button>
                       </div>
 
@@ -484,23 +497,25 @@ export const Projects: React.FC = () => {
                         <span className="text-xs text-slate-400 font-mono font-bold">Sample Feeds:</span>
                         <button
                           onClick={() => setSelectedYoloImage('traffic')}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                          className={`relative overflow-hidden group px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
                             selectedYoloImage === 'traffic' 
                               ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30' 
                               : 'bg-slate-900 text-slate-400 hover:text-white'
                           }`}
                         >
-                          Urban Traffic Feed
+                          <ButtonGlare radius={12} intensity={selectedYoloImage === 'traffic' ? 0.4 : 0.2} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+                          <span className="relative z-10">Urban Traffic Feed</span>
                         </button>
                         <button
                           onClick={() => setSelectedYoloImage('team')}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                          className={`relative overflow-hidden group px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
                             selectedYoloImage === 'team' 
                               ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30' 
                               : 'bg-slate-900 text-slate-400 hover:text-white'
                           }`}
                         >
-                          Indoor Workstation
+                          <ButtonGlare radius={12} intensity={selectedYoloImage === 'team' ? 0.4 : 0.2} frontColor={{ r: 0.7, g: 0.3, b: 0.9, a: 1 }} />
+                          <span className="relative z-10">Indoor Workstation</span>
                         </button>
                       </div>
 
@@ -523,9 +538,10 @@ export const Projects: React.FC = () => {
 
                   <button
                     onClick={() => setActiveDemoProject(null)}
-                    className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-colors"
+                    className="relative overflow-hidden group px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-colors"
                   >
-                    Done Testing
+                    <ButtonGlare radius={12} intensity={0.3} />
+                    <span className="relative z-10">Done Testing</span>
                   </button>
                 </div>
 
