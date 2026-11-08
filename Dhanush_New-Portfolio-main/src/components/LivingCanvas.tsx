@@ -25,6 +25,12 @@ export const LivingCanvas: React.FC = () => {
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x030712, 1);
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    renderer.domElement.style.pointerEvents = 'none';
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -284,7 +290,11 @@ export const LivingCanvas: React.FC = () => {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-gradient-to-b from-[#030712] via-[#060a17] to-[#090d16]"
+      className="fixed inset-0 pointer-events-none -z-10 overflow-hidden"
+      style={{
+        backgroundColor: '#030712',
+        backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.14), transparent 60%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.12), transparent 50%), radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%)'
+      }}
       aria-hidden="true"
     />
   );

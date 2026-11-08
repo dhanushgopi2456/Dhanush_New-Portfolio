@@ -125,7 +125,7 @@ export default function App() {
       {isTerminalMode ? (
         <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
       ) : (
-        <div className="relative z-10 min-h-screen text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
+        <div className="relative z-10 min-h-screen bg-[#030712]/80 text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
           {/* Navigation Header */}
           <Navbar
             activeSection={activeSection}
