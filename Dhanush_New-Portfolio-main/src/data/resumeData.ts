@@ -19,6 +19,7 @@ export interface Project {
   techStack: string[];
   repoUrl: string;
   demoUrl?: string;
+  demoLabel?: string;
   featured: boolean;
   image: string;
   mockType: 'ecommerce' | 'kanban' | 'yolo' | 'grader';
@@ -218,7 +219,8 @@ export const RESUME_DATA = {
       ],
       techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Google Gemini", "OpenRouter", "pdf.js", "Vision AI", "Node.js"],
       repoUrl: "https://github.com/dhanushgopi2456/veda-ai-grader",
-      demoUrl: "https://github.com/dhanushgopi2456/veda-ai-grader",
+      demoUrl: "https://veda-ai-grader.vercel.app",
+      demoLabel: "Live Link",
       featured: true,
       image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800",
       mockType: "grader"
@@ -238,6 +240,7 @@ export const RESUME_DATA = {
       techStack: ["React", "Vite", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
       repoUrl: "https://github.com/dhanushgopi2456/FreshMart-v2",
       demoUrl: "https://fresh-mart-v2.vercel.app",
+      demoLabel: "Live Link",
       featured: true,
       image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
       mockType: "ecommerce"
@@ -257,6 +260,7 @@ export const RESUME_DATA = {
       techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
       repoUrl: "https://github.com/dhanushgopi2456/team-task-manager-v2",
       demoUrl: "https://client-psi-three-59.vercel.app",
+      demoLabel: "Live Link",
       featured: true,
       image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
       mockType: "kanban"
@@ -275,7 +279,8 @@ export const RESUME_DATA = {
       ],
       techStack: ["Python", "PyTorch", "OpenCV", "NumPy", "Flask", "YOLOv9", "Deep Learning"],
       repoUrl: "https://github.com/dhanushgopi2456/Object-Detection-YOLO-v9",
-      demoUrl: "https://yolov9-demo.vercel.app",
+      demoUrl: "https://github.com/dhanushgopi2456/My_Certifications/blob/main/ResearchPaper_Certificate.jpeg",
+      demoLabel: "Research Paper",
       featured: true,
       image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
       mockType: "yolo"

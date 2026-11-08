@@ -56,9 +56,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
       } else if (q.includes('cert') || q.includes('servicenow') || q.includes('azure') || q.includes('oracle') || q.includes('salesforce')) {
         reply = `Dhanush holds 6 key certifications:\n1. Salesforce Agentforce Specialist (Dec 2025)\n2. ServiceNow Certified System Administrator (CSA) (Sep 2025)\n3. ServiceNow Certified Application Developer (CAD) (Oct 2025)\n4. Oracle Cloud Infrastructure 2025 DevOps Professional (July 2025)\n5. Microsoft Azure AI Fundamentals (AI-900) (May 2024)\n6. NPTEL Data Structures & Algorithms using Java (Oct 2024)`;
       } else if (q.includes('veda') || q.includes('grader')) {
-        reply = `VedaAI is Dhanush's AI-powered answer sheet evaluation platform built with Next.js, TypeScript, and Google Gemini Vision. It extracts questions from exam papers, maps handwritten answers with bounding boxes, and generates structured marks and constructive feedback.\nRepo: https://github.com/dhanushgopi2456/veda-ai-grader`;
-      } else if (q.includes('project') || q.includes('freshmart') || q.includes('task')) {
-        reply = `Dhanush built 4 production software & AI projects:\n• VedaAI: AI-Powered Answer Sheet Evaluation Platform with Google Gemini Vision & Bounding-Box Mapping\n• FreshMart: Full-Stack Grocery Web App with JWT & Admin Control\n• Team Task Manager: Collaborative Kanban Board with Role-Based Access Controls (RBAC)\n• Object Detection YOLOv9: Computer vision pipeline for real-time video/image inference`;
+        reply = `VedaAI is Dhanush's AI-powered answer sheet evaluation platform built with Next.js, TypeScript, and Google Gemini Vision. It extracts questions from exam papers, maps handwritten answers with bounding boxes, and generates structured marks and constructive feedback.\nLive Demo: https://veda-ai-grader.vercel.app\nRepo: https://github.com/dhanushgopi2456/veda-ai-grader`;
+      } else if (q.includes('freshmart') || q.includes('grocery')) {
+        reply = `FreshMart is a full-stack MERN grocery e-commerce app featuring JWT authentication, dynamic cart management, and an admin inventory panel.\nLive Demo: https://fresh-mart-v2.vercel.app\nRepo: https://github.com/dhanushgopi2456/FreshMart-v2`;
+      } else if (q.includes('task') || q.includes('kanban')) {
+        reply = `Team Task Manager is a collaborative Kanban workspace with Role-Based Access Controls (RBAC), real-time status updates, and custom Mongoose schemas.\nLive Demo: https://client-psi-three-59.vercel.app\nRepo: https://github.com/dhanushgopi2456/team-task-manager-v2`;
+      } else if (q.includes('project')) {
+        reply = `Dhanush built 4 production software & AI projects:\n• VedaAI (Live: https://veda-ai-grader.vercel.app)\n• FreshMart (Live: https://fresh-mart-v2.vercel.app)\n• Team Task Manager (Live: https://client-psi-three-59.vercel.app)\n• Object Detection YOLOv9 (AIDE-2024 Research Paper)`;
       } else {
         reply = `Dhanush Gopi Kavala is a Computer Science Engineer specializing in Full Stack MERN development, Java/Python DSA, REST API design, and Computer Vision. You can reach him at ${RESUME_DATA.personal.email} or ${RESUME_DATA.personal.phone}!`;
       }
