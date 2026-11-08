@@ -10,33 +10,33 @@ interface ServiceItem {
 const SERVICES_DATA: ServiceItem[] = [
   {
     number: '01',
-    name: '3D Modeling',
+    name: 'Full-Stack MERN Development',
     description:
-      'Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.',
+      'End-to-end web applications engineered with React.js, Node.js, Express.js, and MongoDB, delivering blazing-fast client interfaces and resilient cloud backends.',
   },
   {
     number: '02',
-    name: 'Rendering',
+    name: 'REST API & Backend Architecture',
     description:
-      'High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.',
+      'Scalable, modular RESTful APIs with secure JWT authentication, role-based access control (RBAC), custom middleware, and robust MongoDB/Mongoose schemas.',
   },
   {
     number: '03',
-    name: 'Motion Design',
+    name: 'AI & Computer Vision Solutions',
     description:
-      'Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.',
+      'Real-time object detection and deep learning pipelines with YOLOv9, PyTorch, and OpenCV, packaged with high-performance Flask inference engines.',
   },
   {
     number: '04',
-    name: 'Branding',
+    name: 'Algorithmic Problem Solving & Optimization',
     description:
-      'Crafting cohesive visual identities -- from logos to full brand systems -- that communicate a clear and memorable presence.',
+      'High-efficiency algorithms and database query tuning backed by 900+ competitive programming solutions across LeetCode (1550+ contest rating), GFG, and Code360.',
   },
   {
     number: '05',
-    name: 'Web Design',
+    name: 'Modern UI/UX & Responsive Web Design',
     description:
-      'Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.',
+      'Designing conversion-focused, mobile-first web applications using Tailwind CSS, fluid clamp typography, Framer Motion animations, and interactive 3D physics.',
   },
 ];
 

@@ -1,12 +1,19 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { FadeIn } from './FadeIn';
 import { AnimatedText } from './AnimatedText';
 import { ContactButton } from './ContactButton';
+import { GraduationCap, Code2, Award, BookOpen } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   const paragraphText =
-    "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!";
+    "Results-driven Computer Science graduate and Software Engineer specializing in Full Stack MERN development and AI computer vision. With a 9.04 CGPA and 900+ algorithmic problems solved across LeetCode, GeeksforGeeks, and Code360, i focus on building scalable web applications, robust REST APIs, and high-performance intelligent systems. Let's build something incredible together!";
+
+  const metrics = [
+    { label: 'B.Tech CGPA', value: '9.04', desc: 'Sri Vasavi Engg College', icon: GraduationCap, color: 'text-cyan-400' },
+    { label: 'DSA Solved', value: '900+', desc: 'LeetCode, GFG, Code360', icon: Code2, color: 'text-amber-400' },
+    { label: 'Certifications', value: '6', desc: 'Oracle, Azure, ServiceNow', icon: Award, color: 'text-purple-400' },
+    { label: 'Research Paper', value: 'AIDE-2024', desc: 'Published IEEE Conf.', icon: BookOpen, color: 'text-emerald-400' },
+  ];
 
   return (
     <section
@@ -78,8 +85,28 @@ export const AboutSection: React.FC = () => {
           <AnimatedText text={paragraphText} />
         </div>
 
+        {/* Dynamic Metric Badges */}
+        <FadeIn delay={0.2} y={30} className="w-full mt-12 sm:mt-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
+            {metrics.map((m, idx) => {
+              const Icon = m.icon;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-2xl p-4 bg-white/[0.03] border border-white/10 backdrop-blur-md flex flex-col items-center text-center hover:border-white/20 transition-all"
+                >
+                  <Icon className={`w-5 h-5 mb-2 ${m.color}`} />
+                  <span className="text-xl sm:text-2xl font-black text-white tracking-tight">{m.value}</span>
+                  <span className="text-xs font-medium text-[#D7E2EA] uppercase tracking-wider mt-0.5">{m.label}</span>
+                  <span className="text-[10px] text-[#D7E2EA]/50 tracking-wide mt-1">{m.desc}</span>
+                </div>
+              );
+            })}
+          </div>
+        </FadeIn>
+
         {/* Contact Button */}
-        <div className="mt-16 sm:mt-20 md:mt-24">
+        <div className="mt-14 sm:mt-18 md:mt-20">
           <FadeIn delay={0.3} y={20}>
             <ContactButton href="#contact" />
           </FadeIn>
