@@ -15,6 +15,7 @@ import { TerminalView } from './components/TerminalView';
 import { AiAssistantDrawer } from './components/AiAssistantDrawer';
 import { Preloader } from './components/Preloader';
 import { CustomCursor } from './components/CustomCursor';
+import { VideoBackground } from './components/VideoBackground';
 import { LivingCanvas } from './components/LivingCanvas';
 import { RESUME_DATA } from './data/resumeData';
 import { speakGreetingAndObjective } from './utils/speechUtils';
@@ -116,6 +117,9 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Cinematic Color-Graded Video Background */}
+      <VideoBackground />
+
       {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
       <LivingCanvas />
 
@@ -125,7 +129,7 @@ export default function App() {
       {isTerminalMode ? (
         <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
       ) : (
-        <div className="relative z-10 min-h-screen bg-[#030712]/80 text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
+        <div className="relative z-10 min-h-screen bg-[#030712]/40 text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
           {/* Navigation Header */}
           <Navbar
             activeSection={activeSection}

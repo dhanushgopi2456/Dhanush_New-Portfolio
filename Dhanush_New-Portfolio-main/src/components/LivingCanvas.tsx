@@ -24,7 +24,7 @@ export const LivingCanvas: React.FC = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x030712, 1);
+    renderer.setClearColor(0x000000, 0);
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = '0';
     renderer.domElement.style.left = '0';
@@ -290,11 +290,7 @@ export const LivingCanvas: React.FC = () => {
   return (
     <div
       ref={mountRef}
-      className="fixed inset-0 pointer-events-none -z-10 overflow-hidden"
-      style={{
-        backgroundColor: '#030712',
-        backgroundImage: 'radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.14), transparent 60%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.12), transparent 50%), radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%)'
-      }}
+      className="fixed inset-0 pointer-events-none -z-10 overflow-hidden bg-transparent"
       aria-hidden="true"
     />
   );
