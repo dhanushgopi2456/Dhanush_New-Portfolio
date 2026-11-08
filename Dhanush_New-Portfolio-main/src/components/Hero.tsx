@@ -192,7 +192,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
   const lastName = "Kavala";
 
   return (
-    <section id="hero" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden dot-pattern">
+    <section id="hero" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
       
       {/* Multi-layered Ambient Radial Spotlights */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none animate-pulse-glow" />

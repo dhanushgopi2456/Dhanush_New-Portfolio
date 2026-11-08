@@ -39,7 +39,7 @@ export const About: React.FC = () => {
   const calculatedPercentage = (cgpaInput * 9.5).toFixed(2);
 
   return (
-    <section id="about" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/40">
+    <section id="about" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/20 backdrop-blur-[2px]">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

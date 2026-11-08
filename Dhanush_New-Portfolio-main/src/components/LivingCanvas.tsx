@@ -34,7 +34,7 @@ export const LivingCanvas: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x030712, 0.0008);
+    // No scene fog so background video remains vibrant and transparent
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -171,9 +171,9 @@ export const LivingCanvas: React.FC = () => {
         col = mix(col, violet, smoothstep(0.0, 0.4, pattern));
         col = mix(col, magenta, smoothstep(0.4, 0.9, pattern));
 
-        // Soft vignette & edge fade
+        // Soft vignette & edge fade - subtle accent to harmonize with the video background
         float distFromCenter = length(p);
-        float alpha = smoothstep(1.3, 0.2, distFromCenter) * 0.22;
+        float alpha = smoothstep(1.3, 0.2, distFromCenter) * 0.08;
         
         gl_FragColor = vec4(col, alpha);
       }

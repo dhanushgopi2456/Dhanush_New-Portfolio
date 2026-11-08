@@ -72,7 +72,7 @@ export const InteractiveSkills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/70">
+    <section id="skills" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/25 backdrop-blur-[2px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Staggered 3D Scroll Entrance */}

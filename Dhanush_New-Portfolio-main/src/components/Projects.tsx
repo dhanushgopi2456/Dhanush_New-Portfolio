@@ -105,7 +105,7 @@ export const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/80">
+    <section id="projects" className="py-24 relative z-10 border-t border-white/10 bg-slate-950/25 backdrop-blur-[2px]">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
