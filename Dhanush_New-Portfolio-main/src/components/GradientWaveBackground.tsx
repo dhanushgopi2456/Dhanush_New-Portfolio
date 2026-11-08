@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * GradientWaveBackground (Cyber Ocean Waves)
- * Ultra-smooth, GPU-accelerated interactive gradient ocean waves
- * tailored specifically to Dhanush's portfolio cyber palette:
+ * Ultra-vibrant, GPU-accelerated interactive gradient ocean waves
+ * engineered to Dhanush's portfolio cyber palette:
  * Electric Cyan (#06b6d4), Deep Indigo (#4f46e5), Neon Violet (#8b5cf6),
- * Vivid Magenta (#ec4899), and Deep Space Abyssal Navy (#030712 to #0a1128).
+ * Hot Magenta (#ec4899), and Abyssal Deep Space Navy (#030712).
  *
- * Spans full viewport height and persists seamlessly across all sections:
- * Hero, About, Coding Profiles, Skills, Experience, Projects, Certifications, Contact.
+ * Designed to provide continuous, luminous, visible ocean wave motion across
+ * every single section of the website (Hero, About, Metrics, Skills, Projects, etc.).
  */
 export const GradientWaveBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,12 +29,6 @@ export const GradientWaveBackground: React.FC = () => {
     let mouseY = height / 2;
     let targetMouseX = width / 2;
     let targetMouseY = height / 2;
-    let mouseVelocity = 0;
-    let lastMouseX = mouseX;
-
-    // Scroll tracking
-    let scrollY = window.scrollY;
-    let targetScrollY = window.scrollY;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -45,7 +39,7 @@ export const GradientWaveBackground: React.FC = () => {
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
     };
 
@@ -57,120 +51,90 @@ export const GradientWaveBackground: React.FC = () => {
       targetMouseY = e.clientY;
     };
 
-    const onScroll = () => {
-      targetScrollY = window.scrollY;
-    };
-
     window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('scroll', onScroll, { passive: true });
 
-    // 5 Ocean Wave Layers spanning the full canvas from upper-mid to bottom
-    const oceanWaves = [
+    // 5 Distinct Ocean Wave Layers spanning the full viewport vertically
+    const waves = [
       {
-        // Wave 1: Abyssal Deep Ocean (Deep Navy to Electric Cyan)
-        baseYRatio: 0.62,
-        amplitude: 65,
-        freq1: 0.002,
-        freq2: 0.0042,
-        speed: 0.0018,
-        phase: 0,
-        gradientStops: [
-          { pos: 0.0, color: 'rgba(6, 182, 212, 0.65)' },   // Electric Cyan crest
-          { pos: 0.25, color: 'rgba(14, 116, 144, 0.55)' }, // Deep Teal
-          { pos: 0.65, color: 'rgba(15, 23, 42, 0.75)' },   // Slate Navy
-          { pos: 1.0, color: 'rgba(3, 7, 18, 0.95)' },      // Deep Space Base
-        ],
-        crestStroke: 'rgba(103, 232, 249, 0.95)',
-        crestGlow: '#06b6d4',
-        glowBlur: 20,
-        lineWidth: 2.5,
-      },
-      {
-        // Wave 2: Bioluminescent Indigo Current
-        baseYRatio: 0.52,
-        amplitude: 75,
+        // 1. Upper-Horizon Cyan Bio-Wave (Top 25% of screen)
+        baseYRatio: 0.22,
+        amp: 48,
         freq1: 0.0028,
         freq2: 0.0055,
+        speed: 0.0019,
+        phase: 0,
+        colorTop: 'rgba(6, 182, 212, 0.72)',      // Electric Cyan
+        colorMid: 'rgba(14, 116, 144, 0.42)',    // Deep Cyan
+        colorBottom: 'rgba(15, 23, 42, 0.12)',   // Translucent Ocean
+        crestColor: '#67e8f9',
+        glowColor: '#06b6d4',
+      },
+      {
+        // 2. High-Mid Electric Indigo Current (Top 38% of screen)
+        baseYRatio: 0.36,
+        amp: 62,
+        freq1: 0.0022,
+        freq2: 0.0048,
         speed: -0.0022,
-        phase: Math.PI / 2.5,
-        gradientStops: [
-          { pos: 0.0, color: 'rgba(99, 102, 241, 0.62)' },  // Electric Indigo
-          { pos: 0.35, color: 'rgba(124, 58, 237, 0.52)' }, // Violet
-          { pos: 0.75, color: 'rgba(30, 27, 75, 0.65)' },   // Midnight Purple
-          { pos: 1.0, color: 'rgba(3, 7, 18, 0.85)' },
-        ],
-        crestStroke: 'rgba(165, 180, 252, 0.9)',
-        crestGlow: '#6366f1',
-        glowBlur: 22,
-        lineWidth: 2.2,
+        phase: Math.PI / 3,
+        colorTop: 'rgba(99, 102, 241, 0.75)',    // Vivid Indigo
+        colorMid: 'rgba(79, 70, 229, 0.44)',     // Indigo
+        colorBottom: 'rgba(30, 27, 75, 0.15)',   // Translucent Purple
+        crestColor: '#a5b4fc',
+        glowColor: '#6366f1',
       },
       {
-        // Wave 3: Radiant Cyber Magenta Swell
-        baseYRatio: 0.42,
-        amplitude: 58,
-        freq1: 0.0034,
-        freq2: 0.007,
-        speed: 0.0025,
-        phase: Math.PI,
-        gradientStops: [
-          { pos: 0.0, color: 'rgba(236, 72, 153, 0.58)' },  // Hot Magenta
-          { pos: 0.3, color: 'rgba(217, 70, 239, 0.48)' },  // Fuchsia
-          { pos: 0.7, color: 'rgba(88, 28, 135, 0.55)' },   // Deep Purple
-          { pos: 1.0, color: 'rgba(3, 7, 18, 0.85)' },
-        ],
-        crestStroke: 'rgba(244, 114, 182, 0.92)',
-        crestGlow: '#ec4899',
-        glowBlur: 18,
-        lineWidth: 2.0,
+        // 3. Mid-Ocean Neon Violet Swell (Center 50% of screen)
+        baseYRatio: 0.50,
+        amp: 76,
+        freq1: 0.0018,
+        freq2: 0.0039,
+        speed: 0.0016,
+        phase: (Math.PI * 2) / 3,
+        colorTop: 'rgba(168, 85, 247, 0.78)',    // Neon Violet
+        colorMid: 'rgba(147, 51, 234, 0.46)',    // Purple
+        colorBottom: 'rgba(15, 23, 42, 0.18)',
+        crestColor: '#d8b4fe',
+        glowColor: '#a855f7',
       },
       {
-        // Wave 4: Glowing Aqua Seafoam Ripple
-        baseYRatio: 0.32,
-        amplitude: 45,
-        freq1: 0.0042,
-        freq2: 0.0085,
-        speed: -0.0016,
-        phase: (Math.PI * 3) / 2,
-        gradientStops: [
-          { pos: 0.0, color: 'rgba(45, 212, 191, 0.52)' },  // Aqua Green
-          { pos: 0.35, color: 'rgba(6, 182, 212, 0.42)' },  // Cyan
-          { pos: 0.8, color: 'rgba(15, 23, 42, 0.6)' },
-          { pos: 1.0, color: 'rgba(3, 7, 18, 0.8)' },
-        ],
-        crestStroke: 'rgba(94, 234, 212, 0.88)',
-        crestGlow: '#14b8a6',
-        glowBlur: 16,
-        lineWidth: 1.8,
-      },
-      {
-        // Wave 5: Ethereal Horizon Violet Mist
-        baseYRatio: 0.22,
-        amplitude: 38,
+        // 4. Low-Mid Cyber Magenta Breaker (Lower 65% of screen)
+        baseYRatio: 0.65,
+        amp: 68,
         freq1: 0.0025,
-        freq2: 0.005,
-        speed: 0.0012,
-        phase: Math.PI / 4,
-        gradientStops: [
-          { pos: 0.0, color: 'rgba(168, 85, 247, 0.42)' },  // Violet Mist
-          { pos: 0.4, color: 'rgba(99, 102, 241, 0.3)' },
-          { pos: 0.85, color: 'rgba(3, 7, 18, 0.7)' },
-          { pos: 1.0, color: 'rgba(3, 7, 18, 0.8)' },
-        ],
-        crestStroke: 'rgba(216, 180, 254, 0.85)',
-        crestGlow: '#a855f7',
-        glowBlur: 14,
-        lineWidth: 1.6,
+        freq2: 0.0052,
+        speed: -0.0021,
+        phase: Math.PI,
+        colorTop: 'rgba(236, 72, 153, 0.74)',    // Hot Magenta
+        colorMid: 'rgba(219, 39, 119, 0.42)',    // Rose
+        colorBottom: 'rgba(15, 23, 42, 0.2)',
+        crestColor: '#f472b6',
+        glowColor: '#ec4899',
+      },
+      {
+        // 5. Deep Abyssal Aqua Ocean Surge (Bottom 80% of screen)
+        baseYRatio: 0.80,
+        amp: 58,
+        freq1: 0.002,
+        freq2: 0.0044,
+        speed: 0.0015,
+        phase: (Math.PI * 4) / 3,
+        colorTop: 'rgba(45, 212, 191, 0.76)',    // Aqua / Teal
+        colorMid: 'rgba(13, 148, 136, 0.44)',    // Deep Teal
+        colorBottom: 'rgba(8, 51, 68, 0.22)',
+        crestColor: '#5eead4',
+        glowColor: '#14b8a6',
       },
     ];
 
-    // Bioluminescent floating plankton/foam particles
-    const particlesCount = 45;
+    // 50 Bioluminescent floating plankton/foam particles
+    const particlesCount = 50;
     const particles = Array.from({ length: particlesCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 2.5 + 1.0,
-      baseSpeedX: (Math.random() - 0.5) * 0.4,
-      baseSpeedY: (Math.random() - 0.5) * 0.3 - 0.2,
+      size: Math.random() * 2.8 + 1.2,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.4 - 0.15,
       opacity: Math.random() * 0.7 + 0.3,
       pulseSpeed: Math.random() * 0.04 + 0.02,
       phase: Math.random() * Math.PI * 2,
@@ -180,7 +144,8 @@ export const GradientWaveBackground: React.FC = () => {
         '#a855f7', // Violet
         '#ec4899', // Magenta
         '#38bdf8', // Sky
-      ][Math.floor(Math.random() * 5)],
+        '#2dd4bf', // Aqua
+      ][Math.floor(Math.random() * 6)],
     }));
 
     let time = 0;
@@ -191,28 +156,18 @@ export const GradientWaveBackground: React.FC = () => {
       // Smooth cursor interpolation
       mouseX += (targetMouseX - mouseX) * 0.05;
       mouseY += (targetMouseY - mouseY) * 0.05;
-      mouseVelocity = Math.abs(mouseX - lastMouseX);
-      lastMouseX = mouseX;
-
-      // Smooth scroll interpolation
-      scrollY += (targetScrollY - scrollY) * 0.06;
 
       ctx.clearRect(0, 0, width, height);
-
       time += 1;
 
-      // Mouse influence on waves
-      const mouseInfluenceX = (mouseX / width - 0.5) * 80;
-      const mouseInfluenceY = (mouseY / height - 0.5) * 60;
-      const speedBoost = Math.min(mouseVelocity * 0.0003, 0.003);
+      // Mouse influence on wave crests
+      const mouseInfluenceX = (mouseX / width - 0.5) * 70;
+      const mouseInfluenceY = (mouseY / height - 0.5) * 45;
 
-      // 1. Render all 5 Ocean Waves from back to front
-      // Reverse order so foreground waves overlay background waves naturally
-      for (let i = oceanWaves.length - 1; i >= 0; i--) {
-        const w = oceanWaves[i];
-        const baseY = height * w.baseYRatio + mouseInfluenceY * (i % 2 === 0 ? 0.6 : -0.4);
-        const dynamicAmp = w.amplitude + Math.sin(time * 0.02 + i) * 10;
-        const currentSpeed = w.speed + (w.speed > 0 ? speedBoost : -speedBoost);
+      // 1. Draw all 5 Ocean Waves from top layer to bottom layer
+      waves.forEach((w, index) => {
+        const baseY = height * w.baseYRatio + mouseInfluenceY * (index % 2 === 0 ? 0.7 : -0.5);
+        const dynamicAmp = w.amp + Math.sin(time * 0.02 + index) * 12;
 
         ctx.beginPath();
         ctx.moveTo(0, height);
@@ -220,13 +175,13 @@ export const GradientWaveBackground: React.FC = () => {
 
         const step = 6;
         for (let x = 0; x <= width + step; x += step) {
-          // Interactive fluid ripple from cursor
+          // Interactive fluid ripple originating from cursor
           const distToCursor = Math.abs(x - mouseX);
-          const ripple = Math.exp(-distToCursor / 220) * Math.sin(time * 0.09 - distToCursor * 0.03) * 22;
+          const ripple = Math.exp(-distToCursor / 240) * Math.sin(time * 0.09 - distToCursor * 0.03) * 24;
 
-          // Double harmonic sine & cosine synthesis for organic ocean roll
-          const h1 = Math.sin(x * w.freq1 + time * currentSpeed + w.phase + mouseInfluenceX * 0.004) * dynamicAmp;
-          const h2 = Math.cos(x * w.freq2 - time * (currentSpeed * 0.8) + w.phase * 0.5) * (dynamicAmp * 0.4);
+          // Double harmonic trigonometric synthesis for real liquid ocean swell
+          const h1 = Math.sin(x * w.freq1 + time * w.speed + w.phase + mouseInfluenceX * 0.003) * dynamicAmp;
+          const h2 = Math.cos(x * w.freq2 - time * (w.speed * 0.75) + w.phase * 0.5) * (dynamicAmp * 0.38);
           const y = baseY + h1 + h2 + ripple;
 
           ctx.lineTo(x, y);
@@ -235,51 +190,72 @@ export const GradientWaveBackground: React.FC = () => {
         ctx.lineTo(width, height);
         ctx.closePath();
 
-        // Rich Multi-Stop Ocean Gradient
+        // Multi-Stop Liquid Wave Gradient
         const gradient = ctx.createLinearGradient(0, baseY - dynamicAmp, 0, height);
-        w.gradientStops.forEach((stop) => {
-          gradient.addColorStop(stop.pos, stop.color);
-        });
+        gradient.addColorStop(0.0, w.colorTop);
+        gradient.addColorStop(0.35, w.colorMid);
+        gradient.addColorStop(1.0, w.colorBottom);
 
         ctx.fillStyle = gradient;
         ctx.fill();
 
-        // Glowing Laser Seafoam Crest Line
+        // Pass 1: Soft Ambient Neon Glow Halo along crest
         ctx.save();
         ctx.beginPath();
         for (let x = 0; x <= width + step; x += step) {
           const distToCursor = Math.abs(x - mouseX);
-          const ripple = Math.exp(-distToCursor / 220) * Math.sin(time * 0.09 - distToCursor * 0.03) * 22;
-
-          const h1 = Math.sin(x * w.freq1 + time * currentSpeed + w.phase + mouseInfluenceX * 0.004) * dynamicAmp;
-          const h2 = Math.cos(x * w.freq2 - time * (currentSpeed * 0.8) + w.phase * 0.5) * (dynamicAmp * 0.4);
+          const ripple = Math.exp(-distToCursor / 240) * Math.sin(time * 0.09 - distToCursor * 0.03) * 24;
+          const h1 = Math.sin(x * w.freq1 + time * w.speed + w.phase + mouseInfluenceX * 0.003) * dynamicAmp;
+          const h2 = Math.cos(x * w.freq2 - time * (w.speed * 0.75) + w.phase * 0.5) * (dynamicAmp * 0.38);
           const y = baseY + h1 + h2 + ripple;
 
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
 
-        ctx.strokeStyle = w.crestStroke;
-        ctx.lineWidth = w.lineWidth;
-        ctx.shadowColor = w.crestGlow;
-        ctx.shadowBlur = w.glowBlur;
+        ctx.strokeStyle = w.glowColor;
+        ctx.lineWidth = 5;
+        ctx.shadowColor = w.glowColor;
+        ctx.shadowBlur = 26;
+        ctx.globalAlpha = 0.65;
         ctx.stroke();
         ctx.restore();
-      }
 
-      // 2. Render Bioluminescent Plankton & Seafoam Bubbles
+        // Pass 2: Razor-Sharp Luminous Laser Ridge along peak
+        ctx.save();
+        ctx.beginPath();
+        for (let x = 0; x <= width + step; x += step) {
+          const distToCursor = Math.abs(x - mouseX);
+          const ripple = Math.exp(-distToCursor / 240) * Math.sin(time * 0.09 - distToCursor * 0.03) * 24;
+          const h1 = Math.sin(x * w.freq1 + time * w.speed + w.phase + mouseInfluenceX * 0.003) * dynamicAmp;
+          const h2 = Math.cos(x * w.freq2 - time * (w.speed * 0.75) + w.phase * 0.5) * (dynamicAmp * 0.38);
+          const y = baseY + h1 + h2 + ripple;
+
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        ctx.strokeStyle = w.crestColor;
+        ctx.lineWidth = 2.2;
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.globalAlpha = 0.95;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 2. Draw Bioluminescent Floating Plankton & Foam Embers
       particles.forEach((p) => {
-        p.x += p.baseSpeedX;
-        p.y += p.baseSpeedY;
+        p.x += p.speedX;
+        p.y += p.speedY;
 
-        // Wrap around viewport edges
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
         if (p.y < 0) p.y = height;
         if (p.y > height) p.y = 0;
 
         const pulse = Math.sin(time * p.pulseSpeed + p.phase);
-        const currentOpacity = Math.max(0.1, p.opacity + pulse * 0.25);
+        const currentOpacity = Math.max(0.15, p.opacity + pulse * 0.3);
 
         ctx.save();
         ctx.beginPath();
@@ -287,7 +263,7 @@ export const GradientWaveBackground: React.FC = () => {
         ctx.fillStyle = p.color;
         ctx.globalAlpha = currentOpacity;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.restore();
       });
@@ -299,7 +275,6 @@ export const GradientWaveBackground: React.FC = () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -311,10 +286,11 @@ export const GradientWaveBackground: React.FC = () => {
       {/* 1. Underlying Solid Space Dark Base */}
       <div className="absolute inset-0 bg-[#030712]" />
 
-      {/* 2. Deep Volumetric Aurora Aura Blobs */}
-      <div className="absolute top-0 left-1/4 w-[750px] h-[750px] bg-cyan-500/18 rounded-full blur-[170px] pointer-events-none animate-pulse-glow" />
-      <div className="absolute top-1/3 right-10 w-[700px] h-[700px] bg-purple-600/22 rounded-full blur-[180px] pointer-events-none animate-float-slow" />
-      <div className="absolute bottom-10 left-10 w-[800px] h-[800px] bg-pink-600/16 rounded-full blur-[190px] pointer-events-none animate-pulse-glow" />
+      {/* 2. Deep Volumetric Radiant Ocean Glows */}
+      <div className="absolute top-0 left-10 w-[750px] h-[750px] bg-cyan-500/25 rounded-full blur-[170px] pointer-events-none animate-pulse-glow" />
+      <div className="absolute top-1/4 right-0 w-[800px] h-[800px] bg-purple-600/30 rounded-full blur-[180px] pointer-events-none animate-float-slow" />
+      <div className="absolute top-2/3 left-1/4 w-[850px] h-[850px] bg-indigo-600/28 rounded-full blur-[190px] pointer-events-none animate-pulse-glow" />
+      <div className="absolute bottom-0 right-10 w-[800px] h-[800px] bg-pink-600/25 rounded-full blur-[180px] pointer-events-none animate-float-slow" />
 
       {/* 3. High-Performance Full-Screen Gradient Ocean Wave Canvas */}
       <canvas
@@ -323,7 +299,7 @@ export const GradientWaveBackground: React.FC = () => {
       />
 
       {/* 4. Soft Top Vignette for Crystal Clear Navbar Readability */}
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#030712]/80 to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-36 bg-gradient-to-b from-[#030712]/80 to-transparent pointer-events-none" />
 
       {/* 5. Subtle Tech Matrix Accent */}
       <div className="absolute inset-0 dot-pattern opacity-15 pointer-events-none" />
