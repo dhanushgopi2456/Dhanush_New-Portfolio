@@ -15,6 +15,7 @@ import { TerminalView } from './components/TerminalView';
 import { AiAssistantDrawer } from './components/AiAssistantDrawer';
 import { Preloader } from './components/Preloader';
 import { CustomCursor } from './components/CustomCursor';
+import { LivingCanvas } from './components/LivingCanvas';
 import { RESUME_DATA } from './data/resumeData';
 import { speakGreetingAndObjective } from './utils/speechUtils';
 
@@ -64,6 +65,40 @@ export default function App() {
     }
   }, [isLoading]);
 
+  // Section Observer to synchronize the floating navbar active pill automatically on scroll
+  useEffect(() => {
+    if (isTerminalMode) return;
+
+    const sectionIds = [
+      'hero',
+      'about',
+      'coding-profiles',
+      'skills',
+      'experience',
+      'projects',
+      'certifications',
+      'contact'
+    ];
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 250;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isTerminalMode]);
+
   const handleExploreClick = () => {
     setActiveSection('projects');
     const projectsEl = document.getElementById('projects');
@@ -74,20 +109,23 @@ export default function App() {
 
   return (
     <>
-      {/* Animated Preloader */}
+      {/* Animated Futuristic Sci-Fi Preloader */}
       <AnimatePresence>
         {isLoading && (
           <Preloader onComplete={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
 
-      {/* Custom Animated Cursor Ring */}
+      {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
+      <LivingCanvas />
+
+      {/* Custom Magnetic Dual-Ring Glowing Cursor with Stardust Trail */}
       <CustomCursor />
 
       {isTerminalMode ? (
         <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
       ) : (
-        <div className="min-h-screen bg-[#0b0f19] text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
+        <div className="relative z-10 min-h-screen text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
           {/* Navigation Header */}
           <Navbar
             activeSection={activeSection}
@@ -100,7 +138,7 @@ export default function App() {
             setSoundEnabled={setSoundEnabled}
           />
 
-          {/* Main Sections */}
+          {/* Main Cinematic Sections */}
           <main>
             <Hero
               onOpenPdfModal={() => setIsPdfModalOpen(true)}
