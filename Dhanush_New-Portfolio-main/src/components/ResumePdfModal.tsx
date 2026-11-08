@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { X, Printer, Download, Copy, Check, FileText, ExternalLink, Sparkles } from 'lucide-react';
+import { X, Printer, Download, Copy, Check, FileText } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 
 interface ResumePdfModalProps {
@@ -117,7 +117,7 @@ VERIFIED CERTIFICATIONS
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl">
       <style>{`
         @media print {
           body * {
@@ -142,27 +142,28 @@ VERIFIED CERTIFICATIONS
       `}</style>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-slate-900 border border-slate-700 rounded-3xl max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+        className="bg-slate-900 border border-white/10 rounded-[32px] max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden backdrop-blur-2xl"
       >
         {/* Header Bar */}
-        <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60 no-print">
+        <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-slate-950/70 no-print">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
+            <div className="p-3 rounded-2xl bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-600/20">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Dhanush Gopi Kavala - Official Resume</h3>
-              <p className="text-xs font-mono text-slate-400">ATS-Optimized Printable & Downloadable Format</p>
+              <h3 className="font-extrabold text-white text-base sm:text-lg">Dhanush Gopi Kavala - Official Resume</h3>
+              <p className="text-xs font-mono text-cyan-400">ATS-Optimized Printable & Downloadable Format</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyText}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors border border-slate-700"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
               <span>{copied ? 'Copied' : 'Copy Text'}</span>
@@ -170,7 +171,7 @@ VERIFIED CERTIFICATIONS
 
             <button
               onClick={handleDownloadFile}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
             >
               <Download className="w-4 h-4 text-emerald-400" />
               <span>{downloading ? 'Downloading...' : 'Download File'}</span>
@@ -178,7 +179,7 @@ VERIFIED CERTIFICATIONS
 
             <button
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
             >
               <Printer className="w-4 h-4" />
               <span>Print / Save PDF</span>
@@ -186,7 +187,7 @@ VERIFIED CERTIFICATIONS
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2"
+              className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -201,7 +202,7 @@ VERIFIED CERTIFICATIONS
           {/* Header */}
           <div className="border-b border-slate-800 pb-4 text-center">
             <h1 className="text-2xl font-extrabold text-white tracking-wider">DHANUSH GOPI KAVALA</h1>
-            <p className="text-xs text-blue-400 font-mono mt-1">
+            <p className="text-xs text-cyan-400 font-mono mt-1">
               {RESUME_DATA.personal.email} | {RESUME_DATA.personal.phone} | {RESUME_DATA.personal.location}
             </p>
             <p className="text-xs text-slate-400 font-mono mt-0.5">
@@ -211,7 +212,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Professional Summary */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               PROFESSIONAL SUMMARY
             </h2>
             <p className="text-xs text-slate-300 leading-relaxed">
@@ -221,7 +222,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Academic Highlights */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               EDUCATION & ACADEMICS
             </h2>
             <div className="space-y-2">
@@ -232,7 +233,7 @@ VERIFIED CERTIFICATIONS
                     <p className="text-slate-300">{edu.degree}</p>
                   </div>
                   <div className="text-right font-mono text-[11px]">
-                    <p className="text-blue-300 font-bold">{edu.score}</p>
+                    <p className="text-cyan-300 font-bold">{edu.score}</p>
                     <p className="text-slate-400">{edu.period}</p>
                   </div>
                 </div>
@@ -242,7 +243,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Technical Skills */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               TECHNICAL SKILLS
             </h2>
             <ul className="text-xs text-slate-300 space-y-1 list-disc pl-4">
@@ -258,7 +259,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Internship Experience */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               INTERNSHIP EXPERIENCE
             </h2>
             {RESUME_DATA.experience.map((exp, idx) => (
@@ -278,7 +279,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Projects */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               PROJECTS
             </h2>
             <div className="space-y-3">
@@ -300,7 +301,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Achievements & Leadership */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               RESEARCH PAPER & LEADERSHIP
             </h2>
             <ul className="list-disc pl-4 text-xs text-slate-300 space-y-1">
@@ -314,7 +315,7 @@ VERIFIED CERTIFICATIONS
 
           {/* Certifications */}
           <div>
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-blue-400 mb-2 border-b border-slate-800/80 pb-1">
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2 border-b border-slate-800/80 pb-1">
               INDUSTRY CERTIFICATIONS
             </h2>
             <p className="text-xs text-slate-300">

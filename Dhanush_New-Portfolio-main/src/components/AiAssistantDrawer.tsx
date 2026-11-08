@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, X, Send, Bot, User, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Sparkles, X, Send, Bot, User, RefreshCw } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 
 interface AiAssistantDrawerProps {
@@ -57,38 +57,38 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
       } else if (q.includes('project') || q.includes('freshmart') || q.includes('task')) {
         reply = `Dhanush built 3 major projects:\n• FreshMart: Full-Stack Grocery Web App with JWT & Admin Control\n• Team Task Manager: Collaborative Kanban Board with Role-Based Access Controls (RBAC)\n• Object Detection YOLOv9: Computer vision pipeline for real-time video/image inference`;
       } else {
-        reply = `Dhanush Gopi Kavala is a Computer Science Engineer specializing in Full Stack MERN development, Java/Python DSA, REST API design, and Computer Vision. You can reach him at gopidhanush615@gmail.com or +91-6281716735!`;
+        reply = `Dhanush Gopi Kavala is a Computer Science Engineer specializing in Full Stack MERN development, Java/Python DSA, REST API design, and Computer Vision. You can reach him at ${RESUME_DATA.personal.email} or ${RESUME_DATA.personal.phone}!`;
       }
 
       setMessages(prev => [...prev, { sender: 'ai', text: reply }]);
       setLoading(false);
-    }, 600);
+    }, 550);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/80 backdrop-blur-2xl">
       <motion.div
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="w-full max-w-md bg-slate-900 border-l border-slate-800 h-full flex flex-col shadow-2xl relative"
+        transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+        className="w-full max-w-md bg-slate-900/95 border-l border-white/10 h-full flex flex-col shadow-2xl relative backdrop-blur-2xl"
       >
         {/* Drawer Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-slate-950/80">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
+            <div className="p-2.5 rounded-2xl bg-purple-600/20 text-purple-400 border border-purple-500/30 shadow-lg shadow-purple-600/20">
               <Sparkles className="w-5 h-5 animate-pulse" />
             </div>
             <div>
-              <h3 className="font-bold text-white text-base">Dhanush's AI Assistant</h3>
+              <h3 className="font-extrabold text-white text-base">Dhanush's AI Assistant</h3>
               <p className="text-xs font-mono text-purple-300">Resume & Credentials AI</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
+            className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -102,23 +102,23 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
               className={`flex gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {m.sender === 'ai' && (
-                <div className="w-8 h-8 rounded-full bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <Bot className="w-4 h-4" />
                 </div>
               )}
 
               <div
-                className={`max-w-[80%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                className={`max-w-[82%] p-3.5 rounded-2xl text-xs leading-relaxed ${
                   m.sender === 'user'
-                    ? 'bg-blue-600 text-white rounded-tr-none'
-                    : 'bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none whitespace-pre-line'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-tr-none shadow-md shadow-blue-600/25'
+                    : 'bg-slate-950/90 border border-white/10 text-slate-200 rounded-tl-none whitespace-pre-line shadow-lg'
                 }`}
               >
                 {m.text}
               </div>
 
               {m.sender === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-blue-600/20 text-cyan-400 border border-blue-500/30 flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <User className="w-4 h-4" />
                 </div>
               )}
@@ -134,12 +134,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
         </div>
 
         {/* Quick Prompts */}
-        <div className="p-3 border-t border-slate-800/80 bg-slate-950/50 flex flex-wrap gap-1.5">
+        <div className="p-3 border-t border-white/10 bg-slate-950/70 flex flex-wrap gap-1.5">
           {quickPrompts.map((prompt, pIdx) => (
             <button
               key={pIdx}
               onClick={() => handleSend(prompt)}
-              className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-purple-600/20 border border-slate-700/80 text-slate-300 text-[11px] transition-colors text-left"
+              className="px-2.5 py-1 rounded-xl bg-slate-800/80 hover:bg-purple-600/20 border border-slate-700/80 text-slate-300 text-[11px] transition-colors text-left"
             >
               {prompt}
             </button>
@@ -147,7 +147,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
         </div>
 
         {/* Input Bar */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950">
+        <div className="p-4 border-t border-white/10 bg-slate-950/90">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -157,14 +157,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
           >
             <input
               type="text"
-              placeholder="Ask a question about Dhanush..."
+              placeholder="Ask about MERN, YOLOv9, CGPA, projects..."
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-purple-500"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-purple-500 font-mono"
             />
             <button
               type="submit"
-              className="p-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold"
+              className="p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 transition-all shadow-md"
             >
               <Send className="w-4 h-4" />
             </button>
