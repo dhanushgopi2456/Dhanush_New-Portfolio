@@ -105,8 +105,7 @@ export const ExperienceTimeline: React.FC = () => {
   const [simulatedResponse, setSimulatedResponse] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'architecture' | 'apiConsole' | 'sprints' | 'principles'>('architecture');
 
-  // Mouse tracking for card spotlight
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
+  // Mouse tracking for card spotlight (Direct CSS variables, 0 React re-renders)
   const [cardHovered, setCardHovered] = useState(false);
 
   // Voice Narration State
@@ -144,10 +143,8 @@ export const ExperienceTimeline: React.FC = () => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    e.currentTarget.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
   };
 
   return (
@@ -230,7 +227,7 @@ export const ExperienceTimeline: React.FC = () => {
                 className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                 style={{
                   opacity: cardHovered ? 1 : 0,
-                  background: `radial-gradient(500px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(59, 130, 246, 0.2), transparent 70%)`,
+                  background: 'radial-gradient(500px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(59, 130, 246, 0.2), transparent 70%)',
                 }}
               />
 

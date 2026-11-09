@@ -10,17 +10,16 @@ export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  // Mouse tracking for card spotlights
+  // Mouse tracking for card spotlights (Direct CSS variables, 0 React re-renders)
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, cardId: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-    setHoveredCard(cardId);
+    e.currentTarget.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
+    if (hoveredCard !== cardId) {
+      setHoveredCard(cardId);
+    }
   };
 
   const handleApplyTemplate = (templateText: string) => {
@@ -98,7 +97,7 @@ export const Contact: React.FC = () => {
                 className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                 style={{
                   opacity: hoveredCard === 'email' ? 1 : 0,
-                  background: `radial-gradient(350px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(6, 182, 212, 0.22), transparent 70%)`,
+                  background: 'radial-gradient(350px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(6, 182, 212, 0.22), transparent 70%)',
                 }}
               />
 
@@ -141,7 +140,7 @@ export const Contact: React.FC = () => {
                 className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                 style={{
                   opacity: hoveredCard === 'phone' ? 1 : 0,
-                  background: `radial-gradient(350px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(168, 85, 247, 0.22), transparent 70%)`,
+                  background: 'radial-gradient(350px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(168, 85, 247, 0.22), transparent 70%)',
                 }}
               />
 
@@ -180,7 +179,7 @@ export const Contact: React.FC = () => {
                 className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                 style={{
                   opacity: hoveredCard === 'location' ? 1 : 0,
-                  background: `radial-gradient(350px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(16, 185, 129, 0.22), transparent 70%)`,
+                  background: 'radial-gradient(350px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(16, 185, 129, 0.22), transparent 70%)',
                 }}
               />
 
@@ -244,7 +243,7 @@ export const Contact: React.FC = () => {
               className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
               style={{
                 opacity: hoveredCard === 'form' ? 1 : 0,
-                background: `radial-gradient(450px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(99, 102, 241, 0.2), transparent 70%)`,
+                background: 'radial-gradient(450px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(99, 102, 241, 0.2), transparent 70%)',
               }}
             />
 

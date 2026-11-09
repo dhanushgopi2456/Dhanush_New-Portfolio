@@ -30,7 +30,8 @@ export const GradientWaveBackground: React.FC = () => {
     let targetMouseX = width / 2;
     let targetMouseY = height / 2;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+    const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.25);
 
     const resize = () => {
       width = window.innerWidth;

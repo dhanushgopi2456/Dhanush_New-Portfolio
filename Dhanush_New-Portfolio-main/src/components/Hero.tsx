@@ -102,8 +102,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
   const [typewriterText, setTypewriterText] = useState("");
   const [cursorVisible, setCursorVisible] = useState(true);
 
-  // Card cursor spotlight coordinate state
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
+  // Card cursor spotlight state
   const [cardHovered, setCardHovered] = useState(false);
   const profileCardRef = useRef<HTMLDivElement>(null);
 
@@ -201,10 +200,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
   const handleProfileMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!profileCardRef.current) return;
     const rect = profileCardRef.current.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    profileCardRef.current.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+    profileCardRef.current.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
   };
 
   // Staggered 3D character array for "Dhanush Gopi Kavala"
@@ -434,7 +431,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                       className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                       style={{
                         opacity: cardHovered ? 1 : 0,
-                        background: `radial-gradient(400px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(99, 102, 241, 0.25), transparent 70%)`,
+                        background: 'radial-gradient(400px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(99, 102, 241, 0.25), transparent 70%)',
                       }}
                     />
 

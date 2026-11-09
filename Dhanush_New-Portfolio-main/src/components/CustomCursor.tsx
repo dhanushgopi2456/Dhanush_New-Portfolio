@@ -19,11 +19,12 @@ export const CustomCursor: React.FC = () => {
   const [magneticTarget, setMagneticTarget] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const lastMousePos = useRef({ x: -100, y: -100 });
   const animFrameRef = useRef<number | null>(null);
 
-  // Motion values for smooth 60fps tracking
+  // Motion values for smooth 60fps tracking without triggering React re-renders
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
@@ -31,19 +32,20 @@ export const CustomCursor: React.FC = () => {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  // Spotlight position state for CSS background radial gradient
-  const [spotlightPos, setSpotlightPos] = useState({ x: -500, y: -500 });
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mediaQuery = window.matchMedia('(pointer: fine)');
-    setIsPointerFine(mediaQuery.matches);
-
-    const checkPointer = (e: MediaQueryListEvent) => {
-      setIsPointerFine(e.matches);
+    const checkFine = () => {
+      setIsPointerFine(mediaQuery.matches && window.innerWidth >= 768);
     };
-    mediaQuery.addEventListener('change', checkPointer);
-    return () => mediaQuery.removeEventListener('change', checkPointer);
+    checkFine();
+
+    mediaQuery.addEventListener('change', checkFine);
+    window.addEventListener('resize', checkFine);
+    return () => {
+      mediaQuery.removeEventListener('change', checkFine);
+      window.removeEventListener('resize', checkFine);
+    };
   }, []);
 
   // Mouse movement, magnetic detection, and particle trail
@@ -67,24 +69,29 @@ export const CustomCursor: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      setSpotlightPos({ x: e.clientX, y: e.clientY });
+      
+      // Update spotlight position directly on DOM node (0 React re-renders)
+      if (spotlightRef.current) {
+        spotlightRef.current.style.setProperty('--spot-x', `${e.clientX}px`);
+        spotlightRef.current.style.setProperty('--spot-y', `${e.clientY}px`);
+      }
 
       const dx = e.clientX - lastMousePos.current.x;
       const dy = e.clientY - lastMousePos.current.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       // Trailing particle wake
-      if (dist > 4 && particlesRef.current.length < 70) {
-        for (let i = 0; i < 2; i++) {
+      if (dist > 4 && particlesRef.current.length < 40) {
+        for (let i = 0; i < 1; i++) {
           particlesRef.current.push({
             id: Math.random(),
             x: e.clientX + (Math.random() - 0.5) * 8,
             y: e.clientY + (Math.random() - 0.5) * 8,
-            size: Math.random() * 2.5 + 1,
+            size: Math.random() * 2 + 1,
             color: colors[Math.floor(Math.random() * colors.length)],
-            vx: (Math.random() - 0.5) * 1.4,
-            vy: (Math.random() - 0.5) * 1.4 + 0.4,
-            alpha: 0.85,
+            vx: (Math.random() - 0.5) * 1.2,
+            vy: (Math.random() - 0.5) * 1.2 + 0.3,
+            alpha: 0.8,
           });
         }
       }
@@ -167,12 +174,13 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <>
-      {/* 0. Cursor-Tracking Spotlight & Subtle Background Dot Grid */}
+      {/* 0. Cursor-Tracking Spotlight & Subtle Background Dot Grid (Direct DOM CSS variables) */}
       <div 
+        ref={spotlightRef}
         className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
         style={{
           backgroundImage: `
-            radial-gradient(circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(34, 211, 238, 0.14) 0%, rgba(168, 85, 247, 0.08) 35%, transparent 65%),
+            radial-gradient(circle at var(--spot-x, -500px) var(--spot-y, -500px), rgba(34, 211, 238, 0.14) 0%, rgba(168, 85, 247, 0.08) 35%, transparent 65%),
             radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px)
           `,
           backgroundSize: '100% 100%, 28px 28px',

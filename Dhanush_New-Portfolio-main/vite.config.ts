@@ -6,6 +6,18 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'three-vendor': ['three'],
+            'motion-vendor': ['motion/react'],
+            'lucide-vendor': ['lucide-react'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 800,
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

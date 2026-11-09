@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 export interface SectionFlowingBackgroundProps {
@@ -10,20 +10,50 @@ export interface SectionFlowingBackgroundProps {
 export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> = ({
   variant = 'hero',
   position,
-  particleCount = 420,
+  particleCount = 100,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // IntersectionObserver to only mount WebGL when section is visible in viewport
+  useEffect(() => {
+    const container = mountRef.current;
+    if (!container || isMobile) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.05, rootMargin: '100px' }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [isMobile]);
 
   useEffect(() => {
     const container = mountRef.current;
-    if (!container) return;
+    if (!container || !isInView || isMobile) return;
 
-    // 1. WebGL Renderer
+    // 1. WebGL Renderer with capped DPR and disabled antialiasing for maximum GPU efficiency
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: false,
         powerPreference: 'high-performance',
       });
     } catch (e) {
@@ -31,12 +61,12 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
       return;
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     renderer.setPixelRatio(dpr);
 
     const getDims = () => {
       const w = container.clientWidth || window.innerWidth;
-      const h = container.clientHeight || (variant === 'hero' ? window.innerHeight : 900);
+      const h = container.clientHeight || (variant === 'hero' ? window.innerHeight : 850);
       return { width: Math.max(w, 200), height: Math.max(h, 200) };
     };
 
@@ -61,37 +91,31 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
     );
     camera.position.z = 24;
 
-    // 3. Lighting (Cyan, Purple & Ambient)
+    // 3. Ambient & Point Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    const lightCyan = new THREE.PointLight(0x06b6d4, 4.5, 60);
-    lightCyan.position.set(12, 10, 12);
+    const lightCyan = new THREE.PointLight(0x06b6d4, 3.5, 50);
+    lightCyan.position.set(10, 10, 10);
     scene.add(lightCyan);
 
-    const lightPurple = new THREE.PointLight(0xa855f7, 4.5, 60);
-    lightPurple.position.set(-12, -10, 12);
+    const lightPurple = new THREE.PointLight(0xa855f7, 3.5, 50);
+    lightPurple.position.set(-10, -10, 10);
     scene.add(lightPurple);
 
     // 4. Section 3D Geometric Mesh Group
     const meshGroup = new THREE.Group();
-    const isMobile = window.innerWidth < 768;
-
-    // Position mapping
     const defaultSide = position || (
       variant === 'about' || variant === 'skills' || variant === 'projects' ? 'left' : 'right'
     );
-    const targetX = isMobile ? 0 : defaultSide === 'left' ? -4.6 : 4.5;
-    const targetY = isMobile ? (variant === 'hero' ? 0 : -2) : 0.3;
-    const targetZ = isMobile ? -5 : 0;
+    const targetX = defaultSide === 'left' ? -4.5 : 4.5;
+    const targetY = variant === 'hero' ? 0 : 0.3;
+    const targetZ = 0;
 
     meshGroup.position.set(targetX, targetY, targetZ);
-    if (isMobile) {
-      meshGroup.scale.set(0.68, 0.68, 0.68);
-    }
     scene.add(meshGroup);
 
-    // Choose Geometry & Materials based on Variant
+    // Fast, lightweight standard materials (no expensive transmission shader passes)
     let outerGeo: THREE.BufferGeometry;
     let outerMat: THREE.Material;
     let innerGeo: THREE.BufferGeometry | null = null;
@@ -99,173 +123,161 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
 
     switch (variant) {
       case 'about':
-        outerGeo = new THREE.IcosahedronGeometry(4.2, 1);
+        outerGeo = new THREE.IcosahedronGeometry(4.0, 1);
         outerMat = new THREE.MeshStandardMaterial({
           color: 0xa855f7,
           emissive: 0x6366f1,
-          emissiveIntensity: 0.55,
+          emissiveIntensity: 0.5,
           wireframe: true,
           transparent: true,
-          opacity: 0.55,
+          opacity: 0.5,
         });
-        innerGeo = new THREE.OctahedronGeometry(2.3, 0);
-        innerMat = new THREE.MeshPhysicalMaterial({
+        innerGeo = new THREE.OctahedronGeometry(2.2, 0);
+        innerMat = new THREE.MeshStandardMaterial({
           color: 0x22d3ee,
           emissive: 0x06b6d4,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
+          emissiveIntensity: 0.6,
           transparent: true,
-          opacity: 0.7,
+          opacity: 0.65,
         });
         break;
 
       case 'coding':
-        outerGeo = new THREE.DodecahedronGeometry(4.2, 1);
+        outerGeo = new THREE.DodecahedronGeometry(4.0, 1);
         outerMat = new THREE.MeshStandardMaterial({
           color: 0xf59e0b,
+          emissive: 0x06b6d4,
+          emissiveIntensity: 0.45,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.5,
+        });
+        innerGeo = new THREE.IcosahedronGeometry(2.1, 1);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0xec4899,
+          emissive: 0xa855f7,
+          emissiveIntensity: 0.55,
+          transparent: true,
+          opacity: 0.6,
+        });
+        break;
+
+      case 'skills':
+        outerGeo = new THREE.TorusGeometry(4.5, 1.1, 16, 48);
+        outerMat = new THREE.MeshStandardMaterial({
+          color: 0x3b82f6,
+          emissive: 0x8b5cf6,
+          emissiveIntensity: 0.5,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.5,
+        });
+        innerGeo = new THREE.IcosahedronGeometry(2.0, 1);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0x06b6d4,
+          emissive: 0x3b82f6,
+          emissiveIntensity: 0.6,
+          transparent: true,
+          opacity: 0.65,
+        });
+        break;
+
+      case 'experience':
+        outerGeo = new THREE.OctahedronGeometry(4.2, 2);
+        outerMat = new THREE.MeshStandardMaterial({
+          color: 0x06b6d4,
+          emissive: 0x3b82f6,
+          emissiveIntensity: 0.5,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.5,
+        });
+        innerGeo = new THREE.TetrahedronGeometry(2.2, 1);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0x8b5cf6,
+          emissive: 0xa855f7,
+          emissiveIntensity: 0.6,
+          transparent: true,
+          opacity: 0.65,
+        });
+        break;
+
+      case 'projects':
+        outerGeo = new THREE.TorusKnotGeometry(3.6, 0.9, 64, 16, 2, 3);
+        outerMat = new THREE.MeshStandardMaterial({
+          color: 0xec4899,
+          emissive: 0x6366f1,
+          emissiveIntensity: 0.55,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.5,
+        });
+        innerGeo = new THREE.SphereGeometry(1.9, 16, 16);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0x22d3ee,
+          emissive: 0x06b6d4,
+          emissiveIntensity: 0.65,
+          transparent: true,
+          opacity: 0.65,
+        });
+        break;
+
+      case 'certifications':
+        outerGeo = new THREE.DodecahedronGeometry(4.1, 0);
+        outerMat = new THREE.MeshStandardMaterial({
+          color: 0x10b981,
           emissive: 0x06b6d4,
           emissiveIntensity: 0.5,
           wireframe: true,
           transparent: true,
           opacity: 0.52,
         });
-        innerGeo = new THREE.IcosahedronGeometry(2.2, 1);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0xec4899,
-          emissive: 0xa855f7,
+        innerGeo = new THREE.OctahedronGeometry(2.2, 1);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0xf59e0b,
+          emissive: 0x10b981,
           emissiveIntensity: 0.6,
-          transmission: 0.8,
           transparent: true,
           opacity: 0.65,
         });
         break;
 
-      case 'skills':
-        outerGeo = new THREE.TorusGeometry(4.8, 1.2, 24, 64);
+      case 'contact':
+        outerGeo = new THREE.TorusGeometry(4.2, 1.2, 16, 48);
         outerMat = new THREE.MeshStandardMaterial({
-          color: 0x3b82f6,
-          emissive: 0x8b5cf6,
-          emissiveIntensity: 0.55,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.55,
-        });
-        innerGeo = new THREE.IcosahedronGeometry(2.1, 2);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0x06b6d4,
-          emissive: 0x3b82f6,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
-        });
-        break;
-
-      case 'experience':
-        outerGeo = new THREE.OctahedronGeometry(4.4, 1);
-        outerMat = new THREE.MeshStandardMaterial({
-          color: 0x6366f1,
-          emissive: 0xec4899,
+          color: 0x8b5cf6,
+          emissive: 0x06b6d4,
           emissiveIntensity: 0.5,
           wireframe: true,
           transparent: true,
-          opacity: 0.55,
+          opacity: 0.5,
         });
-        innerGeo = new THREE.OctahedronGeometry(2.2, 0);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0xa855f7,
-          emissive: 0x6366f1,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
-        });
-        break;
-
-      case 'projects':
-        outerGeo = new THREE.TorusKnotGeometry(4.0, 1.2, 110, 28, 3, 5);
-        outerMat = new THREE.MeshStandardMaterial({
-          color: 0x10b981,
-          emissive: 0x06b6d4,
-          emissiveIntensity: 0.52,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.55,
-        });
-        innerGeo = new THREE.IcosahedronGeometry(2.2, 2);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0x22d3ee,
-          emissive: 0x10b981,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
-        });
-        break;
-
-      case 'certifications':
-        outerGeo = new THREE.IcosahedronGeometry(4.2, 2);
-        outerMat = new THREE.MeshStandardMaterial({
-          color: 0xec4899,
+        innerGeo = new THREE.IcosahedronGeometry(2.0, 1);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0x3b82f6,
           emissive: 0x8b5cf6,
-          emissiveIntensity: 0.55,
-          wireframe: true,
+          emissiveIntensity: 0.6,
           transparent: true,
-          opacity: 0.55,
-        });
-        innerGeo = new THREE.DodecahedronGeometry(2.2, 0);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0x10b981,
-          emissive: 0x06b6d4,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
-        });
-        break;
-
-      case 'contact':
-        outerGeo = new THREE.TorusKnotGeometry(4.0, 1.25, 96, 24, 2, 3);
-        outerMat = new THREE.MeshStandardMaterial({
-          color: 0x22d3ee,
-          emissive: 0xa855f7,
-          emissiveIntensity: 0.55,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.55,
-        });
-        innerGeo = new THREE.IcosahedronGeometry(2.1, 2);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0x6366f1,
-          emissive: 0xec4899,
-          emissiveIntensity: 0.65,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
+          opacity: 0.65,
         });
         break;
 
       case 'hero':
       default:
-        outerGeo = new THREE.TorusKnotGeometry(4.2, 1.25, 128, 32, 2, 3);
+        outerGeo = new THREE.TorusKnotGeometry(4.0, 1.0, 64, 16, 2, 3);
         outerMat = new THREE.MeshStandardMaterial({
           color: 0x06b6d4,
-          emissive: 0x4f46e5,
-          emissiveIntensity: 0.5,
+          emissive: 0x6366f1,
+          emissiveIntensity: 0.55,
           wireframe: true,
           transparent: true,
           opacity: 0.55,
-          roughness: 0.2,
-          metalness: 0.9,
         });
-        innerGeo = new THREE.IcosahedronGeometry(2.4, 2);
-        innerMat = new THREE.MeshPhysicalMaterial({
-          color: 0x818cf8,
-          emissive: 0x9333ea,
+        innerGeo = new THREE.SphereGeometry(2.1, 16, 16);
+        innerMat = new THREE.MeshStandardMaterial({
+          color: 0xa855f7,
+          emissive: 0x06b6d4,
           emissiveIntensity: 0.65,
-          roughness: 0.1,
-          metalness: 0.8,
-          transmission: 0.85,
           transparent: true,
           opacity: 0.65,
         });
@@ -281,23 +293,27 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
       meshGroup.add(innerMesh);
     }
 
-    // 5. Dense, Clearly Visible Glowing Particles
+    // 5. Clamped Particle Swarm (<120 static instanced points)
+    const actualParticleCount = Math.min(particleCount || 100, 120);
     const particleGeo = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
-    const particleOriginalX = new Float32Array(particleCount);
-    const particleOriginalY = new Float32Array(particleCount);
-    const particleOriginalZ = new Float32Array(particleCount);
+    const particlePositions = new Float32Array(actualParticleCount * 3);
+    const particleColors = new Float32Array(actualParticleCount * 3);
+    const particleOriginalY = new Float32Array(actualParticleCount);
+    const particleOriginalX = new Float32Array(actualParticleCount);
 
-    const cyanColor = new THREE.Color(0x22d3ee);
-    const purpleColor = new THREE.Color(0xa855f7);
-    const indigoColor = new THREE.Color(0x6366f1);
-    const whiteColor = new THREE.Color(0xffffff);
+    const palette = [
+      new THREE.Color(0x06b6d4),
+      new THREE.Color(0x6366f1),
+      new THREE.Color(0xa855f7),
+      new THREE.Color(0x22d3ee),
+    ];
 
-    for (let i = 0; i < particleCount; i++) {
-      const x = (Math.random() - 0.5) * 38;
-      const y = (Math.random() - 0.5) * 28;
-      const z = (Math.random() - 0.5) * 22;
+    for (let i = 0; i < actualParticleCount; i++) {
+      const radiusDist = 4 + Math.random() * 10;
+      const angle = Math.random() * Math.PI * 2;
+      const x = Math.cos(angle) * radiusDist;
+      const y = (Math.random() - 0.5) * 16;
+      const z = Math.sin(angle) * radiusDist;
 
       particlePositions[i * 3] = x;
       particlePositions[i * 3 + 1] = y;
@@ -305,10 +321,8 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
 
       particleOriginalX[i] = x;
       particleOriginalY[i] = y;
-      particleOriginalZ[i] = z;
 
-      const rand = Math.random();
-      const col = rand > 0.6 ? cyanColor : rand > 0.3 ? purpleColor : rand > 0.1 ? indigoColor : whiteColor;
+      const col = palette[Math.floor(Math.random() * palette.length)];
       particleColors[i * 3] = col.r;
       particleColors[i * 3 + 1] = col.g;
       particleColors[i * 3 + 2] = col.b;
@@ -317,151 +331,69 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
     particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
 
-    // High-Resolution Glowing Orb Texture
-    const createOrbTexture = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 64;
-      canvas.height = 64;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.2, 'rgba(34, 211, 238, 1)');
-        gradient.addColorStop(0.5, 'rgba(168, 85, 247, 0.75)');
-        gradient.addColorStop(0.8, 'rgba(99, 102, 241, 0.3)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(32, 32, 32, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      return new THREE.CanvasTexture(canvas);
-    };
-
-    const particleTexture = createOrbTexture();
-
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.85, // Clearly visible glowing orb size
+      size: 0.35,
       vertexColors: true,
-      map: particleTexture,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.8,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
 
     const particles = new THREE.Points(particleGeo, particleMaterial);
-    scene.add(particles);
+    meshGroup.add(particles);
 
-    // 6. Mouse Interaction & Tilt Damping
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetCameraX = 0;
-    let targetCameraY = 0;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const windowHalfX = window.innerWidth / 2;
-      const windowHalfY = window.innerHeight / 2;
-      mouseX = (e.clientX - windowHalfX) * 0.003;
-      mouseY = (e.clientY - windowHalfY) * 0.003;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-
-    // Handle Resize
+    // 6. Resize handling
     const handleResize = () => {
-      if (!container) return;
       const dims = getDims();
       camera.aspect = dims.width / dims.height;
       camera.updateProjectionMatrix();
       renderer.setSize(dims.width, dims.height);
-
-      const mobileNow = dims.width < 768;
-      meshGroup.position.set(
-        mobileNow ? 0 : targetX,
-        mobileNow ? (variant === 'hero' ? 0 : -2) : targetY,
-        mobileNow ? -5 : targetZ
-      );
-      meshGroup.scale.set(
-        mobileNow ? 0.68 : 1,
-        mobileNow ? 0.68 : 1,
-        mobileNow ? 0.68 : 1
-      );
     };
 
     window.addEventListener('resize', handleResize);
-    const resizeObserver = new ResizeObserver(() => {
-      handleResize();
-    });
-    resizeObserver.observe(container);
-    handleResize();
 
-    // 7. Animation Loop with Intersection Observer Optimization
+    // 7. Render Loop (Only while visible)
     let animationFrameId: number;
     let clock = new THREE.Clock();
-    let isVisible = true;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isVisible = entry.isIntersecting;
-        });
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(container);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      if (!isVisible) return; // Save GPU when scrolled away
-
       const elapsedTime = clock.getElapsedTime();
 
-      // Damped camera tilt
-      targetCameraX += (mouseX * 4 - targetCameraX) * 0.05;
-      targetCameraY += (-mouseY * 4 - targetCameraY) * 0.05;
-      camera.position.x = targetCameraX;
-      camera.position.y = targetCameraY;
-      camera.lookAt(0, 0, 0);
-
-      // 3D Mesh rotation & zero-gravity breathing oscillation
-      outerMesh.rotation.x = elapsedTime * 0.25 + mouseY * 0.8;
-      outerMesh.rotation.y = elapsedTime * 0.35 + mouseX * 0.8;
+      // Mesh rotation & gentle zero-gravity breathing oscillation
+      outerMesh.rotation.x = elapsedTime * 0.22;
+      outerMesh.rotation.y = elapsedTime * 0.3;
 
       if (innerMesh) {
-        innerMesh.rotation.x = -elapsedTime * 0.3;
-        innerMesh.rotation.y = -elapsedTime * 0.4;
+        innerMesh.rotation.x = -elapsedTime * 0.25;
+        innerMesh.rotation.y = -elapsedTime * 0.35;
       }
 
-      const floatY = Math.sin(elapsedTime * 1.2) * 0.4;
-      meshGroup.position.y = (isMobile ? (variant === 'hero' ? 0 : -2) : targetY) + floatY;
+      const floatY = Math.sin(elapsedTime * 1.2) * 0.35;
+      meshGroup.position.y = targetY + floatY;
 
       // Particle floating oscillation
       const posAttr = particleGeo.attributes.position as THREE.BufferAttribute;
       const positions = posAttr.array as Float32Array;
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < actualParticleCount; i++) {
         const yIndex = i * 3 + 1;
         const xIndex = i * 3;
-        positions[yIndex] = particleOriginalY[i] + Math.sin(elapsedTime * 0.9 + i * 0.5) * 0.5;
-        positions[xIndex] = particleOriginalX[i] + Math.cos(elapsedTime * 0.7 + i * 0.4) * 0.4;
+        positions[yIndex] = particleOriginalY[i] + Math.sin(elapsedTime * 0.8 + i * 0.5) * 0.35;
+        positions[xIndex] = particleOriginalX[i] + Math.cos(elapsedTime * 0.6 + i * 0.4) * 0.3;
       }
       posAttr.needsUpdate = true;
 
-      // Particle swarm slow rotation
-      particles.rotation.y = elapsedTime * 0.035;
+      particles.rotation.y = elapsedTime * 0.03;
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // 8. Memory Cleanup
+    // 8. Full WebGL Context & Memory Cleanup upon leaving viewport
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      resizeObserver.disconnect();
-      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
 
       if (renderer.domElement.parentElement) {
@@ -474,9 +406,19 @@ export const SectionFlowingBackground: React.FC<SectionFlowingBackgroundProps> =
       if (innerMat) innerMat.dispose();
       particleGeo.dispose();
       particleMaterial.dispose();
-      particleTexture.dispose();
     };
-  }, [variant, position, particleCount]);
+  }, [variant, position, particleCount, isInView, isMobile]);
+
+  if (isMobile) {
+    return (
+      <div 
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden" 
+        style={{
+          background: 'radial-gradient(circle at 80% 50%, rgba(6, 182, 212, 0.08) 0%, rgba(168, 85, 247, 0.05) 40%, transparent 70%)'
+        }}
+      />
+    );
+  }
 
   return (
     <div

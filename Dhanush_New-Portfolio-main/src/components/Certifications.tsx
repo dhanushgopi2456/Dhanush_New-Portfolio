@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { 
   Award, 
@@ -15,8 +15,9 @@ import {
 import { RESUME_DATA, Certification } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
 import { SectionFlowingBackground } from './SectionFlowingBackground';
-import { CertificationInspectModal } from './CertificationInspectModal';
 import { audioSynth } from '../utils/audioSynth';
+
+const CertificationInspectModal = React.lazy(() => import('./CertificationInspectModal').then(m => ({ default: m.CertificationInspectModal })));
 
 // Collectible Hallmark 3D Card with Iridescent CSS Foil Shader
 interface HallmarkCardProps {
@@ -39,14 +40,12 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
   copiedCode
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [foilAngle, setFoilAngle] = useState(135);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
@@ -59,14 +58,19 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
     // Angle of vector from center to mouse in degrees
     const angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI) + 180;
 
-    setTilt({ x: tiltX, y: tiltY });
-    setFoilAngle(angle);
-    setMousePos({ x, y });
-    setIsHovered(true);
+    el.style.setProperty('--card-x', `${x}px`);
+    el.style.setProperty('--card-y', `${y}px`);
+    el.style.setProperty('--foil-angle', `${angle}deg`);
+    el.style.setProperty('--tilt-x', `${tiltX}deg`);
+    el.style.setProperty('--tilt-y', `${tiltY}deg`);
   };
 
   const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
+    const el = cardRef.current;
+    if (el) {
+      el.style.setProperty('--tilt-x', '0deg');
+      el.style.setProperty('--tilt-y', '0deg');
+    }
     setIsHovered(false);
   };
 
@@ -74,18 +78,21 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       onClick={onToggleFlip}
       className="h-[350px] [perspective:1400px] group cursor-pointer select-none"
     >
       <motion.div
         animate={{
-          rotateX: tilt.x,
-          rotateY: isFlipped ? 180 : tilt.y,
+          rotateY: isFlipped ? 180 : 0,
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        style={{ transformStyle: 'preserve-3d' }}
-        className="w-full h-full relative rounded-[28px]"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: isHovered && !isFlipped ? 'rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))' : undefined,
+        }}
+        className="w-full h-full relative rounded-[28px] transition-transform duration-150 ease-out"
       >
         {/* FRONT SIDE: Collectible Hallmark 3D Card with Iridescent Foil */}
         <div
@@ -105,7 +112,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
             className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 -z-0"
             style={{
               opacity: isHovered ? 0.75 : 0.25,
-              background: `linear-gradient(${foilAngle}deg, rgba(244,63,94,0.3) 0%, rgba(6,182,212,0.4) 25%, rgba(250,204,21,0.35) 50%, rgba(168,85,247,0.4) 75%, rgba(16,185,129,0.35) 100%)`,
+              background: 'linear-gradient(var(--foil-angle, 135deg), rgba(244,63,94,0.3) 0%, rgba(6,182,212,0.4) 25%, rgba(250,204,21,0.35) 50%, rgba(168,85,247,0.4) 75%, rgba(16,185,129,0.35) 100%)',
               mixBlendMode: 'color-dodge',
             }}
           />
@@ -115,7 +122,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
             className="pointer-events-none absolute -inset-[100%] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
               background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.15) 48%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.15) 52%, transparent 60%)',
-              transform: isHovered ? `translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px)` : 'translate(0px, 0px)',
+              transform: isHovered ? 'translate(calc(var(--card-x, 0px) * 0.3), calc(var(--card-y, 0px) * 0.3))' : 'translate(0px, 0px)',
             }}
           />
 
@@ -124,7 +131,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
             className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
             style={{
               opacity: isHovered ? 1 : 0,
-              background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, rgba(16, 185, 129, 0.2), transparent 70%)`,
+              background: 'radial-gradient(350px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(16, 185, 129, 0.2), transparent 70%)',
             }}
           />
 
@@ -377,11 +384,15 @@ export const Certifications: React.FC = () => {
           ))}
         </div>
 
-        {/* 360-Degree Hallmark 3D Badge Inspector Modal */}
-        <CertificationInspectModal
-          cert={inspectingCert}
-          onClose={() => setInspectingCert(null)}
-        />
+        {/* 360-Degree Hallmark 3D Badge Inspector Modal (Suspense Lazy Chunk) */}
+        <Suspense fallback={null}>
+          {inspectingCert && (
+            <CertificationInspectModal
+              cert={inspectingCert}
+              onClose={() => setInspectingCert(null)}
+            />
+          )}
+        </Suspense>
 
       </div>
     </section>

@@ -8,12 +8,17 @@ export const LivingCanvas: React.FC = () => {
     const container = mountRef.current;
     if (!container) return;
 
-    // Check WebGL availability
+    // Mobile guardrail: skip WebGL on mobile devices
+    if (typeof window !== 'undefined' && (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches)) {
+      return;
+    }
+
+    // Check WebGL availability with performance-optimized configuration
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ 
         alpha: true, 
-        antialias: true, 
+        antialias: false, 
         powerPreference: 'high-performance' 
       });
     } catch (e) {
@@ -21,7 +26,7 @@ export const LivingCanvas: React.FC = () => {
       return;
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
@@ -34,7 +39,6 @@ export const LivingCanvas: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    // No scene fog so background video remains vibrant and transparent
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -44,8 +48,8 @@ export const LivingCanvas: React.FC = () => {
     );
     camera.position.z = 800;
 
-    // 1. STARFIELD PARTICLES
-    const starsCount = 1200;
+    // 1. STARFIELD PARTICLES (<150 points for high 60fps budget)
+    const starsCount = 140;
     const starGeometry = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starsCount * 3);
     const starColors = new Float32Array(starsCount * 3);

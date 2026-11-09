@@ -73,20 +73,21 @@ const Interactive3DTiltCard: React.FC<{
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['12deg', '-12deg']);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-12deg', '12deg']);
 
-  // Cursor spotlight inside card
-  const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 });
+  // Cursor spotlight inside card (Direct CSS variables, 0 React re-renders)
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
 
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    setSpotlightPos({ x: mouseX, y: mouseY });
+    el.style.setProperty('--spot-x', `${mouseX}px`);
+    el.style.setProperty('--spot-y', `${mouseY}px`);
 
     const xPct = mouseX / width - 0.5;
     const yPct = mouseY / height - 0.5;
@@ -128,7 +129,7 @@ const Interactive3DTiltCard: React.FC<{
           className="w-full h-full relative [transform-style:preserve-3d]"
         >
           {/* FRONT SIDE */}
-          <div className="absolute inset-0 [backface-visibility:hidden] glass-card p-7 rounded-[28px] border border-white/10 flex flex-col justify-between hover:border-amber-500/50 transition-colors shadow-2xl overflow-hidden group">
+          <div className="absolute inset-0 [backface-visibility:hidden] bg-[#0B0C14]/95 p-7 rounded-[28px] border border-white/10 flex flex-col justify-between hover:border-amber-500/50 transition-colors shadow-2xl overflow-hidden group">
             
             {/* 360 Continuous Laser Border Beam */}
             <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
@@ -140,16 +141,16 @@ const Interactive3DTiltCard: React.FC<{
               className="absolute inset-0 holographic-foil pointer-events-none transition-opacity duration-300"
               style={{
                 opacity: isHovered ? 0.45 : 0.15,
-                backgroundPosition: `${(spotlightPos.x / 400) * 100}% ${(spotlightPos.y / 400) * 100}%`,
+                backgroundPosition: 'calc(var(--spot-x, 0px) * 0.25) calc(var(--spot-y, 0px) * 0.25)',
               }}
             />
 
-            {/* Cursor-tracked internal radial spotlight */}
+            {/* Cursor-tracked internal radial spotlight (Direct CSS variables, 0 React re-renders) */}
             <div
               className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
               style={{
                 opacity: isHovered ? 1 : 0,
-                background: `radial-gradient(400px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(245, 158, 11, 0.18), transparent 70%)`,
+                background: 'radial-gradient(400px circle at var(--spot-x, -500px) var(--spot-y, -500px), rgba(245, 158, 11, 0.18), transparent 70%)',
               }}
             />
 

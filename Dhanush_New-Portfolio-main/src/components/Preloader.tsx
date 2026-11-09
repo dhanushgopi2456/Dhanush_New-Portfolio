@@ -13,6 +13,21 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [statusMessage, setStatusMessage] = useState('BOOTING LUXURY ENGINE...');
 
   useEffect(() => {
+    let completed = false;
+    const safeComplete = () => {
+      if (completed) return;
+      completed = true;
+      setIsOpening(true);
+      setTimeout(() => {
+        onComplete();
+      }, 300);
+    };
+
+    // Hard non-negotiable 800ms fallback timeout to prevent any loading hang
+    const fallbackTimer = setTimeout(() => {
+      safeComplete();
+    }, 800);
+
     const messages = [
       'INITIALIZING WEBGL 3D SHADER PIPELINE...',
       'LOADING MERN STACK DATA STRUCTURES...',
@@ -23,7 +38,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
     const timer = setInterval(() => {
       setProgress((prev) => {
-        const step = Math.floor(Math.random() * 3) + 2;
+        const step = Math.floor(Math.random() * 8) + 8;
         const next = Math.min(prev + step, 100);
 
         if (next < 25) setStatusMessage(messages[0]);
@@ -34,22 +49,25 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
         if (next >= 100) {
           clearInterval(timer);
-          audioSynth.playSuccessChime();
-          // Trigger zero-gravity camera shutter split
+          try {
+            audioSynth.playSuccessChime();
+          } catch {
+            // Audio context may be blocked by browser autoplay policy
+          }
           setTimeout(() => {
-            setIsOpening(true);
-            setTimeout(() => {
-              onComplete();
-            }, 850);
-          }, 350);
+            safeComplete();
+          }, 120);
           return 100;
         }
 
         return next;
       });
-    }, 28);
+    }, 20);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearTimeout(fallbackTimer);
+    };
   }, [onComplete]);
 
   const formattedProgress = progress.toString().padStart(2, '0');

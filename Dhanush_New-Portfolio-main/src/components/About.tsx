@@ -79,30 +79,33 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
   glowColor = 'rgba(6, 182, 212, 0.2)' 
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Smooth tilt angles
     const tiltX = -((y - centerY) / centerY) * 7;
     const tiltY = ((x - centerX) / centerX) * 7;
 
-    setTilt({ x: tiltX, y: tiltY });
-    setMousePos({ x, y });
-    setIsHovered(true);
+    el.style.setProperty('--card-x', `${x}px`);
+    el.style.setProperty('--card-y', `${y}px`);
+    el.style.setProperty('--tilt-x', `${tiltX}deg`);
+    el.style.setProperty('--tilt-y', `${tiltY}deg`);
   };
 
   const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
+    const el = cardRef.current;
+    if (el) {
+      el.style.setProperty('--tilt-x', '0deg');
+      el.style.setProperty('--tilt-y', '0deg');
+    }
     setIsHovered(false);
   };
 
@@ -110,29 +113,29 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
     <div 
       className={`relative [perspective:1200px] ${className}`}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div
+      <div
         ref={cardRef}
-        animate={{
-          rotateX: tilt.x,
-          rotateY: tilt.y,
+        style={{ 
+          transformStyle: 'preserve-3d',
+          transform: isHovered ? 'rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))' : 'rotateX(0deg) rotateY(0deg)',
+          transition: isHovered ? 'transform 0.08s ease-out' : 'transform 0.5s ease-out'
         }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25, mass: 0.15 }}
-        style={{ transformStyle: 'preserve-3d' }}
-        className="relative h-full w-full rounded-3xl bg-slate-950/80 border border-white/10 p-6 sm:p-7 backdrop-blur-2xl shadow-2xl overflow-hidden group hover:border-cyan-500/40 transition-colors"
+        className="relative h-full w-full rounded-3xl bg-[#0B0C14]/95 border border-white/10 p-6 sm:p-7 shadow-2xl overflow-hidden group hover:border-cyan-500/40 transition-colors"
       >
         {/* 360-Degree Continuous Rotating Laser Border Beam */}
         <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
           <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-25 group-hover:opacity-75 transition-opacity" />
         </div>
 
-        {/* Cursor-tracked internal radial spotlight */}
+        {/* Cursor-tracked internal radial spotlight (Direct CSS variables, 0 React re-renders) */}
         <div
           className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
           style={{
             opacity: isHovered ? 1 : 0,
-            background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, ${glowColor}, transparent 70%)`,
+            background: `radial-gradient(400px circle at var(--card-x, -500px) var(--card-y, -500px), ${glowColor}, transparent 70%)`,
           }}
         />
 
@@ -142,9 +145,8 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
           style={{
             background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 48%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.12) 52%, transparent 60%)',
             transform: isHovered 
-              ? `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)` 
+              ? 'translate(calc(var(--card-x, 0px) * 0.4), calc(var(--card-y, 0px) * 0.4))' 
               : 'translate(0px, 0px)',
-            transition: 'transform 0.1s ease-out',
           }}
         />
 
@@ -152,7 +154,7 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
         <div className="relative z-10 h-full flex flex-col justify-between" style={{ transform: 'translateZ(10px)' }}>
           {children}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

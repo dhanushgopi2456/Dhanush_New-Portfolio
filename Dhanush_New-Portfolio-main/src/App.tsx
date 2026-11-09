@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { AppleFloatingDock } from './components/AppleFloatingDock';
 import { Hero } from './components/Hero';
@@ -10,17 +10,19 @@ import { Projects } from './components/Projects';
 import { Certifications } from './components/Certifications';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { ResumePdfModal } from './components/ResumePdfModal';
-import { TerminalView } from './components/TerminalView';
-import { AiAssistantDrawer } from './components/AiAssistantDrawer';
 import { Preloader } from './components/Preloader';
 import { CustomCursor } from './components/CustomCursor';
-import { GradientWaveBackground } from './components/GradientWaveBackground';
-import { LivingCanvas } from './components/LivingCanvas';
 import { ScrollProgressBeam } from './components/ScrollProgressBeam';
-import { CommandPalette } from './components/CommandPalette';
 import { RESUME_DATA } from './data/resumeData';
 import { speakGreetingAndObjective } from './utils/speechUtils';
+
+// Lazy-load heavy modals, drawers, and background canvases to guarantee instant initial paint
+const ResumePdfModal = React.lazy(() => import('./components/ResumePdfModal').then(m => ({ default: m.ResumePdfModal })));
+const TerminalView = React.lazy(() => import('./components/TerminalView').then(m => ({ default: m.TerminalView })));
+const AiAssistantDrawer = React.lazy(() => import('./components/AiAssistantDrawer').then(m => ({ default: m.AiAssistantDrawer })));
+const CommandPalette = React.lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })));
+const LivingCanvas = React.lazy(() => import('./components/LivingCanvas').then(m => ({ default: m.LivingCanvas })));
+const GradientWaveBackground = React.lazy(() => import('./components/GradientWaveBackground').then(m => ({ default: m.GradientWaveBackground })));
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -132,20 +134,26 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Interactive Fluid Multi-Harmonic Gradient Ocean Wave Background */}
-      <GradientWaveBackground />
+      {/* Interactive Fluid Multi-Harmonic Gradient Ocean Wave Background (Non-blocking Suspense) */}
+      <Suspense fallback={null}>
+        <GradientWaveBackground />
+      </Suspense>
 
       {/* Glowing Electric-Blue & Purple Left-Edge Scroll Progress Beam with Laser Droplet */}
       <ScrollProgressBeam />
 
-      {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
-      <LivingCanvas />
+      {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background (Non-blocking Suspense) */}
+      <Suspense fallback={null}>
+        <LivingCanvas />
+      </Suspense>
 
       {/* Custom Magnetic Dual-Ring Glowing Cursor with Stardust Trail */}
       <CustomCursor />
 
       {isTerminalMode ? (
-        <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
+        <Suspense fallback={<div className="min-h-screen bg-[#030712] flex items-center justify-center font-mono text-cyan-400">Loading Terminal...</div>}>
+          <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
+        </Suspense>
       ) : (
         <div className="relative z-10 min-h-screen text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
           {/* Floating Apple-Inspired Cult-UI Magnification Dock & Ambient Audio Synthesizer */}
@@ -181,30 +189,42 @@ export default function App() {
           <Footer />
 
           {/* Floating Glassmorphic Cult-UI Command Palette Modal */}
-          <CommandPalette
-            isOpen={isCommandPaletteOpen}
-            onClose={() => setIsCommandPaletteOpen(false)}
-            onNavigateSection={(secId) => {
-              setActiveSection(secId);
-              const el = document.getElementById(secId);
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            onOpenPdfModal={() => setIsPdfModalOpen(true)}
-            onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
-            soundEnabled={soundEnabled}
-            setSoundEnabled={setSoundEnabled}
-          />
+          <Suspense fallback={null}>
+            {isCommandPaletteOpen && (
+              <CommandPalette
+                isOpen={isCommandPaletteOpen}
+                onClose={() => setIsCommandPaletteOpen(false)}
+                onNavigateSection={(secId) => {
+                  setActiveSection(secId);
+                  const el = document.getElementById(secId);
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                onOpenPdfModal={() => setIsPdfModalOpen(true)}
+                onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
+                soundEnabled={soundEnabled}
+                setSoundEnabled={setSoundEnabled}
+              />
+            )}
+          </Suspense>
 
           {/* Modals & Drawers */}
-          <ResumePdfModal
-            isOpen={isPdfModalOpen}
-            onClose={() => setIsPdfModalOpen(false)}
-          />
+          <Suspense fallback={null}>
+            {isPdfModalOpen && (
+              <ResumePdfModal
+                isOpen={isPdfModalOpen}
+                onClose={() => setIsPdfModalOpen(false)}
+              />
+            )}
+          </Suspense>
 
-          <AiAssistantDrawer
-            isOpen={isAiDrawerOpen}
-            onClose={() => setIsAiDrawerOpen(false)}
-          />
+          <Suspense fallback={null}>
+            {isAiDrawerOpen && (
+              <AiAssistantDrawer
+                isOpen={isAiDrawerOpen}
+                onClose={() => setIsAiDrawerOpen(false)}
+              />
+            )}
+          </Suspense>
         </div>
       )}
     </>

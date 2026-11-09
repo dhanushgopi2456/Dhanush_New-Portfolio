@@ -26,17 +26,16 @@ export const InteractiveSkills: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
 
-  // Mouse tracking for card spotlights
+  // Mouse tracking for card spotlights (Direct CSS variables, 0 React re-renders)
   const [hoveredCardName, setHoveredCardName] = useState<string | null>(null);
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
 
   const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, name: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-    setHoveredCardName(name);
+    e.currentTarget.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
+    if (hoveredCardName !== name) {
+      setHoveredCardName(name);
+    }
   };
 
   const categories: { id: CategoryFilter; label: string; icon: React.ReactNode }[] = [
@@ -250,7 +249,7 @@ export const InteractiveSkills: React.FC = () => {
                   className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                   style={{
                     opacity: hoveredCardName === skill.name ? 1 : 0,
-                    background: `radial-gradient(300px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(6, 182, 212, 0.22), transparent 70%)`,
+                    background: 'radial-gradient(300px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(6, 182, 212, 0.22), transparent 70%)',
                   }}
                 />
 

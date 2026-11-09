@@ -20,8 +20,12 @@ import {
 } from 'lucide-react';
 import { Project } from '../data/resumeData';
 
+export interface MicroPreviewProps {
+  isHovered?: boolean;
+}
+
 // 1. Team Task Manager: Animated Mini Kanban Cards with Role Badges
-export const KanbanMicroPreview: React.FC = () => {
+export const KanbanMicroPreview: React.FC<MicroPreviewProps> = ({ isHovered = false }) => {
   return (
     <div className="relative w-full h-full bg-slate-950/90 rounded-2xl p-3 flex flex-col justify-between overflow-hidden border border-white/5 font-mono select-none">
       {/* Background Matrix Grid */}
@@ -40,7 +44,7 @@ export const KanbanMicroPreview: React.FC = () => {
           <span>Real-Time Agile Board</span>
         </span>
         <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-[9px] flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+          <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${isHovered ? 'animate-ping' : ''}`} />
           RBAC Active
         </span>
       </div>
@@ -66,11 +70,11 @@ export const KanbanMicroPreview: React.FC = () => {
             <span className="text-indigo-400">1</span>
           </div>
           <motion.div
-            animate={{
+            animate={isHovered ? {
               y: [0, -3, 0],
               borderColor: ['rgba(99,102,241,0.3)', 'rgba(6,182,212,0.6)', 'rgba(99,102,241,0.3)']
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            } : { y: 0, borderColor: 'rgba(99,102,241,0.3)' }}
+            transition={{ duration: 2, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
             className="p-1.5 rounded-lg bg-indigo-950/40 border border-indigo-500/40 text-[9px] text-slate-200 shadow-lg shadow-indigo-950/40"
           >
             <span className="block truncate font-semibold text-cyan-300">JWT Auth RBAC</span>
@@ -101,7 +105,7 @@ export const KanbanMicroPreview: React.FC = () => {
 };
 
 // 2. Veda AI Grader: Animated AI Evaluation Dashboard with Laser Scanner & Charts
-export const GraderMicroPreview: React.FC = () => {
+export const GraderMicroPreview: React.FC<MicroPreviewProps> = ({ isHovered = false }) => {
   return (
     <div className="relative w-full h-full bg-slate-950/90 rounded-2xl p-3 flex flex-col justify-between overflow-hidden border border-white/5 font-mono select-none">
       {/* Background Document Paper */}
@@ -109,10 +113,10 @@ export const GraderMicroPreview: React.FC = () => {
 
       {/* Animated Glowing Laser Scanning Beam */}
       <motion.div
-        animate={{
+        animate={isHovered ? {
           top: ['0%', '100%', '0%']
-        }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+        } : { top: '50%' }}
+        transition={{ duration: 2.5, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
         className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#22d3ee,0_0_24px_#06b6d4] z-20 pointer-events-none"
       >
         <span className="absolute right-4 -top-1 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#22d3ee]" />
@@ -139,8 +143,8 @@ export const GraderMicroPreview: React.FC = () => {
           </div>
           <div className="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
             <motion.div
-              animate={{ width: ['0%', '100%'] }}
-              transition={{ duration: 1.5, ease: 'easeOut' }}
+              animate={{ width: isHovered ? ['0%', '100%'] : '100%' }}
+              transition={{ duration: 1, ease: 'easeOut' }}
               className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full shadow-[0_0_6px_#22d3ee]"
             />
           </div>
@@ -154,8 +158,8 @@ export const GraderMicroPreview: React.FC = () => {
           </div>
           <div className="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
             <motion.div
-              animate={{ width: ['0%', '95%'] }}
-              transition={{ duration: 1.5, delay: 0.3, ease: 'easeOut' }}
+              animate={{ width: isHovered ? ['0%', '95%'] : '95%' }}
+              transition={{ duration: 1, ease: 'easeOut' }}
               className="h-full bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full shadow-[0_0_6px_#818cf8]"
             />
           </div>
@@ -175,7 +179,7 @@ export const GraderMicroPreview: React.FC = () => {
 };
 
 // 3. FreshMart: Simulated Items Sliding into 3D Cart with Spring Physics
-export const FreshMartMicroPreview: React.FC = () => {
+export const FreshMartMicroPreview: React.FC<MicroPreviewProps> = ({ isHovered = false }) => {
   return (
     <div className="relative w-full h-full bg-slate-950/90 rounded-2xl p-3 flex flex-col justify-between overflow-hidden border border-white/5 font-mono select-none">
       {/* Background Grocery Sheen */}
@@ -202,11 +206,11 @@ export const FreshMartMicroPreview: React.FC = () => {
           </div>
 
           <motion.div
-            animate={{
+            animate={isHovered ? {
               x: [0, 8, 0],
               opacity: [0.8, 1, 0.8]
-            }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+            } : { x: 0, opacity: 1 }}
+            transition={{ duration: 2, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
             className="p-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between text-[9px] shadow-lg shadow-emerald-950/30"
           >
             <span className="text-emerald-300 font-semibold">🥑 Avocado Pack</span>
@@ -216,11 +220,11 @@ export const FreshMartMicroPreview: React.FC = () => {
 
         {/* Floating 3D Glowing Cart */}
         <motion.div
-          animate={{
+          animate={isHovered ? {
             y: [-3, 3, -3],
             scale: [1, 1.05, 1]
-          }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+          } : { y: 0, scale: 1 }}
+          transition={{ duration: 2, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
           className="relative p-3 rounded-2xl bg-gradient-to-tr from-emerald-600/30 to-teal-500/30 border border-emerald-400/40 shadow-xl shadow-emerald-500/20 flex flex-col items-center justify-center"
         >
           <ShoppingCart className="w-6 h-6 text-emerald-300" />
@@ -242,7 +246,7 @@ export const FreshMartMicroPreview: React.FC = () => {
 };
 
 // 4. HOS Route Planner: Dark-Mode 3D Vector Map with Self-Drawing Cyan Route & Telemetry
-export const RoutePlannerMicroPreview: React.FC = () => {
+export const RoutePlannerMicroPreview: React.FC<MicroPreviewProps> = ({ isHovered = false }) => {
   return (
     <div className="relative w-full h-full bg-slate-950/90 rounded-2xl p-3 flex flex-col justify-between overflow-hidden border border-white/5 font-mono select-none">
       {/* Background Geospatial Map Grid */}
@@ -261,7 +265,7 @@ export const RoutePlannerMicroPreview: React.FC = () => {
           <span>HOS Route & ELD Telemetry</span>
         </span>
         <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-[9px] flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${isHovered ? 'animate-pulse' : ''}`} />
           FMCSA Compliant
         </span>
       </div>
@@ -288,10 +292,10 @@ export const RoutePlannerMicroPreview: React.FC = () => {
             stroke="url(#routeGrad)"
             strokeWidth="2.5"
             strokeDasharray="260"
-            animate={{
+            animate={isHovered ? {
               strokeDashoffset: [260, 0]
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            } : { strokeDashoffset: 0 }}
+            transition={{ duration: 3, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
           />
           <defs>
             <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -307,11 +311,11 @@ export const RoutePlannerMicroPreview: React.FC = () => {
             fill="#ffffff"
             stroke="#06b6d4"
             strokeWidth="2"
-            animate={{
+            animate={isHovered ? {
               cx: [20, 120, 220],
               cy: [45, 20, 40]
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            } : { cx: 220, cy: 40 }}
+            transition={{ duration: 3, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
           />
         </svg>
       </div>
@@ -332,7 +336,7 @@ export const RoutePlannerMicroPreview: React.FC = () => {
 };
 
 // 5. Object Detection YOLOv9: Simulated Camera Viewport with Real-Time Bounding Boxes
-export const YoloMicroPreview: React.FC = () => {
+export const YoloMicroPreview: React.FC<MicroPreviewProps> = ({ isHovered = false }) => {
   return (
     <div className="relative w-full h-full bg-slate-950/90 rounded-2xl p-3 flex flex-col justify-between overflow-hidden border border-white/5 font-mono select-none">
       {/* Viewport Camera Grid */}
@@ -352,7 +356,7 @@ export const YoloMicroPreview: React.FC = () => {
           <span>YOLOv9 Real-Time Vision</span>
         </span>
         <span className="px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold text-[9px] flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+          <span className={`w-1.5 h-1.5 rounded-full bg-rose-500 ${isHovered ? 'animate-ping' : ''}`} />
           REC 60 FPS
         </span>
       </div>
@@ -361,11 +365,11 @@ export const YoloMicroPreview: React.FC = () => {
       <div className="relative z-10 my-1 h-20 w-full overflow-hidden">
         {/* Target 1: Vehicle */}
         <motion.div
-          animate={{
+          animate={isHovered ? {
             x: [10, 110, 10],
             y: [5, 20, 5],
-          }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+          } : { x: 10, y: 5 }}
+          transition={{ duration: 4, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
           className="absolute w-24 h-12 border-2 border-cyan-400 rounded bg-cyan-500/10 shadow-[0_0_10px_#22d3ee] flex flex-col justify-between p-1"
         >
           <span className="text-[8px] bg-cyan-400 text-slate-950 font-bold px-1 rounded-sm w-fit">
@@ -376,11 +380,11 @@ export const YoloMicroPreview: React.FC = () => {
 
         {/* Target 2: Person */}
         <motion.div
-          animate={{
+          animate={isHovered ? {
             x: [140, 60, 140],
             y: [15, 5, 15],
-          }}
-          transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
+          } : { x: 140, y: 15 }}
+          transition={{ duration: 3.5, repeat: isHovered ? Infinity : 0, ease: 'easeInOut' }}
           className="absolute w-16 h-14 border-2 border-purple-400 rounded bg-purple-500/10 shadow-[0_0_10px_#a855f7] flex flex-col justify-between p-1"
         >
           <span className="text-[8px] bg-purple-400 text-slate-950 font-bold px-1 rounded-sm w-fit">

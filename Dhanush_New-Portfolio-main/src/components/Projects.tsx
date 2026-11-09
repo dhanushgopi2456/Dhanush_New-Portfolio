@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   FolderGit2, 
@@ -33,23 +33,26 @@ import {
   ArchitectureBackDiagram
 } from './ProjectMicroPreviews';
 import { SectionFlowingBackground } from './SectionFlowingBackground';
-import { ProjectTheaterModal } from './ProjectTheaterModal';
-import { ResearchYoloSpotlight } from './ResearchYoloSpotlight';
+
+// Lazy-load modal and research spotlight
+const ProjectTheaterModal = React.lazy(() => import('./ProjectTheaterModal').then(m => ({ default: m.ProjectTheaterModal })));
+const ResearchYoloSpotlight = React.lazy(() => import('./ResearchYoloSpotlight').then(m => ({ default: m.ResearchYoloSpotlight })));
 
 export const Projects: React.FC = () => {
   const [activeDemoProject, setActiveDemoProject] = useState<Project | null>(null);
 
-  // Mouse tracking for card spotlights
+  // Mouse tracking for card spotlights (using direct DOM CSS variables to prevent re-renders)
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
 
   const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-    setHoveredProjectId(id);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--card-x', `${x}px`);
+    e.currentTarget.style.setProperty('--card-y', `${y}px`);
+    if (hoveredProjectId !== id) {
+      setHoveredProjectId(id);
+    }
   };
 
   // Project 3D Card Flip State
@@ -78,20 +81,20 @@ export const Projects: React.FC = () => {
     }));
   };
 
-  const renderProjectMicroPreview = (type: string) => {
+  const renderProjectMicroPreview = (type: string, isHovered: boolean) => {
     switch (type) {
       case 'kanban':
-        return <KanbanMicroPreview />;
+        return <KanbanMicroPreview isHovered={isHovered} />;
       case 'grader':
-        return <GraderMicroPreview />;
+        return <GraderMicroPreview isHovered={isHovered} />;
       case 'ecommerce':
-        return <FreshMartMicroPreview />;
+        return <FreshMartMicroPreview isHovered={isHovered} />;
       case 'route':
-        return <RoutePlannerMicroPreview />;
+        return <RoutePlannerMicroPreview isHovered={isHovered} />;
       case 'yolo':
-        return <YoloMicroPreview />;
+        return <YoloMicroPreview isHovered={isHovered} />;
       default:
-        return <KanbanMicroPreview />;
+        return <KanbanMicroPreview isHovered={isHovered} />;
     }
   };
 
@@ -253,12 +256,12 @@ export const Projects: React.FC = () => {
                       <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-35 group-hover:opacity-85 transition-opacity" />
                     </div>
 
-                    {/* Cursor-tracked internal radial spotlight */}
+                    {/* Cursor-tracked internal radial spotlight (Direct CSS variables, 0 React re-renders) */}
                     <div
                       className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
                       style={{
                         opacity: hoveredProjectId === proj.id ? 1 : 0,
-                        background: `radial-gradient(400px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(99, 102, 241, 0.22), transparent 70%)`,
+                        background: 'radial-gradient(400px circle at var(--card-x, -500px) var(--card-y, -500px), rgba(99, 102, 241, 0.22), transparent 70%)',
                       }}
                     />
 
@@ -295,9 +298,9 @@ export const Projects: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Live, Self-Playing Interactive Micro-Preview */}
+                      {/* Live Interactive Micro-Preview (Pauses when unhovered) */}
                       <div className="p-3 bg-slate-950/90 border-b border-white/5 h-44">
-                        {renderProjectMicroPreview(proj.mockType)}
+                        {renderProjectMicroPreview(proj.mockType, hoveredProjectId === proj.id)}
                       </div>
 
                       {/* Body Content with Elevated Parallax Depth */}
@@ -426,14 +429,20 @@ export const Projects: React.FC = () => {
           })}
         </div>
 
-        {/* Dedicated Published YOLOv9 Research Spotlight Banner with X-Ray Scanner */}
-        <ResearchYoloSpotlight />
+        {/* Dedicated Published YOLOv9 Research Spotlight Banner with X-Ray Scanner (Suspense Lazy Chunk) */}
+        <Suspense fallback={null}>
+          <ResearchYoloSpotlight />
+        </Suspense>
 
         {/* Flagship Spatial Project Theater Modal with Code, Architecture & Telemetry */}
-        <ProjectTheaterModal
-          project={activeDemoProject}
-          onClose={() => setActiveDemoProject(null)}
-        />
+        <Suspense fallback={null}>
+          {activeDemoProject && (
+            <ProjectTheaterModal
+              project={activeDemoProject}
+              onClose={() => setActiveDemoProject(null)}
+            />
+          )}
+        </Suspense>
 
       </div>
     </section>
