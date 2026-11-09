@@ -240,7 +240,11 @@ export const ExperienceTimeline: React.FC = () => {
                   className="glass-panel p-6 sm:p-9 rounded-[32px] border border-white/10 relative overflow-hidden group shadow-2xl transform-gpu w-full"
                   style={{
                     backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden'
+                    WebkitBackfaceVisibility: 'hidden',
+                    opacity: isExperienceFlipped ? 0 : 1,
+                    pointerEvents: isExperienceFlipped ? 'none' : 'auto',
+                    visibility: isExperienceFlipped ? 'hidden' : 'visible',
+                    transition: 'opacity 0.25s ease, visibility 0.25s ease'
                   }}
                 >
                   {/* 360-Degree Continuous Rotating Laser Border Beam */}
@@ -562,13 +566,25 @@ export const ExperienceTimeline: React.FC = () => {
 
             {/* BACK FACE: Production System Architecture & Enterprise Telemetry Deck */}
             <div
-              className="glass-panel p-6 sm:p-9 rounded-[32px] border border-cyan-500/40 bg-slate-950/95 relative overflow-hidden shadow-2xl absolute inset-0 w-full h-full flex flex-col justify-between"
+              className="glass-panel p-6 sm:p-9 rounded-[32px] border border-cyan-500/40 bg-slate-950/98 relative overflow-y-auto shadow-2xl absolute inset-0 w-full h-full flex flex-col justify-between"
               style={{
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg)'
+                transform: 'rotateY(180deg)',
+                opacity: isExperienceFlipped ? 1 : 0,
+                pointerEvents: isExperienceFlipped ? 'auto' : 'none',
+                visibility: isExperienceFlipped ? 'visible' : 'hidden',
+                transition: 'opacity 0.25s ease, visibility 0.25s ease'
               }}
             >
+              {/* Background Circuit Grid */}
+              <div 
+                className="absolute inset-0 opacity-15 pointer-events-none -z-10"
+                style={{
+                  backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)',
+                  backgroundSize: '18px 18px'
+                }}
+              />
               {/* 360-Degree Continuous Rotating Laser Border Beam */}
               <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
                 <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-40" />

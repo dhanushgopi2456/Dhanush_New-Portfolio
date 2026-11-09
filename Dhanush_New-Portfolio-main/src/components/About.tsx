@@ -662,62 +662,78 @@ export const About: React.FC = () => {
               const honors = EDUCATION_HONORS[idx] || EDUCATION_HONORS[0];
 
               return (
-                <div key={idx} className="[perspective:1200px] h-full min-h-[460px]">
+                <div
+                  key={idx}
+                  className="relative [perspective:1400px] w-full min-h-[490px] sm:min-h-[510px]"
+                >
                   <motion.div
-                    initial={{ opacity: 0, y: 35, rotateX: 10 }}
-                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    initial={{ opacity: 0, y: 35 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: idx * 0.15 }}
+                    transition={{ duration: 0.7, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
                     animate={{ rotateY: isFlipped ? 180 : 0 }}
                     style={{ transformStyle: 'preserve-3d' }}
-                    className="relative w-full h-full rounded-3xl"
+                    className="relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
                     {/* FRONT FACE: Coursework & Degree Details */}
                     <div 
-                      className="glass-card p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group shadow-xl hover:border-cyan-500/50 transition-all overflow-hidden absolute inset-0 w-full h-full"
-                      style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                      className="glass-card p-6 sm:p-7 rounded-[30px] border border-white/10 flex flex-col justify-between group shadow-xl hover:border-cyan-500/50 relative w-full h-full min-h-[490px] sm:min-h-[510px] bg-slate-900/95 overflow-hidden"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        opacity: isFlipped ? 0 : 1,
+                        pointerEvents: isFlipped ? 'none' : 'auto',
+                        visibility: isFlipped ? 'hidden' : 'visible',
+                        transition: 'opacity 0.25s ease, visibility 0.25s ease'
+                      }}
                     >
+                      {/* 360 Continuous Laser Border Beam */}
+                      <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
+                        <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-35 group-hover:opacity-85 transition-opacity" />
+                      </div>
+
                       <div>
-                        {/* Top Bar with score & Flip Card button */}
-                        <div className="flex items-center justify-between mb-3 gap-2">
+                        {/* Top Bar with score & 3D Flip button */}
+                        <div className="flex items-center justify-between mb-4 gap-2 border-b border-white/5 pb-3">
                           <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold shadow-sm">
                             {edu.score}
                           </span>
+
                           <button
                             onClick={(e) => toggleEduFlip(idx, e)}
-                            className="px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:scale-105"
-                            title="Flip Card (10s Auto-Loop)"
+                            className="px-2.5 py-1 rounded-full bg-indigo-950/80 hover:bg-indigo-900/90 border border-indigo-500/40 text-indigo-300 font-mono text-[10px] font-bold flex items-center gap-1.5 transition-all hover:scale-105 cursor-pointer shadow-md"
+                            title="Flip to inspect Academic Distinctions & Honors (10s Auto-Loop)"
                           >
-                            <RotateCw className="w-3 h-3 text-amber-400 animate-spin-slow" />
-                            <span>Flip Card 🔄 (10s Loop)</span>
+                            <RotateCw className="w-3 h-3 text-cyan-400 group-hover:rotate-180 transition-transform duration-500" />
+                            <span>3D Honors</span>
                           </button>
                         </div>
 
-                        <div className="text-xs text-slate-400 font-mono flex items-center gap-1 mb-2">
-                          <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                        <div className="text-xs text-slate-400 font-mono flex items-center gap-1.5 mb-2.5">
+                          <Calendar className="w-3.5 h-3.5 text-cyan-400" />
                           <span>{edu.period}</span>
                         </div>
 
-                        <h4 className="text-lg font-extrabold text-white mt-1 group-hover:text-cyan-300 transition-colors">
+                        <h4 className="text-xl font-extrabold text-white mt-1 group-hover:text-cyan-300 transition-colors leading-snug">
                           {edu.institution}
                         </h4>
-                        <p className="text-xs font-bold text-indigo-300 mt-1">
+                        <p className="text-xs font-bold text-indigo-300 mt-1.5">
                           {edu.degree}
                         </p>
-                        <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-1 font-mono">
+                        <p className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-1 font-mono">
                           <Building className="w-3.5 h-3.5 text-slate-500" />
                           <span>{edu.location}</span>
                         </p>
 
-                        <div className="mt-4 pt-4 border-t border-slate-800/80">
-                          <p className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-bold">
+                        <div className="mt-5 pt-4 border-t border-slate-800/80">
+                          <p className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2.5 font-bold">
                             Key Coursework:
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {edu.favoriteCourses.map((course, cIdx) => (
                               <span 
                                 key={cIdx}
-                                className="px-2.5 py-0.5 rounded-lg bg-slate-900/90 text-slate-300 text-[11px] border border-slate-700/60 font-mono"
+                                className="px-2.5 py-1 rounded-lg bg-slate-950/90 text-slate-300 text-[11px] border border-slate-800 font-mono"
                               >
                                 {course}
                               </span>
@@ -726,40 +742,73 @@ export const About: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="mt-5 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                      <div className="mt-6 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
                         <span>Milestone {idx + 1} of 3</span>
-                        <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+                          <span className="text-[10px] text-slate-400 font-mono">Auto-Loop (10s)</span>
+                        </div>
                       </div>
                     </div>
 
                     {/* BACK FACE: Academic Honors, Distinctions & Credentials */}
                     <div 
-                      className="glass-card p-6 rounded-3xl border border-cyan-500/40 bg-slate-950/95 relative flex flex-col justify-between shadow-2xl overflow-hidden absolute inset-0 w-full h-full"
+                      className="glass-card p-6 sm:p-7 rounded-[30px] border border-cyan-500/40 bg-slate-950/98 flex flex-col justify-between shadow-2xl absolute inset-0 w-full h-full min-h-[490px] sm:min-h-[510px] overflow-hidden"
                       style={{
                         backfaceVisibility: 'hidden',
                         WebkitBackfaceVisibility: 'hidden',
-                        transform: 'rotateY(180deg)'
+                        transform: 'rotateY(180deg)',
+                        opacity: isFlipped ? 1 : 0,
+                        pointerEvents: isFlipped ? 'auto' : 'none',
+                        visibility: isFlipped ? 'visible' : 'hidden',
+                        transition: 'opacity 0.25s ease, visibility 0.25s ease'
                       }}
                     >
+                      {/* Circuit Background Grid pattern (Identical to Projects ArchitectureBackDiagram) */}
+                      <div 
+                        className="absolute inset-0 opacity-20 pointer-events-none -z-10"
+                        style={{
+                          backgroundImage: 'radial-gradient(circle, #22d3ee 1px, transparent 1px)',
+                          backgroundSize: '16px 16px'
+                        }}
+                      />
+
+                      {/* 360 Continuous Laser Border Beam */}
+                      <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
+                        <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-40" />
+                      </div>
+
                       <div>
-                        {/* Back Header */}
-                        <div className="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-3 gap-2">
+                        {/* Back Top Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-white/10 gap-2 mb-3">
                           <div className="flex items-center gap-2">
-                            <Trophy className="w-4 h-4 text-amber-400" />
-                            <span className="text-xs font-extrabold text-white tracking-wide">Academic Distinction</span>
+                            <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                              <Trophy className="w-4 h-4 text-amber-400" />
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Academic Distinction</h4>
+                              <p className="text-[10px] text-cyan-400 font-mono truncate max-w-[140px]">{honors.badge}</p>
+                            </div>
                           </div>
-                          <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono font-bold truncate max-w-[150px]">
-                            {honors.badge}
-                          </span>
+
+                          <button
+                            onClick={(e) => toggleEduFlip(idx, e)}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-bold transition-all hover:scale-105 cursor-pointer shadow-sm"
+                            title="Flip to Coursework"
+                          >
+                            <RotateCw className="w-3 h-3 text-cyan-400" />
+                            <span>Flip Front</span>
+                          </button>
                         </div>
 
-                        <p className="text-xs text-slate-300 font-medium mb-3 leading-relaxed">
+                        <p className="text-xs text-slate-300 font-medium mb-3.5 leading-snug">
                           {honors.summary}
                         </p>
 
+                        {/* Highlights List */}
                         <div className="space-y-2">
                           {honors.highlights.map((h, hIdx) => (
-                            <div key={hIdx} className="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 flex items-start gap-2">
+                            <div key={hIdx} className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800/80 flex items-start gap-2.5 shadow-sm">
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
                               <div className="min-w-0">
                                 <p className="text-[10px] font-mono text-cyan-400 font-bold">{h.label}</p>
@@ -770,18 +819,18 @@ export const About: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-slate-800/80">
+                      <div className="pt-3 border-t border-slate-800/80 mt-3">
                         <p className="text-[10px] font-mono text-slate-500 text-center mb-2">
                           {honors.credentialNote}
                         </p>
                         <button
                           onClick={(e) => toggleEduFlip(idx, e)}
-                          className="relative overflow-hidden flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-xs font-mono transition-all shadow-md shadow-blue-600/30 group cursor-pointer w-full"
+                          className="relative overflow-hidden flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs font-mono transition-all shadow-md shadow-cyan-600/30 group cursor-pointer w-full"
                         >
                           <ButtonGlare radius={12} intensity={0.4} />
                           <span className="relative z-10 flex items-center gap-2">
                             <RotateCw className="w-3.5 h-3.5 text-cyan-300" />
-                            <span>Flip to Coursework 🔄</span>
+                            <span>Flip to Coursework Overview</span>
                           </span>
                         </button>
                       </div>
