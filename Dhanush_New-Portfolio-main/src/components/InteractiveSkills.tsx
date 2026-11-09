@@ -98,8 +98,87 @@ export const InteractiveSkills: React.FC = () => {
         </motion.div>
 
         {/* 3D Continuously Rotating Skill Sphere */}
-        <div className="mb-16">
+        <div className="mb-14">
           <SkillSphere />
+        </div>
+
+        {/* Two Infinite Horizontal Marquee Rows (Opposite Directions, Pause & Illuminate on Hover) */}
+        <div className="mb-16 space-y-3 overflow-hidden py-1 select-none">
+          {/* Marquee Row 1 (Left to Right) */}
+          <div className="relative w-full overflow-hidden flex [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="animate-marquee gap-3 py-1 hover:[animation-play-state:paused]">
+              {[
+                { name: "React.js", category: "Frontend", glow: "hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]" },
+                { name: "Next.js", category: "Full Stack", glow: "hover:border-white hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]" },
+                { name: "TypeScript", category: "Language", glow: "hover:border-blue-400 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]" },
+                { name: "Node.js", category: "Backend", glow: "hover:border-emerald-400 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]" },
+                { name: "Express.js", category: "Backend", glow: "hover:border-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)]" },
+                { name: "MongoDB", category: "Database", glow: "hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)]" },
+                { name: "PostgreSQL", category: "Database", glow: "hover:border-sky-400 hover:shadow-[0_0_15px_rgba(56,189,248,0.5)]" },
+                { name: "Tailwind CSS", category: "Frontend", glow: "hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]" },
+                { name: "JavaScript ES6+", category: "Language", glow: "hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(234,179,8,0.5)]" },
+                // Duplicate for seamless infinite loop
+                { name: "React.js", category: "Frontend", glow: "hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]" },
+                { name: "Next.js", category: "Full Stack", glow: "hover:border-white hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]" },
+                { name: "TypeScript", category: "Language", glow: "hover:border-blue-400 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]" },
+                { name: "Node.js", category: "Backend", glow: "hover:border-emerald-400 hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]" },
+                { name: "Express.js", category: "Backend", glow: "hover:border-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)]" },
+                { name: "MongoDB", category: "Database", glow: "hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)]" },
+                { name: "PostgreSQL", category: "Database", glow: "hover:border-sky-400 hover:shadow-[0_0_15px_rgba(56,189,248,0.5)]" },
+                { name: "Tailwind CSS", category: "Frontend", glow: "hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]" },
+                { name: "JavaScript ES6+", category: "Language", glow: "hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(234,179,8,0.5)]" }
+              ].map((item, mIdx) => (
+                <div
+                  key={mIdx}
+                  className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-slate-950/80 border border-white/10 hover:bg-slate-900 text-slate-300 hover:text-white transition-all shadow-md cursor-pointer group/m ${item.glow}`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover/m:animate-ping" />
+                  <span className="text-xs font-mono font-bold tracking-wide">{item.name}</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-white/5 text-cyan-300 font-mono">
+                    {item.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Marquee Row 2 (Right to Left) */}
+          <div className="relative w-full overflow-hidden flex [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="animate-marquee-reverse gap-3 py-1 hover:[animation-play-state:paused]">
+              {[
+                { name: "Core Java", category: "Language & DSA", glow: "hover:border-orange-400 hover:shadow-[0_0_15px_rgba(251,146,60,0.5)]" },
+                { name: "Python", category: "Language & AI", glow: "hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(250,204,21,0.5)]" },
+                { name: "Docker", category: "DevOps", glow: "hover:border-blue-400 hover:shadow-[0_0_15px_rgba(96,165,250,0.5)]" },
+                { name: "Git & GitHub", category: "Tools", glow: "hover:border-red-400 hover:shadow-[0_0_15px_rgba(248,113,113,0.5)]" },
+                { name: "GraphQL", category: "API", glow: "hover:border-pink-400 hover:shadow-[0_0_15px_rgba(244,114,182,0.5)]" },
+                { name: "MySQL", category: "Database", glow: "hover:border-amber-400 hover:shadow-[0_0_15px_rgba(251,191,36,0.5)]" },
+                { name: "PyTorch", category: "AI / ML", glow: "hover:border-rose-400 hover:shadow-[0_0_15px_rgba(251,113,133,0.5)]" },
+                { name: "YOLOv9 Vision", category: "Computer Vision", glow: "hover:border-purple-400 hover:shadow-[0_0_15px_rgba(192,132,252,0.5)]" },
+                { name: "Data Structures", category: "Algorithms", glow: "hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(129,140,248,0.5)]" },
+                // Duplicate for seamless infinite loop
+                { name: "Core Java", category: "Language & DSA", glow: "hover:border-orange-400 hover:shadow-[0_0_15px_rgba(251,146,60,0.5)]" },
+                { name: "Python", category: "Language & AI", glow: "hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(250,204,21,0.5)]" },
+                { name: "Docker", category: "DevOps", glow: "hover:border-blue-400 hover:shadow-[0_0_15px_rgba(96,165,250,0.5)]" },
+                { name: "Git & GitHub", category: "Tools", glow: "hover:border-red-400 hover:shadow-[0_0_15px_rgba(248,113,113,0.5)]" },
+                { name: "GraphQL", category: "API", glow: "hover:border-pink-400 hover:shadow-[0_0_15px_rgba(244,114,182,0.5)]" },
+                { name: "MySQL", category: "Database", glow: "hover:border-amber-400 hover:shadow-[0_0_15px_rgba(251,191,36,0.5)]" },
+                { name: "PyTorch", category: "AI / ML", glow: "hover:border-rose-400 hover:shadow-[0_0_15px_rgba(251,113,133,0.5)]" },
+                { name: "YOLOv9 Vision", category: "Computer Vision", glow: "hover:border-purple-400 hover:shadow-[0_0_15px_rgba(192,132,252,0.5)]" },
+                { name: "Data Structures", category: "Algorithms", glow: "hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(129,140,248,0.5)]" }
+              ].map((item, mIdx) => (
+                <div
+                  key={mIdx}
+                  className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-slate-950/80 border border-white/10 hover:bg-slate-900 text-slate-300 hover:text-white transition-all shadow-md cursor-pointer group/m ${item.glow}`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-purple-400 group-hover/m:animate-ping" />
+                  <span className="text-xs font-mono font-bold tracking-wide">{item.name}</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-white/5 text-purple-300 font-mono">
+                    {item.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Filter Controls & Search Bar */}

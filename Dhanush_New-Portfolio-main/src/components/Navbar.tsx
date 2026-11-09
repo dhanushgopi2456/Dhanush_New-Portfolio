@@ -9,6 +9,7 @@ import {
   X, 
   Volume2, 
   VolumeX,
+  Search
 } from 'lucide-react';
 import { VoiceSpeakerControl } from './VoiceSpeakerControl';
 import { ButtonGlare } from './ui/button-glare';
@@ -20,6 +21,7 @@ interface NavbarProps {
   setIsTerminalMode: (val: boolean) => void;
   onOpenPdfModal: () => void;
   onOpenAiDrawer: () => void;
+  onOpenCommandPalette?: () => void;
   soundEnabled: boolean;
   setSoundEnabled: (val: boolean) => void;
 }
@@ -31,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setIsTerminalMode,
   onOpenPdfModal,
   onOpenAiDrawer,
+  onOpenCommandPalette,
   soundEnabled,
   setSoundEnabled
 }) => {
@@ -129,6 +132,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Action Controls with Magnetic Pull & Neon Pulse Rings */}
         <div className="hidden sm:flex items-center gap-2">
           
+          {/* Command Palette Trigger Pill (Cmd + K) */}
+          {onOpenCommandPalette && (
+            <button
+              onClick={onOpenCommandPalette}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-850 text-slate-300 border border-white/10 hover:border-cyan-500/40 text-xs font-mono transition-all shadow-md group cursor-pointer"
+              title="Open Command Palette (Cmd + K or Ctrl + K)"
+            >
+              <Search className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="hidden xl:inline text-[11px] text-slate-400">Cmd</span>
+              <kbd className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10 text-[9px] text-cyan-300 font-bold">
+                ⌘K
+              </kbd>
+            </button>
+          )}
+
           {/* Voice Speaker / Audio Guide */}
           <div className="relative group">
             <VoiceSpeakerControl compact={true} />

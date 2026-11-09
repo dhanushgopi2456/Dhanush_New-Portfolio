@@ -31,6 +31,9 @@ export const CustomCursor: React.FC = () => {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
+  // Spotlight position state for CSS background radial gradient
+  const [spotlightPos, setSpotlightPos] = useState({ x: -500, y: -500 });
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mediaQuery = window.matchMedia('(pointer: fine)');
@@ -59,27 +62,28 @@ export const CustomCursor: React.FC = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    const colors = ['#3b82f6', '#06b6d4', '#a855f7', '#ec4899', '#ffffff'];
+    const colors = ['#22d3ee', '#06b6d4', '#6366f1', '#a855f7', '#ec4899', '#ffffff'];
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      setSpotlightPos({ x: e.clientX, y: e.clientY });
 
       const dx = e.clientX - lastMousePos.current.x;
       const dy = e.clientY - lastMousePos.current.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Spawn trailing particle wake if moved enough
-      if (dist > 4 && particlesRef.current.length < 80) {
+      // Trailing particle wake
+      if (dist > 4 && particlesRef.current.length < 70) {
         for (let i = 0; i < 2; i++) {
           particlesRef.current.push({
             id: Math.random(),
             x: e.clientX + (Math.random() - 0.5) * 8,
             y: e.clientY + (Math.random() - 0.5) * 8,
-            size: Math.random() * 2.8 + 1,
+            size: Math.random() * 2.5 + 1,
             color: colors[Math.floor(Math.random() * colors.length)],
-            vx: (Math.random() - 0.5) * 1.5,
-            vy: (Math.random() - 0.5) * 1.5 + 0.5,
+            vx: (Math.random() - 0.5) * 1.4,
+            vy: (Math.random() - 0.5) * 1.4 + 0.4,
             alpha: 0.85,
           });
         }
@@ -90,7 +94,6 @@ export const CustomCursor: React.FC = () => {
       const target = (e.target as HTMLElement | null)?.closest('a, button, input, textarea, [role="button"], .magnetic-snap');
       if (target) {
         const rect = target.getBoundingClientRect();
-        // If element is reasonably sized (buttons, tabs, icons, cards), apply magnetic snap
         if (rect.width < 500 && rect.height < 250) {
           setMagneticTarget({
             x: rect.left + rect.width / 2,
@@ -125,7 +128,7 @@ export const CustomCursor: React.FC = () => {
           const p = particlesRef.current[i];
           p.x += p.vx;
           p.y += p.vy;
-          p.alpha -= 0.022;
+          p.alpha -= 0.024;
 
           if (p.alpha <= 0) {
             particlesRef.current.splice(i, 1);
@@ -163,59 +166,73 @@ export const CustomCursor: React.FC = () => {
   const targetY = magneticTarget ? magneticTarget.y : smoothY;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {/* Particle trail canvas */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-40"
+    <>
+      {/* 0. Cursor-Tracking Spotlight & Subtle Background Dot Grid */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(34, 211, 238, 0.14) 0%, rgba(168, 85, 247, 0.08) 35%, transparent 65%),
+            radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: '100% 100%, 28px 28px',
+        }}
       />
 
-      {/* 1. Inner Precision Glowing Dot (#3b82f6) */}
-      <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 rounded-full pointer-events-none z-50 mix-blend-screen"
-        style={{
-          x: mouseX,
-          y: mouseY,
-          translateX: '-50%',
-          translateY: '-50%',
-          background: 'radial-gradient(circle, #60a5fa 0%, #3b82f6 80%, #1d4ed8 100%)',
-          boxShadow: '0 0 10px 2px rgba(59, 130, 246, 0.8), 0 0 20px 4px rgba(6, 182, 212, 0.5)',
-        }}
-        animate={{
-          scale: isClicking ? 0.6 : isHovered ? 1.5 : 1,
-        }}
-        transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-      />
+      <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+        {/* Particle trail canvas */}
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 pointer-events-none z-40"
+        />
 
-      {/* 2. Outer Smooth Magnetic Dual-Ring Glowing Aura (#3b82f6 & #ec4899) */}
-      <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-50 transition-colors"
-        style={{
-          x: targetX,
-          y: targetY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={{
-          width: magneticTarget ? Math.max(magneticTarget.width + 16, 44) : isHovered ? 52 : 36,
-          height: magneticTarget ? Math.max(magneticTarget.height + 12, 44) : isHovered ? 52 : 36,
-          borderRadius: magneticTarget ? '16px' : '9999px',
-          scale: isClicking ? 0.9 : 1,
-          borderColor: isHovered ? '#ec4899' : '#3b82f6',
-          boxShadow: isHovered
-            ? '0 0 20px 3px rgba(236, 72, 153, 0.5), inset 0 0 14px 2px rgba(99, 102, 241, 0.3)'
-            : '0 0 15px 2px rgba(59, 130, 246, 0.45), inset 0 0 8px 1px rgba(6, 182, 212, 0.25)',
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 350,
-          damping: 26,
-          mass: 0.2,
-        }}
-      >
-        {/* Animated Rotating Conic Laser Edge on Cursor Ring */}
-        <div className="absolute inset-0 rounded-[inherit] p-[1.5px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-80 animate-spin-slow pointer-events-none" />
-      </motion.div>
-    </div>
+        {/* 1. Instant Cyan Center Dot (#22d3ee) */}
+        <motion.div
+          className="fixed top-0 left-0 w-2.5 h-2.5 rounded-full pointer-events-none z-50 mix-blend-screen"
+          style={{
+            x: mouseX,
+            y: mouseY,
+            translateX: '-50%',
+            translateY: '-50%',
+            background: 'radial-gradient(circle, #ffffff 0%, #22d3ee 60%, #0891b2 100%)',
+            boxShadow: '0 0 12px 2px #22d3ee, 0 0 24px 4px rgba(6, 182, 212, 0.6)',
+          }}
+          animate={{
+            scale: isClicking ? 0.6 : isHovered ? 1.6 : 1,
+          }}
+          transition={{ type: 'spring', stiffness: 600, damping: 28 }}
+        />
+
+        {/* 2. Spring-Physics Indigo Outer Ring (#6366f1) */}
+        <motion.div
+          className="fixed top-0 left-0 rounded-full pointer-events-none z-50 transition-colors"
+          style={{
+            x: targetX,
+            y: targetY,
+            translateX: '-50%',
+            translateY: '-50%',
+          }}
+          animate={{
+            width: magneticTarget ? Math.max(magneticTarget.width + 16, 46) : isHovered ? 56 : 38,
+            height: magneticTarget ? Math.max(magneticTarget.height + 12, 46) : isHovered ? 56 : 38,
+            borderRadius: magneticTarget ? '16px' : '9999px',
+            scale: isClicking ? 0.9 : 1,
+            borderColor: isHovered ? '#a855f7' : '#6366f1',
+            boxShadow: isHovered
+              ? '0 0 24px 4px rgba(168, 85, 247, 0.6), inset 0 0 14px 2px rgba(99, 102, 241, 0.4)'
+              : '0 0 16px 2px rgba(99, 102, 241, 0.45), inset 0 0 8px 1px rgba(6, 182, 212, 0.25)',
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 350,
+            damping: 26,
+            mass: 0.2,
+          }}
+        >
+          {/* Animated Rotating Conic Edge on Cursor Ring */}
+          <div className="absolute inset-0 rounded-[inherit] p-[1.5px] bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-500 opacity-80 animate-spin-slow pointer-events-none" />
+        </motion.div>
+      </div>
+    </>
   );
 };

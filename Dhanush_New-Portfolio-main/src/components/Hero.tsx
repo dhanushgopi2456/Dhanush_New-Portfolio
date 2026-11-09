@@ -27,6 +27,8 @@ import { PORTFOLIO_PHOTOS } from '../data/photos';
 import { VoiceSpeakerControl } from './VoiceSpeakerControl';
 import { subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
 import { ButtonGlare } from './ui/button-glare';
+import { HeroThreeScene } from './HeroThreeScene';
+import { MagneticButton } from './MagneticButton';
 
 interface HeroProps {
   onOpenPdfModal: () => void;
@@ -211,6 +213,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
   return (
     <section id="hero" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
       
+      {/* Interactive Full-Bleed Three.js Wireframe & Ambient Particle Scene */}
+      <HeroThreeScene />
+
       {/* Multi-layered Ambient Radial Spotlights */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none animate-pulse-glow" />
       <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
@@ -227,36 +232,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 flex flex-col items-start space-y-6"
           >
-            {/* Interactive Status Pill with Pulsing Emerald Radar Wave */}
+            {/* Cult-UI Glowing Pill Badge with Pulsing Cyan Radar Dot */}
             <div className="relative inline-block">
-              {/* Concentric Pulsing Radar Rings */}
               <span className="radar-ring" />
-              <span className="radar-ring" style={{ animationDelay: '0.8s' }} />
-              <span className="radar-ring" style={{ animationDelay: '1.6s' }} />
-
-              <button
-                onClick={() => setStatusIndex((prev) => (prev + 1) % AVAILABILITY_STATUSES.length)}
-                className="relative z-10 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-emerald-500/40 hover:border-emerald-400 backdrop-blur-xl shadow-lg shadow-emerald-950/20 transition-all hover:scale-105 group overflow-hidden cursor-pointer"
-                title="Click to cycle status mode"
-              >
-                <ButtonGlare radius={Infinity} coolColor={{ r: 0.1, g: 0.85, b: 0.5, a: 1 }} />
+              <div className="relative z-10 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/85 border border-cyan-500/40 hover:border-cyan-400 backdrop-blur-xl shadow-lg shadow-cyan-950/40 transition-all hover:scale-105 group overflow-hidden">
+                <ButtonGlare radius={Infinity} coolColor={{ r: 0.05, g: 0.85, b: 0.95, a: 1 }} />
                 <span className="relative z-10 flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400 shadow-[0_0_10px_#22d3ee]"></span>
                 </span>
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={statusIndex}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.2 }}
-                    className="relative z-10 text-xs font-bold text-emerald-300 tracking-wide uppercase font-mono"
-                  >
-                    {AVAILABILITY_STATUSES[statusIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </button>
+                <span className="relative z-10 text-xs font-bold text-cyan-300 tracking-wider uppercase font-mono">
+                  Available for Full-Time Software Engineering Roles
+                </span>
+              </div>
             </div>
 
             {/* Main Greeting & 3D Staggered Name Reveal */}
@@ -355,43 +343,51 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
               Results-driven Computer Science Graduate specialized in building high-performance <strong className="text-white font-semibold">MERN Stack applications</strong>, scalable <strong className="text-white font-semibold">REST APIs</strong>, and deep learning models with <strong className="text-white font-semibold">PyTorch & YOLOv9</strong>.
             </p>
 
-            {/* Primary Action Buttons with Magnetic Pull */}
+            {/* Primary Action Buttons with Motion Magnetic Physics */}
             <div className="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
               {/* Voice Speaker Narration Button with Live Waveform */}
-              <VoiceSpeakerControl />
+              <MagneticButton strength={0.25}>
+                <VoiceSpeakerControl />
+              </MagneticButton>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onExploreClick}
-                className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group cursor-pointer"
-              >
-                <ButtonGlare radius={16} />
-                <span className="relative z-10">View Projects</span>
-                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              <MagneticButton strength={0.35}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onExploreClick}
+                  className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group cursor-pointer"
+                >
+                  <ButtonGlare radius={16} />
+                  <span className="relative z-10">View Projects</span>
+                  <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </MagneticButton>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onOpenAiDrawer}
-                className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-sm shadow-lg shadow-purple-950/30 transition-all group cursor-pointer"
-              >
-                <ButtonGlare radius={16} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
-                <Sparkles className="relative z-10 w-4 h-4 text-purple-400 animate-pulse" />
-                <span className="relative z-10">Ask Dhanush AI</span>
-              </motion.button>
+              <MagneticButton strength={0.35}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onOpenAiDrawer}
+                  className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-sm shadow-lg shadow-purple-950/30 transition-all group cursor-pointer"
+                >
+                  <ButtonGlare radius={16} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
+                  <Sparkles className="relative z-10 w-4 h-4 text-purple-400 animate-pulse" />
+                  <span className="relative z-10">Ask Dhanush AI</span>
+                </motion.button>
+              </MagneticButton>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onOpenPdfModal}
-                className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-sm transition-all shadow-md group cursor-pointer"
-              >
-                <ButtonGlare radius={16} />
-                <FileText className="relative z-10 w-4 h-4 text-cyan-400" />
-                <span className="relative z-10">Resume PDF</span>
-              </motion.button>
+              <MagneticButton strength={0.25}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onOpenPdfModal}
+                  className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-sm transition-all shadow-md group cursor-pointer"
+                >
+                  <ButtonGlare radius={16} />
+                  <FileText className="relative z-10 w-4 h-4 text-cyan-400" />
+                  <span className="relative z-10">Resume PDF</span>
+                </motion.button>
+              </MagneticButton>
             </div>
 
             {/* Social Links & Location */}

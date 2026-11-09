@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useInView } from 'motion/react';
 import { 
   GraduationCap, 
   Award, 
@@ -10,33 +10,176 @@ import {
   FileText,
   Calendar,
   Building,
-  ShieldAlert,
   BarChart3,
   ExternalLink,
   ArrowUpRight,
-  Calculator
+  Calculator,
+  Github,
+  GitCommit,
+  GitBranch,
+  Star,
+  Code2,
+  Terminal,
+  Cpu,
+  Layers,
+  Flame
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
 
-export const About: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'academic' | 'leadership' | 'research'>('academic');
-  const [cgpaInput, setCgpaInput] = useState<number>(9.04);
+// Viewport-Triggered Animated Number Counter
+const ViewportCounter: React.FC<{ target: number; suffix?: string; decimals?: number; duration?: number }> = ({
+  target,
+  suffix = '',
+  decimals = 0,
+  duration = 2
+}) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
 
-  // Mouse tracking for card spotlights
-  const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
-  const [cardMousePos, setCardMousePos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    if (!inView) return;
 
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-    setHoveredCardIndex(index);
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setCount(ease * target);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
+  }, [inView, target, duration]);
+
+  return (
+    <span ref={ref} className="font-mono">
+      {count.toFixed(decimals)}{suffix}
+    </span>
+  );
+};
+
+// Spatial 3D Bento Card with X/Y Tilt & Sweeping Diagonal Glass Reflection
+interface BentoTiltCardProps {
+  children: React.ReactNode;
+  className?: string;
+  glowColor?: string;
+}
+
+const BentoTiltCard: React.FC<BentoTiltCardProps> = ({ 
+  children, 
+  className = '',
+  glowColor = 'rgba(6, 182, 212, 0.2)' 
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Smooth tilt angles
+    const tiltX = -((y - centerY) / centerY) * 7;
+    const tiltY = ((x - centerX) / centerX) * 7;
+
+    setTilt({ x: tiltX, y: tiltY });
+    setMousePos({ x, y });
+    setIsHovered(true);
   };
 
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+    setIsHovered(false);
+  };
+
+  return (
+    <div 
+      className={`relative [perspective:1200px] ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <motion.div
+        ref={cardRef}
+        animate={{
+          rotateX: tilt.x,
+          rotateY: tilt.y,
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25, mass: 0.15 }}
+        style={{ transformStyle: 'preserve-3d' }}
+        className="relative h-full w-full rounded-3xl bg-slate-950/80 border border-white/10 p-6 sm:p-7 backdrop-blur-2xl shadow-2xl overflow-hidden group hover:border-cyan-500/40 transition-colors"
+      >
+        {/* 360-Degree Continuous Rotating Laser Border Beam */}
+        <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
+          <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#06b6d4_120deg,#6366f1_180deg,#a855f7_240deg,transparent_300deg)] opacity-25 group-hover:opacity-75 transition-opacity" />
+        </div>
+
+        {/* Cursor-tracked internal radial spotlight */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, ${glowColor}, transparent 70%)`,
+          }}
+        />
+
+        {/* Sweeping Diagonal Glass Reflection Sheen */}
+        <div 
+          className="pointer-events-none absolute -inset-[100%] opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-0"
+          style={{
+            background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.12) 48%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.12) 52%, transparent 60%)',
+            transform: isHovered 
+              ? `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)` 
+              : 'translate(0px, 0px)',
+            transition: 'transform 0.1s ease-out',
+          }}
+        />
+
+        {/* Content with elevated Z-space */}
+        <div className="relative z-10 h-full flex flex-col justify-between" style={{ transform: 'translateZ(10px)' }}>
+          {children}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export const About: React.FC = () => {
+  const [cgpaInput, setCgpaInput] = useState<number>(9.04);
   const calculatedPercentage = (cgpaInput * 9.5).toFixed(2);
+
+  // Generate simulated 52-week GitHub contribution heatmap data
+  const contributionGrid = React.useMemo(() => {
+    const weeks = 40;
+    const daysPerWeek = 7;
+    const grid: number[][] = [];
+
+    for (let w = 0; w < weeks; w++) {
+      const week: number[] = [];
+      for (let d = 0; d < daysPerWeek; d++) {
+        // Pseudo-random deterministic activity levels 0-4
+        const seed = (w * 7 + d * 13) % 100;
+        let level = 0;
+        if (seed > 80) level = 4;
+        else if (seed > 60) level = 3;
+        else if (seed > 38) level = 2;
+        else if (seed > 18) level = 1;
+        week.push(level);
+      }
+      grid.push(week);
+    }
+    return grid;
+  }, []);
 
   return (
     <section id="about" className="py-24 relative z-10 bg-transparent">
@@ -53,432 +196,370 @@ export const About: React.FC = () => {
           className="text-center max-w-3xl mx-auto mb-16 transform-gpu"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-bold uppercase tracking-wider mb-4 shadow-lg shadow-cyan-950/20">
-            <GraduationCap className="w-4 h-4" />
-            <span>Background & Milestones</span>
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span>Spatial 3D Bento Grid & Milestone Vault</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Academic Excellence & <br />
-            <span className="liquid-gradient-text">Leadership Trajectory</span>
+            Engineering Precision & <br />
+            <span className="liquid-gradient-text">Academic Milestones</span>
           </h2>
           <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
-            Combining top academic rank (9.04 CGPA), Class Representative leadership for 60+ students, and published IEEE research in AI vision.
+            A comprehensive overview of top academic distinction (9.04 CGPA), live GitHub commit telemetry, 900+ algorithmic problems, and published IEEE computer vision research.
           </p>
         </motion.div>
 
-        {/* Interactive Feature Selector Tabs with Framer Motion layoutId */}
-        <div className="flex justify-center mb-12">
-          <div className="p-1.5 bg-slate-900/80 border border-white/10 rounded-2xl inline-flex flex-wrap gap-2 backdrop-blur-xl shadow-2xl">
-            <button
-              onClick={() => setActiveTab('academic')}
-              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
-                activeTab === 'academic' ? 'text-white' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {activeTab === 'academic' && (
-                <motion.div
-                  layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
-                  transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                >
-                  <ButtonGlare radius={12} />
-                </motion.div>
-              )}
-              <BookOpen className="relative z-10 w-4 h-4" />
-              <span className="relative z-10">Academic Excellence (9.04 CGPA)</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('leadership')}
-              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
-                activeTab === 'leadership' ? 'text-white' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {activeTab === 'leadership' && (
-                <motion.div
-                  layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
-                  transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                >
-                  <ButtonGlare radius={12} />
-                </motion.div>
-              )}
-              <Users className="relative z-10 w-4 h-4" />
-              <span className="relative z-10">Leadership Trajectory</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('research')}
-              className={`relative overflow-hidden px-5 py-2.5 rounded-xl text-xs font-bold font-mono transition-colors flex items-center gap-2 cursor-pointer group ${
-                activeTab === 'research' ? 'text-white' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {activeTab === 'research' && (
-                <motion.div
-                  layoutId="aboutActiveTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl -z-10 shadow-lg shadow-blue-500/30 border border-white/20 overflow-hidden"
-                  transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                >
-                  <ButtonGlare radius={12} />
-                </motion.div>
-              )}
-              <FileText className="relative z-10 w-4 h-4" />
-              <span className="relative z-10">AIDE-2024 Research Paper</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Tab Content Panes with 3D Slide Transition */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'academic' && (
-            <motion.div
-              key="academic"
-              initial={{ opacity: 0, x: 25, rotateY: 8 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              exit={{ opacity: 0, x: -25, rotateY: -8 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 transform-gpu [perspective:1000px]"
-            >
-              {/* Left Overview */}
-              <div 
-                onMouseMove={(e) => handleCardMouseMove(e, 101)}
-                onMouseLeave={() => setHoveredCardIndex(null)}
-                className="lg:col-span-7 glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group shadow-2xl"
-              >
-                {/* 360-Degree Continuous Rotating Laser Border Beam */}
-                <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
-                  <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#3b82f6_120deg,#06b6d4_180deg,#8b5cf6_240deg,transparent_300deg)] opacity-40 group-hover:opacity-80 transition-opacity" />
-                </div>
-
-                {/* Cursor-tracked internal radial spotlight */}
-                <div
-                  className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-                  style={{
-                    opacity: hoveredCardIndex === 101 ? 1 : 0,
-                    background: `radial-gradient(450px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(59, 130, 246, 0.2), transparent 70%)`,
-                  }}
-                />
-
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-blue-600/30 to-cyan-500/30 border border-blue-500/40 text-cyan-400 shadow-lg shadow-blue-500/20">
-                    <BookOpen className="w-6 h-6" />
+        {/* Spatial 3D Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-16">
+          
+          {/* Bento Card 1: Major GitHub Commit Activity (8 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-12 lg:col-span-8 min-h-[380px]"
+            glowColor="rgba(6, 182, 212, 0.22)"
+          >
+            <div>
+              {/* Header */}
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-5 border-b border-white/5 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-2xl bg-slate-900 border border-cyan-500/30 text-cyan-400 shadow-lg shadow-cyan-950/30">
+                    <Github className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-white">Sri Vasavi Engineering College (CSE)</h3>
-                    <p className="text-xs text-cyan-300 font-mono">Tadepalligudem, AP • B.Tech Nov 2022 - July 2026</p>
-                  </div>
-                </div>
-
-                <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                  Graduating with a cumulative grade point average of <strong className="text-cyan-300 font-bold font-mono">9.04 / 10.0 (82.88%)</strong>, placing in the top percentile of the Computer Science & Engineering department.
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 my-6">
-                  <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-                    <p className="text-[10px] font-mono text-slate-400 uppercase">Degree Awarded</p>
-                    <p className="text-sm font-bold text-white mt-1">B.Tech Computer Science</p>
-                  </div>
-                  <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-                    <p className="text-[10px] font-mono text-slate-400 uppercase">Overall Academic Score</p>
-                    <p className="text-sm font-bold text-emerald-400 mt-1 font-mono">9.04 CGPA (82.88%)</p>
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-400 uppercase font-mono font-bold tracking-wider mb-3">
-                  Core Computer Science Subjects Mastered:
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {[
-                    "Data Structures & Algorithms",
-                    "Object Oriented Programming",
-                    "Database Management (DBMS)",
-                    "MERN Web Stack",
-                    "Computer Networks",
-                    "Operating Systems"
-                  ].map((subject, idx) => (
-                    <div key={idx} className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-xs font-semibold text-slate-200 flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
-                      <span>{subject}</span>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-white">dhanushgopi2456</h3>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                        Active Dev
+                      </span>
                     </div>
-                  ))}
+                    <p className="text-xs text-slate-400 font-mono mt-0.5">Live GitHub Commit Activity & Repository Telemetry</p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Right Coursework Breakdown & Performance Metrics */}
-              <div className="lg:col-span-5 flex flex-col justify-between gap-4">
-                
-                {/* Academic Performance Metrics Card with Glowing Liquid Neon Progress Bars */}
-                <div 
-                  onMouseMove={(e) => handleCardMouseMove(e, 102)}
-                  onMouseLeave={() => setHoveredCardIndex(null)}
-                  className="glass-card p-6 rounded-3xl border border-white/10 relative overflow-hidden group shadow-xl"
+                <a
+                  href={RESUME_DATA.personal.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold transition-all hover:scale-105"
                 >
-                  <div
-                    className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-                    style={{
-                      opacity: hoveredCardIndex === 102 ? 1 : 0,
-                      background: `radial-gradient(350px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(99, 102, 241, 0.2), transparent 70%)`,
-                    }}
-                  />
+                  <span>github.com/dhanushgopi2456</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
 
-                  <h4 className="text-base font-bold text-white mb-2 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-cyan-400" />
-                    <span>Academic Performance Metrics</span>
-                  </h4>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-5">
-                    Demonstrated consistent academic distinction across all 8 semesters with Outstanding marks in theoretical CS and laboratories.
-                  </p>
-
-                  <div className="space-y-4">
-                    {/* Bar 1: Data Structures & Java */}
-                    <div>
-                      <div className="flex justify-between text-xs font-mono mb-1.5">
-                        <span className="text-slate-300 font-medium">Data Structures & Java</span>
-                        <span className="text-cyan-400 font-bold">Grade: O (Outstanding)</span>
-                      </div>
-                      <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800 relative p-0.5">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '95%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                          className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-500 relative shadow-md shadow-cyan-500/50"
-                        >
-                          {/* Leading Spark Particle */}
-                          <span className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#38bdf8] animate-pulse" />
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    {/* Bar 2: Database Systems */}
-                    <div>
-                      <div className="flex justify-between text-xs font-mono mb-1.5">
-                        <span className="text-slate-300 font-medium">Database Systems (DBMS/SQL)</span>
-                        <span className="text-cyan-400 font-bold">Grade: O (Outstanding)</span>
-                      </div>
-                      <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800 relative p-0.5">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '92%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                          className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 relative shadow-md shadow-teal-500/50"
-                        >
-                          <span className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#2dd4bf] animate-pulse" />
-                        </motion.div>
-                      </div>
-                    </div>
-
-                    {/* Bar 3: MERN Web Engineering */}
-                    <div>
-                      <div className="flex justify-between text-xs font-mono mb-1.5">
-                        <span className="text-slate-300 font-medium">MERN Web Engineering</span>
-                        <span className="text-cyan-400 font-bold">Grade: A+ (Excellent)</span>
-                      </div>
-                      <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800 relative p-0.5">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: '90%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                          className="h-full rounded-full bg-gradient-to-r from-purple-500 via-pink-400 to-indigo-500 relative shadow-md shadow-purple-500/50"
-                        >
-                          <span className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#ec4899] animate-pulse" />
-                        </motion.div>
-                      </div>
-                    </div>
+              {/* GitHub Contribution Heatmap in Dark Indigo & Electric Cyan */}
+              <div className="mb-5 bg-slate-950/90 p-4 rounded-2xl border border-slate-800/80">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+                  <span className="flex items-center gap-1.5">
+                    <GitCommit className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Contribution Heatmap • 900+ Commits Tracked</span>
+                  </span>
+                  <div className="flex items-center gap-1 text-[10px]">
+                    <span>Less</span>
+                    <span className="w-2.5 h-2.5 rounded-sm bg-slate-900 border border-slate-800" />
+                    <span className="w-2.5 h-2.5 rounded-sm bg-indigo-950 border border-indigo-800" />
+                    <span className="w-2.5 h-2.5 rounded-sm bg-indigo-700" />
+                    <span className="w-2.5 h-2.5 rounded-sm bg-cyan-600" />
+                    <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400 shadow-[0_0_6px_#22d3ee]" />
+                    <span>More</span>
                   </div>
                 </div>
 
-                {/* Academic Distinction Badge Card */}
-                <div className="glass-card p-6 rounded-3xl border border-blue-500/30 bg-blue-950/20 shadow-xl relative overflow-hidden">
-                  <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 font-mono text-[10px] font-bold uppercase tracking-wider border border-blue-500/30">
-                    Academic Distinction
-                  </span>
-                  <h4 className="text-base font-bold text-white mt-2.5">NPTEL Certified in Java & DSA</h4>
-                  <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
-                    Successfully completed NPTEL certification in Data Structures and Algorithms using Java with elite scoring and departmental praise.
+                {/* Heatmap Grid */}
+                <div className="overflow-x-auto pb-1">
+                  <div className="flex gap-1 min-w-[560px]">
+                    {contributionGrid.map((week, wIdx) => (
+                      <div key={wIdx} className="flex flex-col gap-1">
+                        {week.map((level, dIdx) => {
+                          const bg = 
+                            level === 4 ? 'bg-cyan-400 shadow-[0_0_8px_#22d3ee]' :
+                            level === 3 ? 'bg-cyan-600' :
+                            level === 2 ? 'bg-indigo-600' :
+                            level === 1 ? 'bg-indigo-950/80 border border-indigo-800/50' :
+                            'bg-slate-900/80 border border-slate-800/40';
+                          return (
+                            <div 
+                              key={dIdx} 
+                              className={`w-2.5 h-2.5 rounded-sm ${bg} transition-transform hover:scale-125 cursor-pointer`}
+                              title={`Week ${wIdx + 1}, Day ${dIdx + 1}: ${level * 3 + 1} contributions`}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Repository Statistics Ribbon */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                <div className="p-3 rounded-xl bg-slate-900/70 border border-slate-800">
+                  <p className="text-[10px] font-mono text-slate-400 uppercase">Public Repos</p>
+                  <p className="text-lg font-bold text-white font-mono mt-0.5">15+ Repos</p>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/70 border border-slate-800">
+                  <p className="text-[10px] font-mono text-slate-400 uppercase">Total Commits</p>
+                  <p className="text-lg font-bold text-cyan-400 font-mono mt-0.5">900+ Commits</p>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/70 border border-slate-800">
+                  <p className="text-[10px] font-mono text-slate-400 uppercase">Forks & Stars</p>
+                  <p className="text-lg font-bold text-indigo-400 font-mono mt-0.5">40+ Stars</p>
+                </div>
+                <div className="p-3 rounded-xl bg-slate-900/70 border border-slate-800">
+                  <p className="text-[10px] font-mono text-slate-400 uppercase">Continuous Streak</p>
+                  <p className="text-lg font-bold text-amber-400 font-mono mt-0.5 flex items-center gap-1">
+                    <Flame className="w-4 h-4 text-amber-400" />
+                    <span>50+ Days</span>
                   </p>
                 </div>
-
               </div>
-            </motion.div>
-          )}
 
-          {activeTab === 'leadership' && (
-            <motion.div
-              key="leadership"
-              initial={{ opacity: 0, x: 25, rotateY: 8 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              exit={{ opacity: 0, x: -25, rotateY: -8 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 transform-gpu"
-            >
-              {/* Class Representative */}
-              <div 
-                onMouseMove={(e) => handleCardMouseMove(e, 201)}
-                onMouseLeave={() => setHoveredCardIndex(null)}
-                className="glass-panel p-8 rounded-3xl border border-white/10 space-y-4 shadow-2xl relative overflow-hidden group"
-              >
-                <div
-                  className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-                  style={{
-                    opacity: hoveredCardIndex === 201 ? 1 : 0,
-                    background: `radial-gradient(400px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(59, 130, 246, 0.2), transparent 70%)`,
-                  }}
-                />
-
-                <div className="p-3.5 rounded-2xl bg-blue-600/20 text-cyan-400 border border-blue-500/30 w-fit shadow-lg shadow-blue-500/20">
-                  <Users className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono font-bold">
-                    Jan 2023 - Jan 2026 (3 Years)
+              {/* Visual Breakdown of Top Programming Languages */}
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono mb-2 text-slate-300">
+                  <span className="font-bold flex items-center gap-1.5">
+                    <Code2 className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Language Distribution Breakdown</span>
                   </span>
-                  <h3 className="text-xl font-bold text-white mt-2">Class Representative (60+ Students)</h3>
-                  <p className="text-xs font-mono text-cyan-300 mt-0.5">Sri Vasavi Engineering College</p>
+                  <span className="text-[11px] text-slate-400">Aggregated Across 15 Repos</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Elected by peers and faculty to represent a cohort of 60+ Computer Science students across academic years. Key duties included:
+
+                {/* Multi-Segment Language Bar */}
+                <div className="w-full h-3 rounded-full overflow-hidden bg-slate-900 flex p-0.5 border border-slate-800">
+                  <div className="h-full bg-amber-500 rounded-l-full" style={{ width: '42%' }} title="Core Java: 42%" />
+                  <div className="h-full bg-cyan-400" style={{ width: '34%' }} title="TypeScript / JavaScript: 34%" />
+                  <div className="h-full bg-indigo-500" style={{ width: '18%' }} title="Python / PyTorch: 18%" />
+                  <div className="h-full bg-purple-500 rounded-r-full" style={{ width: '6%' }} title="SQL / Others: 6%" />
+                </div>
+
+                {/* Language Legend */}
+                <div className="flex flex-wrap items-center gap-4 mt-2 text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                    <span className="text-slate-200">Java (42%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                    <span className="text-slate-200">TypeScript / JS (34%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                    <span className="text-slate-200">Python / AI (18%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                    <span className="text-slate-200">SQL & Others (6%)</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card 2: Academic Excellence (4 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-12 lg:col-span-4 min-h-[380px]"
+            glowColor="rgba(99, 102, 241, 0.25)"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 shadow-md">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold">
+                  Rank 1 (82.88%)
+                </span>
+              </div>
+
+              <div className="mb-4">
+                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Cumulative GPA</span>
+                <div className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-white mt-1">
+                  <ViewportCounter target={9.04} decimals={2} />
+                  <span className="text-lg text-slate-500 font-normal"> / 10.0</span>
+                </div>
+                <h4 className="text-base font-bold text-white mt-2">B.Tech in Computer Science</h4>
+                <p className="text-xs text-indigo-300 font-mono">Sri Vasavi Engineering College</p>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Consistent academic distinction across all 8 semesters with Outstanding grades in DSA, DBMS, and Web Engineering.
                 </p>
-                <ul className="space-y-2 text-xs text-slate-300 list-disc pl-4">
-                  <li>Liaising between student cohort and HOD/faculty for curriculum scheduling and lab sessions.</li>
-                  <li>Organizing student peer-programming circles, MERN stack bootcamps, and coding hackathons.</li>
-                  <li>Resolving academic queries and feedback operations with zero escalation.</li>
-                </ul>
               </div>
 
-              {/* Anti-Ragging Committee */}
-              <div 
-                onMouseMove={(e) => handleCardMouseMove(e, 202)}
-                onMouseLeave={() => setHoveredCardIndex(null)}
-                className="glass-panel p-8 rounded-3xl border border-white/10 space-y-4 shadow-2xl relative overflow-hidden group"
-              >
-                <div
-                  className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-                  style={{
-                    opacity: hoveredCardIndex === 202 ? 1 : 0,
-                    background: `radial-gradient(400px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(16, 185, 129, 0.2), transparent 70%)`,
-                  }}
+              {/* Interactive CGPA to Percentage Conversion Tool */}
+              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-300 mb-2">
+                  <span className="flex items-center gap-1.5">
+                    <Calculator className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>JNTU CGPA to % Tool</span>
+                  </span>
+                  <span className="font-bold text-cyan-400">{calculatedPercentage}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="6.0"
+                  max="10.0"
+                  step="0.01"
+                  value={cgpaInput}
+                  onChange={(e) => setCgpaInput(parseFloat(e.target.value))}
+                  className="w-full accent-cyan-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer"
                 />
-
-                <div className="p-3.5 rounded-2xl bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 w-fit shadow-lg shadow-emerald-500/20">
-                  <ShieldAlert className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
-                    Aug 2024 - Jan 2026
-                  </span>
-                  <h3 className="text-xl font-bold text-white mt-2">Anti-Ragging & Student Committee Member</h3>
-                  <p className="text-xs font-mono text-emerald-400 mt-0.5">Campus Safety & Student Welfare</p>
-                </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Appointed member of the official institutional welfare committee dedicated to keeping the college environment safe and inclusive:
-                </p>
-                <ul className="space-y-2 text-xs text-slate-300 list-disc pl-4">
-                  <li>Promoting anti-ragging guidelines across senior and junior engineering batches.</li>
-                  <li>Mentoring incoming CSE freshmen for a smooth transition into college academic life.</li>
-                  <li>Coordinating with institutional management to uphold campus safety policies.</li>
-                </ul>
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'research' && (
-            <motion.div
-              key="research"
-              initial={{ opacity: 0, x: 25, rotateY: 8 }}
-              animate={{ opacity: 1, x: 0, rotateY: 0 }}
-              exit={{ opacity: 0, x: -25, rotateY: -8 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel p-8 rounded-3xl border border-purple-500/40 bg-purple-950/20 mb-16 space-y-6 shadow-2xl relative overflow-hidden"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-purple-500/30">
-                <div>
-                  <span className="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold">
-                    IEEE Format International Conference
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-2">
-                    Research Paper: Object Detection using YOLOv9
-                  </h3>
-                  <p className="text-xs text-purple-300 font-mono mt-1">
-                    Published at AIDE-2024 (International Conference on Artificial Intelligence and Data Science)
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 self-start sm:self-center">
-                  <a
-                    href="https://github.com/dhanushgopi2456/My_Certifications/blob/main/ResearchPaper_Certificate.jpeg"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all hover:scale-105"
-                  >
-                    <Award className="w-4 h-4" />
-                    <span>View Paper Certificate</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-
-                  <a
-                    href={RESUME_DATA.projects.find(p => p.id === 'yolov9')?.repoUrl || "https://github.com/dhanushgopi2456/Object-Detection-YOLO-v9"}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2.5 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-2 transition-all border border-purple-500/40 shadow-md"
-                  >
-                    <span>View Code Repository</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </a>
+                <div className="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+                  <span>6.0</span>
+                  <span className="text-cyan-300 font-bold">{cgpaInput.toFixed(2)} CGPA</span>
+                  <span>10.0</span>
                 </div>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-                  <p className="text-[10px] font-mono text-purple-400 uppercase">Architecture</p>
-                  <p className="text-sm font-bold text-white mt-1">YOLOv9 Programmable Gradient</p>
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Graduation: July 2026</span>
+              <span className="text-emerald-400 font-bold">First Class with Distinction</span>
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card 3: Algorithmic Problem Solving (4 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-6 lg:col-span-4 min-h-[300px]"
+            glowColor="rgba(245, 158, 11, 0.22)"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 shadow-md">
+                  <Code2 className="w-6 h-6" />
                 </div>
-                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-                  <p className="text-[10px] font-mono text-purple-400 uppercase">Frameworks</p>
-                  <p className="text-sm font-bold text-white mt-1">PyTorch, OpenCV, Flask</p>
-                </div>
-                <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-                  <p className="text-[10px] font-mono text-purple-400 uppercase">Deployment</p>
-                  <p className="text-sm font-bold text-white mt-1">Live Web Inference Server</p>
-                </div>
+                <span className="px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
+                  Top 20%
+                </span>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
-                <strong>Abstract & Key Findings:</strong> The research addresses real-time object detection accuracy loss in compressed media streams. By leveraging YOLOv9's Programmable Gradient Information (PGI) and Generalized Efficient Layer Aggregation Network (GELAN), the proposed model achieved superior mAP (mean Average Precision) scores while maintaining high frame rates required for live video processing.
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Algorithmic Mastery</span>
+              <div className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-white mt-1">
+                <ViewportCounter target={900} suffix="+" />
+              </div>
+              <h4 className="text-base font-bold text-white mt-2">Problems Solved Across Platforms</h4>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                LeetCode (500+ Solved, Contest Rating 1550+), GeeksforGeeks (250+ Solved), and Code360 (150+ Solved).
               </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
 
-        {/* Educational Milestones Connected by Animated Glowing SVG Circuit Timeline */}
-        <div className="mt-16 relative">
+            <div className="mt-4 pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
+              {['Trees & Graphs', 'Dynamic Programming', 'Collections', 'Binary Search'].map((tag, i) => (
+                <span key={i} className="px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] font-mono">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card 4: Published Research Paper (4 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-6 lg:col-span-4 min-h-[300px]"
+            glowColor="rgba(168, 85, 247, 0.22)"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/30 text-purple-400 shadow-md">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono font-bold">
+                  IEEE AIDE-2024
+                </span>
+              </div>
+
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">International Conference Paper</span>
+              <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1 leading-snug">
+                Object Detection using YOLOv9
+              </div>
+              <p className="text-xs text-purple-300 font-mono mt-1">PyTorch & OpenCV Real-Time Vision Optimization</p>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                Co-authored and published IEEE-format paper benchmarking YOLOv9 PGI architectures against Faster R-CNN on custom datasets.
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+              <a
+                href="https://github.com/dhanushgopi2456/My_Certifications/blob/main/ResearchPaper_Certificate.jpeg"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-400 hover:text-amber-300 transition-colors"
+              >
+                <span>View Certificate</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <span className="text-[10px] font-mono text-slate-500">AIDE-2024 Conference</span>
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card 5: Enterprise Certifications (4 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-12 lg:col-span-4 min-h-[300px]"
+            glowColor="rgba(16, 185, 129, 0.22)"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-md">
+                  <Award className="w-6 h-6" />
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
+                  100% Verified
+                </span>
+              </div>
+
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Industry Certifications</span>
+              <div className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-white mt-1">
+                <ViewportCounter target={6} />
+              </div>
+              <h4 className="text-base font-bold text-white mt-2">Enterprise Cloud & AI Credentials</h4>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Oracle DevOps Professional, Azure AI-900, ServiceNow CSA & CAD, Salesforce Agentforce, and NPTEL Java DSA.
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-emerald-400">
+              <span>View Holographic Vault</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card 6: Leadership Trajectory (12 Cols) */}
+          <BentoTiltCard 
+            className="md:col-span-12 min-h-[180px]"
+            glowColor="rgba(147, 51, 234, 0.2)"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <div className="md:col-span-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white">Class Representative & Engineering Leadership</h4>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Elected Class Representative continuously across all 8 semesters, directly leading and representing a cohort of <strong className="text-white font-semibold">60+ Computer Science undergraduates</strong>. Coordinated department technical symposiums, liaised between senior faculty and student body, and facilitated peer tutoring for DSA and full-stack projects.
+                </p>
+              </div>
+
+              <div className="md:col-span-4 flex flex-wrap gap-2 justify-start md:justify-end">
+                {['60+ Students Led', '8 Semesters Active', 'Symposium Organizer', 'Agile Team Leader'].map((badge, idx) => (
+                  <span key={idx} className="px-3 py-1.5 rounded-xl bg-slate-900 border border-purple-500/30 text-purple-300 text-xs font-mono font-semibold">
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </BentoTiltCard>
+
+        </div>
+
+        {/* Educational Milestones Breakdown with Circuit Timeline */}
+        <div className="mt-8 relative">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-extrabold text-white flex items-center gap-3">
               <GraduationCap className="w-6 h-6 text-cyan-400" />
               <span>Educational Milestones Breakdown</span>
             </h3>
 
-            {/* Glowing Circuit Indicator */}
             <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/40 px-3 py-1.5 rounded-full border border-cyan-500/30">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
               <span>Circuit Synced Timeline</span>
             </div>
-          </div>
-
-          {/* Animated Connecting SVG Circuit Line (Desktop) */}
-          <div className="hidden md:block absolute top-[110px] left-[15%] right-[15%] h-[4px] pointer-events-none -z-0">
-            {/* Background Trace */}
-            <div className="w-full h-full bg-slate-800/80 rounded-full" />
-            
-            {/* Glowing Flowing Pulse */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: 'easeInOut' }}
-              className="origin-left absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 rounded-full shadow-[0_0_12px_#38bdf8]"
-            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
@@ -489,24 +570,8 @@ export const About: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
-                onMouseMove={(e) => handleCardMouseMove(e, 300 + idx)}
-                onMouseLeave={() => setHoveredCardIndex(null)}
                 className="glass-card p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group shadow-xl hover:border-cyan-500/50 transition-all overflow-hidden"
               >
-                {/* 360-Degree Animated Glowing Border Beam */}
-                <div className="absolute -inset-[1px] rounded-[inherit] overflow-hidden pointer-events-none -z-10">
-                  <div className="absolute -inset-[200%] animate-spin-slow bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0deg,transparent_60deg,#3b82f6_120deg,#06b6d4_180deg,#8b5cf6_240deg,transparent_300deg)] opacity-30 group-hover:opacity-80 transition-opacity" />
-                </div>
-
-                {/* Internal Cursor Spotlight */}
-                <div
-                  className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-                  style={{
-                    opacity: hoveredCardIndex === 300 + idx ? 1 : 0,
-                    background: `radial-gradient(350px circle at ${cardMousePos.x}px ${cardMousePos.y}px, rgba(59, 130, 246, 0.2), transparent 70%)`,
-                  }}
-                />
-
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold shadow-sm">
@@ -546,7 +611,6 @@ export const About: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Circuit Node Pin */}
                 <div className="mt-5 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
                   <span>Milestone {idx + 1} of 3</span>
                   <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />

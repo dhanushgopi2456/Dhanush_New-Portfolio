@@ -152,20 +152,24 @@ export const RESUME_DATA = {
   skills: [
     // Frontend
     { name: "React.js", category: "frontend", level: 95, icon: "Atom", description: "State hooks, context, custom hooks, reusable UI architectures, Vite integration", featured: true },
-    { name: "Tailwind CSS", category: "frontend", level: 92, icon: "Palette", description: "Utility-first responsive layouts, glassmorphism, dynamic themes, dark mode", featured: true },
-    { name: "JavaScript (ES6+)", category: "frontend", level: 92, icon: "Code2", description: "Promises, Async/Await, DOM manipulation, ES modules, functional patterns", featured: true },
+    { name: "Next.js", category: "frontend", level: 90, icon: "Zap", description: "App Router, SSR, Server Components, API routes, SEO & Vercel edge deployment", featured: true },
+    { name: "TypeScript", category: "language", level: 92, icon: "Code2", description: "Strict typing, generics, interfaces, scalable enterprise React architecture", featured: true },
+    { name: "Tailwind CSS", category: "frontend", level: 94, icon: "Palette", description: "Utility-first responsive layouts, glassmorphism, dynamic themes, dark mode", featured: true },
+    { name: "JavaScript (ES6+)", category: "language", level: 92, icon: "Code2", description: "Promises, Async/Await, DOM manipulation, ES modules, functional patterns", featured: true },
     { name: "Vite", category: "frontend", level: 90, icon: "Zap", description: "Modern lightning-fast build tooling, HMR, asset optimization", featured: false },
     { name: "HTML5 / CSS3", category: "frontend", level: 95, icon: "Layout", description: "Semantic markup, Flexbox, Grid, custom keyframe animations", featured: false },
 
     // Backend
     { name: "Node.js", category: "backend", level: 90, icon: "Server", description: "Event-driven asynchronous backend runtime, NPM packages, CLI apps", featured: true },
     { name: "Express.js", category: "backend", level: 92, icon: "Cpu", description: "RESTful routing, custom middleware, error handling, MVC architecture", featured: true },
+    { name: "GraphQL", category: "backend", level: 86, icon: "Workflow", description: "Schemas, queries, mutations, resolvers, Apollo integration", featured: true },
     { name: "JWT Auth", category: "backend", level: 90, icon: "ShieldCheck", description: "Role-Based Access Control (RBAC), token verification, secure sessions", featured: true },
     { name: "Spring Boot", category: "backend", level: 78, icon: "Layers", description: "Java web service basics, Spring MVC, REST controllers", featured: false },
     { name: "Flask", category: "backend", level: 85, icon: "Flame", description: "Lightweight Python web framework for ML model inference and REST APIs", featured: false },
 
     // Databases
     { name: "MongoDB", category: "database", level: 90, icon: "Database", description: "Document-oriented NoSQL database, indexing, aggregation pipelines", featured: true },
+    { name: "PostgreSQL", category: "database", level: 88, icon: "Database", description: "Relational modeling, indexing, SQL queries, transactions, foreign keys", featured: true },
     { name: "Mongoose", category: "database", level: 92, icon: "Workflow", description: "Schema validation, population, document hooks, ORM modeling", featured: true },
     { name: "MySQL", category: "database", level: 85, icon: "Table", description: "Relational queries, ACID compliance, normalization, complex JOINs", featured: false },
 
@@ -181,6 +185,7 @@ export const RESUME_DATA = {
     { name: "OpenCV & NumPy", category: "aiml", level: 88, icon: "Image", description: "Image filtering, bounding box rendering, video frame processing", featured: false },
 
     // Tools & Soft
+    { name: "Docker", category: "tools", level: 85, icon: "Layers", description: "Containerization, Dockerfile creation, multi-container orchestration", featured: true },
     { name: "Git & GitHub", category: "tools", level: 92, icon: "GitBranch", description: "Branching strategies, pull requests, version control, commit conventions", featured: true },
     { name: "Postman", category: "tools", level: 90, icon: "Send", description: "API collection design, environment variables, authentication testing", featured: false },
     { name: "CI/CD & DevOps", category: "tools", level: 82, icon: "Cloud", description: "Vercel deployments, automated build scripts, environment secrets", featured: false },

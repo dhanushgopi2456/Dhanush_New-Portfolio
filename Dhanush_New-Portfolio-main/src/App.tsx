@@ -17,6 +17,8 @@ import { Preloader } from './components/Preloader';
 import { CustomCursor } from './components/CustomCursor';
 import { GradientWaveBackground } from './components/GradientWaveBackground';
 import { LivingCanvas } from './components/LivingCanvas';
+import { ScrollProgressBeam } from './components/ScrollProgressBeam';
+import { CommandPalette } from './components/CommandPalette';
 import { RESUME_DATA } from './data/resumeData';
 import { speakGreetingAndObjective } from './utils/speechUtils';
 
@@ -26,7 +28,20 @@ export default function App() {
   const [isTerminalMode, setIsTerminalMode] = useState(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Global Command Palette Shortcut Listener (Cmd+K or Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const hasAutoSpokenRef = useRef(false);
 
@@ -120,6 +135,9 @@ export default function App() {
       {/* Interactive Fluid Multi-Harmonic Gradient Ocean Wave Background */}
       <GradientWaveBackground />
 
+      {/* Glowing Electric-Blue & Purple Left-Edge Scroll Progress Beam with Laser Droplet */}
+      <ScrollProgressBeam />
+
       {/* Living Three.js WebGL Space Canvas & Aurora Mesh Background */}
       <LivingCanvas />
 
@@ -138,6 +156,7 @@ export default function App() {
             setIsTerminalMode={setIsTerminalMode}
             onOpenPdfModal={() => setIsPdfModalOpen(true)}
             onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
             soundEnabled={soundEnabled}
             setSoundEnabled={setSoundEnabled}
           />
@@ -160,6 +179,21 @@ export default function App() {
 
           {/* Footer */}
           <Footer />
+
+          {/* Floating Glassmorphic Cult-UI Command Palette Modal */}
+          <CommandPalette
+            isOpen={isCommandPaletteOpen}
+            onClose={() => setIsCommandPaletteOpen(false)}
+            onNavigateSection={(secId) => {
+              setActiveSection(secId);
+              const el = document.getElementById(secId);
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            onOpenPdfModal={() => setIsPdfModalOpen(true)}
+            onOpenAiDrawer={() => setIsAiDrawerOpen(true)}
+            soundEnabled={soundEnabled}
+            setSoundEnabled={setSoundEnabled}
+          />
 
           {/* Modals & Drawers */}
           <ResumePdfModal
