@@ -151,7 +151,7 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
         />
 
         {/* Content with elevated Z-space */}
-        <div className="relative z-10 h-full flex flex-col justify-between" style={{ transform: 'translateZ(10px)' }}>
+        <div className="relative z-10 h-full w-full flex flex-col min-h-0" style={{ transform: 'translateZ(10px)' }}>
           {children}
         </div>
       </div>
@@ -425,17 +425,17 @@ export const About: React.FC = () => {
 
           {/* Bento Card: Cult-UI Interactive Terminal & AI Playground (8 Cols) */}
           <BentoTiltCard
-            className="md:col-span-12 lg:col-span-8 min-h-[360px]"
+            className="md:col-span-12 lg:col-span-8 min-h-[440px]"
             glowColor="rgba(6, 182, 212, 0.28)"
           >
-            <div className="h-full flex flex-col justify-between">
-              <div className="mb-3">
+            <div className="h-full w-full flex flex-col min-h-0">
+              <div className="mb-3 shrink-0">
                 <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider block">
                   Interactive Sandbox & Telemetry Stream
                 </span>
                 <h4 className="text-lg font-bold text-white">Live Developer Terminal & AI Playground</h4>
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-h-0 flex flex-col w-full">
                 <BentoTerminalPlayground />
               </div>
             </div>

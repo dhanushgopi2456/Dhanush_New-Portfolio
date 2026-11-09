@@ -33,14 +33,16 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ onExitTerminal }) =>
   ]);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const terminalBufferRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (terminalBufferRef.current) {
+      terminalBufferRef.current.scrollTop = terminalBufferRef.current.scrollHeight;
+    }
   }, [history]);
 
   const handleCommandSubmit = (e: React.FormEvent) => {
@@ -203,7 +205,7 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ onExitTerminal }) =>
       </div>
 
       {/* Terminal Buffer */}
-      <div className="flex-1 overflow-y-auto py-6 space-y-4 pr-2">
+      <div ref={terminalBufferRef} className="flex-1 overflow-y-auto py-6 space-y-4 pr-2">
         {history.map((item, idx) => (
           <div key={idx} className="space-y-2">
             <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
@@ -213,7 +215,6 @@ export const TerminalView: React.FC<TerminalViewProps> = ({ onExitTerminal }) =>
             <div className="pl-4">{item.output}</div>
           </div>
         ))}
-        <div ref={bottomRef} />
       </div>
 
       {/* Prompt Form */}
