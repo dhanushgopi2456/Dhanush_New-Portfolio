@@ -357,7 +357,7 @@ export const SkillSphere: React.FC = () => {
                 </h3>
 
                 <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  {selectedSkill.experience}
+                  {selectedSkill.description}
                 </p>
 
                 {/* Animated Level Bar */}

@@ -241,20 +241,20 @@ export const ProjectTheaterModal: React.FC<ProjectTheaterModalProps> = ({ projec
             </div>
 
             <div className="flex items-center gap-2">
-              {project.liveUrl && (
+              {project.demoUrl && (
                 <a
-                  href={project.liveUrl}
+                  href={project.demoUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-300 text-xs font-mono font-bold flex items-center gap-1.5 transition-all border border-cyan-500/30"
                 >
-                  <span>Live App</span>
+                  <span>{project.demoLabel || 'Live App'}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
-              {project.githubUrl && (
+              {project.repoUrl && (
                 <a
-                  href={project.githubUrl}
+                  href={project.repoUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all border border-white/10"
@@ -345,12 +345,19 @@ export const ProjectTheaterModal: React.FC<ProjectTheaterModalProps> = ({ projec
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 rounded-2xl bg-slate-900/40 border border-white/5 space-y-2">
-                    <span className="text-xs font-mono text-cyan-400 uppercase font-bold tracking-wider">Engineering Problem:</span>
-                    <p className="text-xs text-slate-300 leading-relaxed">{project.problem}</p>
+                    <span className="text-xs font-mono text-cyan-400 uppercase font-bold tracking-wider">System Description:</span>
+                    <p className="text-xs text-slate-300 leading-relaxed">{project.description}</p>
                   </div>
                   <div className="p-4 rounded-2xl bg-slate-900/40 border border-white/5 space-y-2">
-                    <span className="text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider">Architectural Solution:</span>
-                    <p className="text-xs text-slate-300 leading-relaxed">{project.solution}</p>
+                    <span className="text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider">Engineering Architecture & Deliverables:</span>
+                    <ul className="text-xs text-slate-300 space-y-1">
+                      {project.bulletPoints.map((bp, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-emerald-400 font-bold">•</span>
+                          <span>{bp}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -363,7 +370,7 @@ export const ProjectTheaterModal: React.FC<ProjectTheaterModalProps> = ({ projec
                     <Server className="w-4 h-4 text-purple-400" />
                     <span>Real-Time Tiered Architecture & Distributed Packet Flow:</span>
                   </h4>
-                  <ArchitectureBackDiagram />
+                  <ArchitectureBackDiagram project={project} onFlipBack={() => {}} />
                 </div>
               </div>
             )}

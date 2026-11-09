@@ -70,7 +70,7 @@ export const BentoTerminalPlayground: React.FC = () => {
         result = (
           <div className="space-y-1 text-emerald-300 font-mono text-xs">
             <p>🎓 {RESUME_DATA.education[0].institution}</p>
-            <p>📚 {RESUME_DATA.education[0].degree} ({RESUME_DATA.education[0].year})</p>
+            <p>📚 {RESUME_DATA.education[0].degree} ({RESUME_DATA.education[0].period})</p>
             <p className="text-cyan-300 font-bold">🏆 CGPA: 9.04 / 10.0 (82.88%) — Top Academic Distinction</p>
           </div>
         );

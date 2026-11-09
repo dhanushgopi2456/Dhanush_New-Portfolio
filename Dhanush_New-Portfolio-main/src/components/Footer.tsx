@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Magnetic 3D "Launch Collaboration" Portal Button */}
-          <MagneticButton magneticStrength={0.4}>
+          <MagneticButton strength={0.4}>
             <button
               onClick={handleLaunchCollaboration}
               onMouseEnter={() => audioSynth.playGlassClick()}
