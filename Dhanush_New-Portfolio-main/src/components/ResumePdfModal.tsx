@@ -150,54 +150,67 @@ VERIFIED CERTIFICATIONS
         className="bg-slate-900 border border-white/10 rounded-[32px] max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden backdrop-blur-2xl"
       >
         {/* Header Bar */}
-        <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-slate-950/70 no-print">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-600/20">
-              <FileText className="w-5 h-5" />
+        <div className="p-3.5 sm:p-6 border-b border-white/10 flex flex-col md:flex-row gap-3 md:items-center justify-between bg-slate-950/70 no-print">
+          <div className="flex items-center justify-between w-full md:w-auto">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 shadow-lg shadow-cyan-600/20 shrink-0">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-white text-sm sm:text-lg leading-tight">Dhanush Gopi Kavala - Official Resume</h3>
+                <p className="text-[11px] sm:text-xs font-mono text-cyan-400">ATS-Optimized Printable Format</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-extrabold text-white text-base sm:text-lg">Dhanush Gopi Kavala - Official Resume</h3>
-              <p className="text-xs font-mono text-cyan-400">ATS-Optimized Printable & Downloadable Format</p>
-            </div>
+
+            {/* Mobile Close Button */}
+            <button
+              onClick={onClose}
+              className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors shrink-0 ml-2 cursor-pointer"
+              title="Close Modal"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <button
               onClick={handleCopyText}
-              className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors border border-slate-700"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-colors border border-slate-700 cursor-pointer"
             >
               <ButtonGlare radius={12} intensity={0.3} />
               <span className="relative z-10 flex items-center gap-1.5">
-                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
                 <span>{copied ? 'Copied' : 'Copy Text'}</span>
               </span>
             </button>
 
             <button
               onClick={handleDownloadFile}
-              className="relative overflow-hidden group flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all cursor-pointer"
             >
               <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.8, b: 0.6, a: 1 }} />
               <span className="relative z-10 flex items-center gap-1.5">
-                <Download className="w-4 h-4 text-emerald-400" />
-                <span>{downloading ? 'Downloading...' : 'Download File'}</span>
+                <Download className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{downloading ? 'Downloading...' : 'Download'}</span>
               </span>
             </button>
 
             <button
               onClick={handlePrint}
-              className="relative overflow-hidden group flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
+              className="relative overflow-hidden group flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30 cursor-pointer"
             >
               <ButtonGlare radius={12} intensity={0.5} frontColor={{ r: 0.3, g: 0.6, b: 1, a: 1 }} />
               <span className="relative z-10 flex items-center gap-1.5">
-                <Printer className="w-4 h-4" />
-                <span>Print / Save PDF</span>
+                <Printer className="w-3.5 h-3.5" />
+                <span>Print / PDF</span>
               </span>
             </button>
 
+            {/* Desktop Close Button */}
             <button
               onClick={onClose}
-              className="relative overflow-hidden group p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2 transition-colors"
+              className="hidden md:flex relative overflow-hidden group p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white ml-2 transition-colors cursor-pointer"
+              title="Close Modal"
             >
               <ButtonGlare radius={12} intensity={0.3} />
               <span className="relative z-10">

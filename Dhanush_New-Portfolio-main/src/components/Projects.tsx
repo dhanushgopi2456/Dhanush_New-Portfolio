@@ -308,15 +308,15 @@ export const Projects: React.FC = () => {
                         <h3 className="text-xl font-extrabold text-white group-hover:text-cyan-300 transition-colors">
                           {proj.title}
                         </h3>
-                        <div className="flex items-center justify-between gap-2 mt-2">
-                          <p className="text-xs font-mono text-cyan-400">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mt-2">
+                          <p className="text-xs font-mono text-cyan-400 flex-1 min-w-[140px]">
                             {proj.subtitle}
                           </p>
 
                           {/* Audio Overview Button */}
                           <button
                             onClick={() => handleSpeakProject(proj)}
-                            className={`relative overflow-hidden flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer group ${
+                            className={`shrink-0 ml-auto relative overflow-hidden flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer group ${
                               speechState.isSpeaking && (speechState.currentText.includes(proj.title) || speechState.activeSource === 'mp3')
                                 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 animate-pulse shadow-md shadow-amber-500/20'
                                 : 'bg-amber-500/10 text-amber-400 border-amber-500/30 hover:bg-amber-500/20'

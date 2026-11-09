@@ -192,7 +192,7 @@ export const ResearchYoloSpotlight: React.FC = () => {
     <div className="w-full my-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Outer Luxury Glass Container */}
-      <div className="relative rounded-3xl bg-slate-950/85 border border-cyan-500/40 p-6 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(6,182,212,0.15)] overflow-hidden">
+      <div className="relative rounded-3xl bg-slate-950/85 border border-cyan-500/40 p-4 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(6,182,212,0.15)] overflow-hidden">
         
         {/* Ambient Top Glow Line */}
         <div className="absolute top-0 inset-x-12 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
@@ -261,7 +261,7 @@ export const ResearchYoloSpotlight: React.FC = () => {
             </div>
 
             {/* Quick Action Toggles: Grad-CAM Heatmap & Auto Sweep */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => {
                   setShowGradCam(prev => !prev);
@@ -300,10 +300,11 @@ export const ResearchYoloSpotlight: React.FC = () => {
           <div className="pt-3 border-t border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
             
             {/* Confidence Threshold Slider */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full md:w-auto">
               <span className="text-xs font-mono text-slate-400 font-bold flex items-center gap-1.5 whitespace-nowrap">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Confidence Threshold:</span>
+                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span className="hidden sm:inline">Confidence Threshold:</span>
+                <span className="sm:hidden">Confidence:</span>
                 <span className="text-cyan-300 font-bold px-2 py-0.5 rounded bg-slate-950 border border-cyan-500/30">
                   ≥ {confidenceThreshold}%
                 </span>
@@ -315,11 +316,11 @@ export const ResearchYoloSpotlight: React.FC = () => {
                 max="99"
                 value={confidenceThreshold}
                 onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
-                className="w-32 sm:w-44 accent-cyan-400 cursor-pointer"
+                className="flex-1 min-w-[90px] max-w-[130px] sm:max-w-[176px] accent-cyan-400 cursor-pointer"
               />
 
-              <span className="text-[11px] font-mono text-emerald-400 font-bold whitespace-nowrap">
-                {visibleDetections.length} / {YOLO_DETECTIONS.length} Detected
+              <span className="text-[11px] font-mono text-emerald-400 font-bold whitespace-nowrap ml-auto sm:ml-0">
+                {visibleDetections.length}/{YOLO_DETECTIONS.length} Detected
               </span>
             </div>
 

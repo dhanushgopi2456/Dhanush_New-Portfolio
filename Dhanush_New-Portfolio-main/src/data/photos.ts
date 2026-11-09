@@ -27,15 +27,6 @@ export const PORTFOLIO_PHOTOS: PhotoItem[] = [
     aspectRatio: "1:1"
   },
   {
-    id: "fullbody",
-    title: "Standing Portrait",
-    tagline: "Beige Striped Shirt & Smartwatch",
-    url: dhanush_image4,
-    fallbackUrl: dhanush_photo_png,
-    caption: "Dhanush Gopi Kavala - Software Engineer & MERN Stack Developer",
-    aspectRatio: "9:16"
-  },
-  {
     id: "corporate",
     title: "MERN Stack Developer",
     tagline: "Codec Technologies Intern",

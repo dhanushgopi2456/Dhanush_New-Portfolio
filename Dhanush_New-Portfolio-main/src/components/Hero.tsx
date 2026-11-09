@@ -305,44 +305,46 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
             </p>
 
             {/* Primary Action Buttons with Motion Magnetic Physics */}
-            <div className="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 w-full sm:w-auto max-w-full">
               {/* Voice Speaker Narration Button with Live Waveform */}
-              <MagneticButton strength={0.25}>
+              <MagneticButton strength={0.25} className="w-full sm:w-auto">
                 <VoiceSpeakerControl />
               </MagneticButton>
 
-              <MagneticButton strength={0.35}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onExploreClick}
-                  className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group cursor-pointer"
-                >
-                  <ButtonGlare radius={16} />
-                  <span className="relative z-10">View Projects</span>
-                  <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </MagneticButton>
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 w-full sm:w-auto">
+                <MagneticButton strength={0.35} className="w-full sm:w-auto">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={onExploreClick}
+                    className="relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all border border-blue-400/30 group cursor-pointer"
+                  >
+                    <ButtonGlare radius={16} />
+                    <span className="relative z-10 whitespace-nowrap">View Projects</span>
+                    <ArrowRight className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
+                  </motion.button>
+                </MagneticButton>
 
-              <MagneticButton strength={0.35}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onOpenAiDrawer}
-                  className="relative overflow-hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-sm shadow-lg shadow-purple-950/30 transition-all group cursor-pointer"
-                >
-                  <ButtonGlare radius={16} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
-                  <Sparkles className="relative z-10 w-4 h-4 text-purple-400 animate-pulse" />
-                  <span className="relative z-10">Ask Dhanush AI</span>
-                </motion.button>
-              </MagneticButton>
+                <MagneticButton strength={0.35} className="w-full sm:w-auto">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={onOpenAiDrawer}
+                    className="relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-3 sm:py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-purple-500/40 hover:border-purple-400 font-bold text-xs sm:text-sm shadow-lg shadow-purple-950/30 transition-all group cursor-pointer"
+                  >
+                    <ButtonGlare radius={16} crestColor={{ r: 0.8, g: 0.25, b: 0.95, a: 1 }} />
+                    <Sparkles className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400 animate-pulse shrink-0" />
+                    <span className="relative z-10 whitespace-nowrap">Ask Dhanush AI</span>
+                  </motion.button>
+                </MagneticButton>
+              </div>
 
-              <MagneticButton strength={0.25}>
+              <MagneticButton strength={0.25} className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onOpenPdfModal}
-                  className="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-sm transition-all shadow-md group cursor-pointer"
+                  className="relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-500 font-bold text-xs sm:text-sm transition-all shadow-md group cursor-pointer"
                 >
                   <ButtonGlare radius={16} />
                   <FileText className="relative z-10 w-4 h-4 text-cyan-400" />
