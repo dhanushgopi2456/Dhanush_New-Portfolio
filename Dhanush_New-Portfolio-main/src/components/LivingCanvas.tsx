@@ -1,6 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+interface SectionObject {
+  group: THREE.Group;
+  outerMesh: THREE.Mesh;
+  innerMesh?: THREE.Mesh;
+  baseX: number;
+  baseY: number;
+  baseZ: number;
+  rotSpeedX: number;
+  rotSpeedY: number;
+  rotSpeedZ: number;
+  floatFreq: number;
+  floatAmp: number;
+}
+
 export const LivingCanvas: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -8,16 +22,16 @@ export const LivingCanvas: React.FC = () => {
     const container = mountRef.current;
     if (!container) return;
 
-    // Check WebGL availability
+    // 1. WebGL Renderer Initialization
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ 
-        alpha: true, 
-        antialias: true, 
-        powerPreference: 'high-performance' 
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
       });
     } catch (e) {
-      console.warn('WebGL initialization failed, falling back to CSS canvas background', e);
+      console.warn('WebGL initialization failed in LivingCanvas', e);
       return;
     }
 
@@ -33,54 +47,34 @@ export const LivingCanvas: React.FC = () => {
     renderer.domElement.style.pointerEvents = 'none';
     container.appendChild(renderer.domElement);
 
+    // 2. Scene & Camera Setup
     const scene = new THREE.Scene();
-    // No scene fog so background video remains vibrant and transparent
-
     const camera = new THREE.PerspectiveCamera(
-      60,
+      50,
       window.innerWidth / window.innerHeight,
       1,
-      2000
+      4000
     );
-    camera.position.z = 800;
+    camera.position.z = 720;
 
-    // 1. STARFIELD PARTICLES
-    const starsCount = 1200;
-    const starGeometry = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starsCount * 3);
-    const starColors = new Float32Array(starsCount * 3);
-    const starOriginalY = new Float32Array(starsCount);
+    // 3. Lighting Setup (Cyan, Purple & Indigo Accents)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    scene.add(ambientLight);
 
-    const palette = [
-      new THREE.Color(0x6366f1), // Indigo
-      new THREE.Color(0x06b6d4), // Cyan
-      new THREE.Color(0xa855f7), // Violet
-      new THREE.Color(0xec4899), // Magenta
-      new THREE.Color(0xffffff), // Bright star white
-      new THREE.Color(0x93c5fd), // Soft blue
-    ];
+    const lightCyan = new THREE.PointLight(0x06b6d4, 4.5, 1600);
+    lightCyan.position.set(300, 200, 300);
+    scene.add(lightCyan);
 
-    for (let i = 0; i < starsCount; i++) {
-      const x = (Math.random() - 0.5) * 2400;
-      const y = (Math.random() - 0.5) * 2400;
-      const z = (Math.random() - 0.5) * 1600;
+    const lightPurple = new THREE.PointLight(0xa855f7, 4.5, 1600);
+    lightPurple.position.set(-300, -200, 300);
+    scene.add(lightPurple);
 
-      starPositions[i * 3] = x;
-      starPositions[i * 3 + 1] = y;
-      starPositions[i * 3 + 2] = z;
-      starOriginalY[i] = y;
+    const lightIndigo = new THREE.PointLight(0x6366f1, 3.5, 1400);
+    lightIndigo.position.set(0, 0, 200);
+    scene.add(lightIndigo);
 
-      const col = palette[Math.floor(Math.random() * palette.length)];
-      starColors[i * 3] = col.r;
-      starColors[i * 3 + 1] = col.g;
-      starColors[i * 3 + 2] = col.b;
-    }
-
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-
-    // Custom circle star texture
-    const createStarTexture = () => {
+    // 4. Circle Particle Texture Helper
+    const createCircleTexture = () => {
       const canvas = document.createElement('canvas');
       canvas.width = 32;
       canvas.height = 32;
@@ -88,8 +82,8 @@ export const LivingCanvas: React.FC = () => {
       if (ctx) {
         const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
         gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.8)');
-        gradient.addColorStop(0.6, 'rgba(168, 85, 247, 0.4)');
+        gradient.addColorStop(0.3, 'rgba(34, 211, 238, 0.9)');
+        gradient.addColorStop(0.65, 'rgba(168, 85, 247, 0.45)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -99,128 +93,588 @@ export const LivingCanvas: React.FC = () => {
       return new THREE.CanvasTexture(canvas);
     };
 
-    const starMaterial = new THREE.PointsMaterial({
-      size: 4.5,
-      map: createStarTexture(),
+    const particleTexture = createCircleTexture();
+
+    // 5. Constellation of Section-Anchored 3D Geometric Flowing Objects
+    const sectionObjects: SectionObject[] = [];
+    const isMobile = window.innerWidth < 768;
+
+    // Section 1: Hero — Floating Torus Knot + Glassmorphic Core
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.TorusKnotGeometry(105, 30, 128, 32, 2, 3);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0x06b6d4,
+        emissive: 0x4f46e5,
+        emissiveIntensity: 0.5,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.55,
+        roughness: 0.2,
+        metalness: 0.9,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.IcosahedronGeometry(48, 2);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x818cf8,
+        emissive: 0x9333ea,
+        emissiveIntensity: 0.65,
+        transmission: 0.85,
+        transparent: true,
+        opacity: 0.65,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : 340;
+      const posY = 30;
+      const posZ = isMobile ? -60 : 0;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: 0.25,
+        rotSpeedY: 0.35,
+        rotSpeedZ: 0.15,
+        floatFreq: 1.1,
+        floatAmp: 25,
+      });
+    }
+
+    // Section 2: About / 3D Bento Grid — Floating Icosahedron Crystal + Octahedron Core
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.IcosahedronGeometry(95, 1);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0xa855f7,
+        emissive: 0x6366f1,
+        emissiveIntensity: 0.55,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.52,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.OctahedronGeometry(46, 0);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x22d3ee,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.7,
+        transmission: 0.8,
+        transparent: true,
+        opacity: 0.7,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : -380;
+      const posY = -850;
+      const posZ = -40;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: 0.3,
+        rotSpeedY: -0.25,
+        rotSpeedZ: 0.2,
+        floatFreq: 0.95,
+        floatAmp: 28,
+      });
+    }
+
+    // Section 3: Coding Profiles — Floating Dodecahedron Mesh + Glowing Star Core
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.DodecahedronGeometry(100, 1);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.45,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.IcosahedronGeometry(44, 1);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0xec4899,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.6,
+        transmission: 0.75,
+        transparent: true,
+        opacity: 0.65,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : 380;
+      const posY = -1700;
+      const posZ = -30;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: -0.22,
+        rotSpeedY: 0.32,
+        rotSpeedZ: 0.18,
+        floatFreq: 1.05,
+        floatAmp: 26,
+      });
+    }
+
+    // Section 4: Skills — Floating Torus Halo Ring with Orbiting Core
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.TorusGeometry(115, 24, 24, 64);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0x3b82f6,
+        emissive: 0x8b5cf6,
+        emissiveIntensity: 0.5,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.52,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.IcosahedronGeometry(42, 2);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x06b6d4,
+        emissive: 0x3b82f6,
+        emissiveIntensity: 0.6,
+        transmission: 0.85,
+        transparent: true,
+        opacity: 0.7,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : -370;
+      const posY = -2550;
+      const posZ = -40;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: 0.35,
+        rotSpeedY: 0.2,
+        rotSpeedZ: -0.25,
+        floatFreq: 0.9,
+        floatAmp: 30,
+      });
+    }
+
+    // Section 5: Experience Timeline — Floating Octahedron Diamond Crystal
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.OctahedronGeometry(105, 1);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0x6366f1,
+        emissive: 0xec4899,
+        emissiveIntensity: 0.5,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.55,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.OctahedronGeometry(45, 0);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0xa855f7,
+        emissive: 0x6366f1,
+        emissiveIntensity: 0.7,
+        transmission: 0.85,
+        transparent: true,
+        opacity: 0.7,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : 360;
+      const posY = -3400;
+      const posZ = -40;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: -0.25,
+        rotSpeedY: -0.3,
+        rotSpeedZ: 0.15,
+        floatFreq: 1.15,
+        floatAmp: 24,
+      });
+    }
+
+    // Section 6: Projects Showcase — Floating Complex Torus Knot
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.TorusKnotGeometry(100, 28, 110, 28, 3, 5);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0x10b981,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.5,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.52,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.IcosahedronGeometry(45, 2);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x22d3ee,
+        emissive: 0x10b981,
+        emissiveIntensity: 0.6,
+        transmission: 0.8,
+        transparent: true,
+        opacity: 0.65,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : -390;
+      const posY = -4250;
+      const posZ = -30;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: 0.28,
+        rotSpeedY: 0.36,
+        rotSpeedZ: -0.18,
+        floatFreq: 1.0,
+        floatAmp: 28,
+      });
+    }
+
+    // Section 7: Certifications Vault — Floating Holographic Icosahedron
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.IcosahedronGeometry(100, 2);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0xec4899,
+        emissive: 0x8b5cf6,
+        emissiveIntensity: 0.55,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.52,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.DodecahedronGeometry(44, 0);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x10b981,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.65,
+        transmission: 0.85,
+        transparent: true,
+        opacity: 0.7,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : 370;
+      const posY = -5100;
+      const posZ = -40;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: 0.22,
+        rotSpeedY: -0.32,
+        rotSpeedZ: 0.22,
+        floatFreq: 1.08,
+        floatAmp: 25,
+      });
+    }
+
+    // Section 8: Contact Section — Floating Klein Torus Knot
+    {
+      const group = new THREE.Group();
+      const outerGeo = new THREE.TorusKnotGeometry(95, 28, 96, 24, 2, 3);
+      const outerMat = new THREE.MeshStandardMaterial({
+        color: 0x22d3ee,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.55,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.55,
+      });
+      const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+      group.add(outerMesh);
+
+      const innerGeo = new THREE.IcosahedronGeometry(42, 2);
+      const innerMat = new THREE.MeshPhysicalMaterial({
+        color: 0x6366f1,
+        emissive: 0xec4899,
+        emissiveIntensity: 0.65,
+        transmission: 0.8,
+        transparent: true,
+        opacity: 0.65,
+      });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      group.add(innerMesh);
+
+      const posX = isMobile ? 0 : -320;
+      const posY = -5950;
+      const posZ = -30;
+      group.position.set(posX, posY, posZ);
+      if (isMobile) group.scale.set(0.65, 0.65, 0.65);
+      scene.add(group);
+
+      sectionObjects.push({
+        group,
+        outerMesh,
+        innerMesh,
+        baseX: posX,
+        baseY: posY,
+        baseZ: posZ,
+        rotSpeedX: -0.28,
+        rotSpeedY: 0.35,
+        rotSpeedZ: 0.15,
+        floatFreq: 0.95,
+        floatAmp: 28,
+      });
+    }
+
+    // 6. Viewport-Relative Floating Satellites (Always Floating in View in Zero Gravity)
+    const cameraSatellites: {
+      mesh: THREE.Mesh;
+      baseX: number;
+      baseY: number;
+      baseZ: number;
+      rotSpeedX: number;
+      rotSpeedY: number;
+      floatPhase: number;
+    }[] = [];
+
+    const satelliteGroup = new THREE.Group();
+    scene.add(satelliteGroup);
+
+    // Satellite A: Mini Icosahedron (Top-Left)
+    {
+      const geo = new THREE.IcosahedronGeometry(22, 1);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x06b6d4,
+        emissive: 0x6366f1,
+        emissiveIntensity: 0.6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      satelliteGroup.add(mesh);
+      cameraSatellites.push({
+        mesh,
+        baseX: -260,
+        baseY: 170,
+        baseZ: -100,
+        rotSpeedX: 0.4,
+        rotSpeedY: 0.5,
+        floatPhase: 0,
+      });
+    }
+
+    // Satellite B: Mini Torus (Bottom-Right)
+    {
+      const geo = new THREE.TorusGeometry(26, 7, 16, 32);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xa855f7,
+        emissive: 0xec4899,
+        emissiveIntensity: 0.6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      satelliteGroup.add(mesh);
+      cameraSatellites.push({
+        mesh,
+        baseX: 270,
+        baseY: -180,
+        baseZ: -80,
+        rotSpeedX: -0.5,
+        rotSpeedY: 0.4,
+        floatPhase: 1.8,
+      });
+    }
+
+    // Satellite C: Mini Octahedron Diamond (Mid-Right)
+    {
+      const geo = new THREE.OctahedronGeometry(20, 0);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x22d3ee,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.65,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      satelliteGroup.add(mesh);
+      cameraSatellites.push({
+        mesh,
+        baseX: 300,
+        baseY: 30,
+        baseZ: -90,
+        rotSpeedX: 0.35,
+        rotSpeedY: -0.45,
+        floatPhase: 3.2,
+      });
+    }
+
+    // Satellite D: Mini Dodecahedron (Mid-Left)
+    {
+      const geo = new THREE.DodecahedronGeometry(22, 0);
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x818cf8,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.45,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      satelliteGroup.add(mesh);
+      cameraSatellites.push({
+        mesh,
+        baseX: -290,
+        baseY: -80,
+        baseZ: -110,
+        rotSpeedX: -0.3,
+        rotSpeedY: 0.4,
+        floatPhase: 4.5,
+      });
+    }
+
+    // 7. Global Ambient Swarm of 900+ Glowing Cyan & Purple Particles
+    const particleCount = 950;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+    const particleOriginalX = new Float32Array(particleCount);
+    const particleOriginalY = new Float32Array(particleCount);
+    const particleOriginalZ = new Float32Array(particleCount);
+
+    const cyanColor = new THREE.Color(0x22d3ee);
+    const purpleColor = new THREE.Color(0xa855f7);
+    const indigoColor = new THREE.Color(0x6366f1);
+    const whiteColor = new THREE.Color(0xffffff);
+
+    for (let i = 0; i < particleCount; i++) {
+      const x = (Math.random() - 0.5) * 1500;
+      // Spanning full vertical scroll depth from +400 down to -6400
+      const y = (Math.random() - 0.5) * 6800 - 3000;
+      const z = (Math.random() - 0.5) * 900 - 100;
+
+      particlePositions[i * 3] = x;
+      particlePositions[i * 3 + 1] = y;
+      particlePositions[i * 3 + 2] = z;
+
+      particleOriginalX[i] = x;
+      particleOriginalY[i] = y;
+      particleOriginalZ[i] = z;
+
+      const rand = Math.random();
+      const col = rand > 0.65 ? cyanColor : rand > 0.35 ? purpleColor : rand > 0.15 ? indigoColor : whiteColor;
+      particleColors[i * 3] = col.r;
+      particleColors[i * 3 + 1] = col.g;
+      particleColors[i * 3 + 2] = col.b;
+    }
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 6.5,
       vertexColors: true,
+      map: particleTexture,
       transparent: true,
       opacity: 0.85,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
 
-    const starField = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starField);
+    const particles = new THREE.Points(particleGeo, particleMaterial);
+    scene.add(particles);
 
-    // 2. AURORA SHADER MESH PLANE
-    // Custom vertex & fragment shader for a slow drifting volumetric aurora ribbon
-    const auroraUniforms = {
-      uTime: { value: 0 },
-      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-    };
-
-    const auroraVertexShader = `
-      varying vec2 vUv;
-      varying vec3 vPosition;
-      uniform float uTime;
-      uniform vec2 uMouse;
-
-      void main() {
-        vUv = uv;
-        vec3 pos = position;
-
-        // Wave displacement reacting to time and mouse
-        float wave1 = sin(pos.x * 0.003 + uTime * 0.8 + uMouse.x * 2.0) * 45.0;
-        float wave2 = cos(pos.y * 0.004 + uTime * 0.6 + uMouse.y * 2.0) * 35.0;
-        pos.z += wave1 + wave2;
-
-        vPosition = pos;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `;
-
-    const auroraFragmentShader = `
-      varying vec2 vUv;
-      varying vec3 vPosition;
-      uniform float uTime;
-      uniform vec2 uMouse;
-
-      void main() {
-        vec2 uv = vUv;
-        
-        // Fluid flow coordinates
-        float t = uTime * 0.25;
-        vec2 p = uv * 2.0 - 1.0;
-        p.x += (uMouse.x - 0.5) * 0.4;
-        p.y += (uMouse.y - 0.5) * 0.4;
-
-        float n1 = sin(p.x * 2.5 + t) * cos(p.y * 2.5 + t);
-        float n2 = sin(p.x * 4.0 - t * 0.8) * cos(p.y * 3.0 + t * 0.5);
-        float n3 = sin((p.x + p.y) * 3.0 + t * 1.2);
-        float pattern = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
-
-        // Aurora Color Palette
-        vec3 indigo = vec3(0.388, 0.4, 0.945);  // #6366f1
-        vec3 cyan = vec3(0.024, 0.714, 0.831);   // #06b6d4
-        vec3 violet = vec3(0.659, 0.333, 0.969); // #a855f7
-        vec3 magenta = vec3(0.925, 0.282, 0.6);  // #ec4899
-
-        // Multi-stop color blending
-        vec3 col = mix(indigo, cyan, smoothstep(-0.6, 0.0, pattern));
-        col = mix(col, violet, smoothstep(0.0, 0.4, pattern));
-        col = mix(col, magenta, smoothstep(0.4, 0.9, pattern));
-
-        // Soft vignette & edge fade - subtle accent to harmonize with the video background
-        float distFromCenter = length(p);
-        float alpha = smoothstep(1.3, 0.2, distFromCenter) * 0.08;
-        
-        gl_FragColor = vec4(col, alpha);
-      }
-    `;
-
-    const auroraGeometry = new THREE.PlaneGeometry(2400, 1600, 64, 48);
-    const auroraMaterial = new THREE.ShaderMaterial({
-      vertexShader: auroraVertexShader,
-      fragmentShader: auroraFragmentShader,
-      uniforms: auroraUniforms,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-    });
-
-    const auroraMesh = new THREE.Mesh(auroraGeometry, auroraMaterial);
-    auroraMesh.position.z = -150;
-    scene.add(auroraMesh);
-
-    // 3. PERSPECTIVE GRID LINES IN DEEP SPACE (Subtle Sci-Fi Depth Grid)
-    const gridHelper = new THREE.GridHelper(3000, 50, 0x1e293b, 0x0f172a);
-    gridHelper.position.y = -600;
-    gridHelper.position.z = 0;
-    (gridHelper.material as THREE.Material).transparent = true;
-    (gridHelper.material as THREE.Material).opacity = 0.25;
-    scene.add(gridHelper);
-
-    // MOUSE & SCROLL STATE WITH DAMPING
+    // 8. Mouse & Scroll Tracking with Spring Damping
     let mouseX = 0;
     let mouseY = 0;
     let targetMouseX = 0;
     let targetMouseY = 0;
-    let scrollY = window.scrollY;
-    let targetScrollY = window.scrollY;
+    let currentScrollFraction = 0;
+    let targetScrollFraction = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-      auroraUniforms.uMouse.value.set(
-        e.clientX / window.innerWidth,
-        1.0 - e.clientY / window.innerHeight
-      );
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+      targetMouseX = (e.clientX - halfW) / halfW;
+      targetMouseY = (e.clientY - halfH) / halfH;
     };
 
     const handleScroll = () => {
-      targetScrollY = window.scrollY;
+      const maxScroll = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        1
+      );
+      targetScrollFraction = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
     };
 
     const handleResize = () => {
@@ -229,47 +683,94 @@ export const LivingCanvas: React.FC = () => {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      auroraUniforms.uResolution.value.set(width, height);
+
+      const mobileNow = width < 768;
+      sectionObjects.forEach((obj) => {
+        obj.group.scale.set(
+          mobileNow ? 0.65 : 1,
+          mobileNow ? 0.65 : 1,
+          mobileNow ? 0.65 : 1
+        );
+        obj.group.position.x = mobileNow ? 0 : obj.baseX;
+      });
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
+    handleScroll();
 
-    // ANIMATION LOOP
+    // 9. 60fps Animation Loop
     let animId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-
       const elapsedTime = clock.getElapsedTime();
-      auroraUniforms.uTime.value = elapsedTime;
 
-      // Smooth mouse interpolation
+      // Smooth mouse interpolation (lerp)
       mouseX += (targetMouseX - mouseX) * 0.05;
       mouseY += (targetMouseY - mouseY) * 0.05;
 
-      // Smooth scroll interpolation
-      scrollY += (targetScrollY - scrollY) * 0.05;
+      // Smooth scroll interpolation (lerp)
+      currentScrollFraction += (targetScrollFraction - currentScrollFraction) * 0.06;
 
-      // Camera parallax
-      camera.position.x = mouseX * 80;
-      camera.position.y = mouseY * 60 - scrollY * 0.25;
-      camera.lookAt(0, -scrollY * 0.2, 0);
+      // Total vertical distance along the 8 sections is ~5950 units
+      const targetCamY = -currentScrollFraction * 5950;
+      camera.position.y = targetCamY + mouseY * 25;
+      camera.position.x = mouseX * 45;
+      camera.position.z = 720 + Math.sin(elapsedTime * 0.4) * 12;
+      camera.lookAt(0, targetCamY, 0);
 
-      // Starfield slow drift
-      starField.rotation.y = elapsedTime * 0.02 + mouseX * 0.05;
-      starField.rotation.x = elapsedTime * 0.01 + mouseY * 0.05;
+      // Light positions follow scroll camera to ensure bright illuminations in every section
+      lightCyan.position.y = targetCamY + 200;
+      lightPurple.position.y = targetCamY - 200;
+      lightIndigo.position.y = targetCamY;
 
-      // Slight floating wobble on aurora
-      auroraMesh.rotation.z = Math.sin(elapsedTime * 0.2) * 0.05;
+      // Animate Section-Anchored 3D Geometric Objects
+      sectionObjects.forEach((obj) => {
+        obj.outerMesh.rotation.x = elapsedTime * obj.rotSpeedX + mouseY * 0.4;
+        obj.outerMesh.rotation.y = elapsedTime * obj.rotSpeedY + mouseX * 0.4;
+        obj.outerMesh.rotation.z = elapsedTime * obj.rotSpeedZ;
+
+        if (obj.innerMesh) {
+          obj.innerMesh.rotation.x = -elapsedTime * obj.rotSpeedX * 0.8;
+          obj.innerMesh.rotation.y = -elapsedTime * obj.rotSpeedY * 0.8;
+        }
+
+        // Harmonic zero-gravity breathing float
+        const floatDelta = Math.sin(elapsedTime * obj.floatFreq) * obj.floatAmp;
+        obj.group.position.y = obj.baseY + floatDelta;
+      });
+
+      // Animate Viewport Satellites (always floating in view around the camera)
+      satelliteGroup.position.set(camera.position.x, targetCamY, camera.position.z - 380);
+      cameraSatellites.forEach((sat) => {
+        sat.mesh.rotation.x = elapsedTime * sat.rotSpeedX;
+        sat.mesh.rotation.y = elapsedTime * sat.rotSpeedY;
+
+        const floatY = Math.sin(elapsedTime * 1.4 + sat.floatPhase) * 18;
+        const floatX = Math.cos(elapsedTime * 1.1 + sat.floatPhase) * 14;
+        sat.mesh.position.set(sat.baseX + floatX, sat.baseY + floatY, sat.baseZ);
+      });
+
+      // Animate Global Ambient Glowing Particle Swarm
+      const positions = particleGeo.attributes.position.array as Float32Array;
+      for (let i = 0; i < particleCount; i++) {
+        const idx = i * 3;
+        // Zero-gravity harmonic wave drift
+        positions[idx] = particleOriginalX[i] + Math.sin(elapsedTime * 0.7 + i) * 18;
+        positions[idx + 1] = particleOriginalY[i] + Math.cos(elapsedTime * 0.5 + i * 1.3) * 18;
+        positions[idx + 2] = particleOriginalZ[i] + Math.sin(elapsedTime * 0.6 + i * 0.7) * 14;
+      }
+      particleGeo.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     };
 
     animate();
 
+    // 10. Memory Cleanup
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -279,11 +780,10 @@ export const LivingCanvas: React.FC = () => {
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);
       }
-      starGeometry.dispose();
-      starMaterial.dispose();
-      auroraGeometry.dispose();
-      auroraMaterial.dispose();
       renderer.dispose();
+      particleGeo.dispose();
+      particleMaterial.dispose();
+      particleTexture.dispose();
     };
   }, []);
 
