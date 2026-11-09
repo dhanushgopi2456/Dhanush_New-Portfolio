@@ -18,7 +18,7 @@ body {
 }
 
 #root {
-  background-color: #030712 !important;
+  background-color: transparent !important;
   min-height: 100vh;
 }
 

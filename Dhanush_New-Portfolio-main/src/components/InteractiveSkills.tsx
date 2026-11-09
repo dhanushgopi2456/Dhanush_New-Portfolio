@@ -17,6 +17,7 @@ import {
 import { SkillSphere } from './SkillSphere';
 import { RESUME_DATA, Skill } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 type CategoryFilter = 'all' | 'frontend' | 'backend' | 'database' | 'language' | 'aiml' | 'tools' | 'soft';
 
@@ -72,7 +73,8 @@ export const InteractiveSkills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-24 relative z-10 bg-transparent">
+    <section id="skills" className="py-24 relative z-10 bg-transparent overflow-hidden">
+      <SectionFlowingBackground variant="skills" position="left" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

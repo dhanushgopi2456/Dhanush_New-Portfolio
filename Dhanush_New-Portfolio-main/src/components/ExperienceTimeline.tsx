@@ -23,6 +23,7 @@ import {
 import { RESUME_DATA } from '../data/resumeData';
 import { speakInternshipSection, stopSpeech, subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
 import { ButtonGlare } from './ui/button-glare';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 interface ApiEndpointTest {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -150,7 +151,8 @@ export const ExperienceTimeline: React.FC = () => {
   };
 
   return (
-    <section id="experience" className="py-24 relative z-10 bg-transparent">
+    <section id="experience" className="py-24 relative z-10 bg-transparent overflow-hidden">
+      <SectionFlowingBackground variant="experience" position="right" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

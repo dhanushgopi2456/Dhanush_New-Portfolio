@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Github, Linkedin, Send, Check, Copy, MessageSquare, Sparkles } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 export const Contact: React.FC = () => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -48,7 +49,8 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-24 relative z-10 bg-transparent">
+    <section id="contact" className="py-24 relative z-10 bg-transparent overflow-hidden">
+      <SectionFlowingBackground variant="contact" position="right" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

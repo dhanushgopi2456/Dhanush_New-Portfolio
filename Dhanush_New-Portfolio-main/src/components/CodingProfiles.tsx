@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 interface TopicDistribution {
   name: string;
@@ -330,7 +331,8 @@ export const CodingProfiles: React.FC = () => {
   };
 
   return (
-    <section id="coding-profiles" className="py-24 relative z-10 bg-transparent">
+    <section id="coding-profiles" className="py-24 relative z-10 bg-transparent overflow-hidden">
+      <SectionFlowingBackground variant="coding" position="right" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

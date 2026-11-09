@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 // Viewport-Triggered Animated Number Counter
 const ViewportCounter: React.FC<{ target: number; suffix?: string; decimals?: number; duration?: number }> = ({
@@ -182,7 +183,8 @@ export const About: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="py-24 relative z-10 bg-transparent">
+    <section id="about" className="py-24 relative z-10 bg-transparent overflow-hidden">
+      <SectionFlowingBackground variant="about" position="left" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

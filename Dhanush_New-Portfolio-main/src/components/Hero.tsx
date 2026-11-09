@@ -28,6 +28,7 @@ import { VoiceSpeakerControl } from './VoiceSpeakerControl';
 import { subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
 import { ButtonGlare } from './ui/button-glare';
 import { MagneticButton } from './MagneticButton';
+import { SectionFlowingBackground } from './SectionFlowingBackground';
 
 interface HeroProps {
   onOpenPdfModal: () => void;
@@ -212,6 +213,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
   return (
     <section id="hero" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
       
+      {/* Interactive 3D Flowing Torus Knot Mesh & Dense Glowing Particles */}
+      <SectionFlowingBackground variant="hero" position="right" particleCount={480} />
+
       {/* Multi-layered Ambient Radial Spotlights */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none animate-pulse-glow" />
       <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-600/15 rounded-full blur-[140px] pointer-events-none" />
