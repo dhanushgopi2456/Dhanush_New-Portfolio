@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Briefcase, 
@@ -111,11 +111,13 @@ export const ExperienceTimeline: React.FC = () => {
   const [simulatedResponse, setSimulatedResponse] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'architecture' | 'apiConsole' | 'sprints' | 'principles'>('architecture');
 
-  // 10-Second Continuous Auto Flip Loop for Experience Card
+  // 10-Second Continuous Auto Flip Loop for Experience Card (Pauses on hover / touch)
   const [isExperienceFlipped, setIsExperienceFlipped] = useState<boolean>(false);
+  const isExpPausedRef = useRef<boolean>(false);
 
   React.useEffect(() => {
     const expTimer = setInterval(() => {
+      if (isExpPausedRef.current) return;
       setIsExperienceFlipped(prev => !prev);
     }, 10000);
     return () => clearInterval(expTimer);
@@ -222,7 +224,15 @@ export const ExperienceTimeline: React.FC = () => {
         {/* Experience Timeline Card with Deep Frosted Glass & Laser Border */}
         <div className="max-w-5xl mx-auto space-y-8 [perspective:1500px]">
           {RESUME_DATA.experience.map((exp, idx) => (
-            <div key={idx} className="relative w-full">
+            <div 
+              key={idx} 
+              onMouseEnter={() => { isExpPausedRef.current = true; }}
+              onMouseLeave={() => { isExpPausedRef.current = false; }}
+              onTouchStart={() => { isExpPausedRef.current = true; }}
+              onTouchEnd={() => { isExpPausedRef.current = false; }}
+              onTouchCancel={() => { isExpPausedRef.current = false; }}
+              className="relative w-full"
+            >
               <motion.div
                 initial={{ opacity: 0, y: 40, rotateX: 12 }}
                 whileInView={{ opacity: 1, y: 0, rotateX: 0 }}

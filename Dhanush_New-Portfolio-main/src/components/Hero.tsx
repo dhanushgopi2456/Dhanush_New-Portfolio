@@ -159,9 +159,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
     return () => clearInterval(photoLoopTimer);
   }, [isPhotoFlipped]);
 
-  // Continuous Auto Flip Loop: Flips card every 10 seconds
+  // Continuous Auto Flip Loop: Flips card every 10 seconds (Pauses on hover / touch)
+  const isHeroPhotoPausedRef = useRef<boolean>(false);
+
   useEffect(() => {
     const autoFlipTimer = setInterval(() => {
+      if (isHeroPhotoPausedRef.current) return;
       setIsPhotoFlipped((prev) => !prev);
     }, 10000);
     return () => clearInterval(autoFlipTimer);
@@ -390,8 +393,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
             <div 
               ref={profileCardRef}
               onMouseMove={handleProfileMouseMove}
-              onMouseEnter={() => setCardHovered(true)}
-              onMouseLeave={() => setCardHovered(false)}
+              onMouseEnter={() => {
+                setCardHovered(true);
+                isHeroPhotoPausedRef.current = true;
+              }}
+              onMouseLeave={() => {
+                setCardHovered(false);
+                isHeroPhotoPausedRef.current = false;
+              }}
+              onTouchStart={() => {
+                isHeroPhotoPausedRef.current = true;
+              }}
+              onTouchEnd={() => {
+                isHeroPhotoPausedRef.current = false;
+              }}
+              onTouchCancel={() => {
+                isHeroPhotoPausedRef.current = false;
+              }}
               className="relative w-full max-w-md h-[580px] sm:h-[620px] [perspective:1200px]"
             >
               

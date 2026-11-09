@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   FolderGit2, 
@@ -55,17 +55,19 @@ export const Projects: React.FC = () => {
     }
   };
 
-  // Project 3D Card Flip State
+  // Project 3D Card Flip State & Paused Cards Ref
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  const pausedProjectsRef = useRef<Record<string, boolean>>({});
 
-  // 10-Second Continuous Auto Flip Loop for all Project Cards
+  // 10-Second Continuous Auto Flip Loop for all Project Cards (Individual Pause on Hover / Touch)
   React.useEffect(() => {
     const flipInterval = setInterval(() => {
       setFlippedCards(prev => {
-        const anyFlipped = Object.values(prev).some(Boolean);
-        const next: Record<string, boolean> = {};
+        const next: Record<string, boolean> = { ...prev };
         RESUME_DATA.projects.forEach(p => {
-          next[p.id] = !anyFlipped;
+          // If this specific card is paused by cursor or finger, keep its current state!
+          if (pausedProjectsRef.current[p.id]) return;
+          next[p.id] = !prev[p.id];
         });
         return next;
       });
@@ -230,7 +232,23 @@ export const Projects: React.FC = () => {
                 key={proj.id}
                 className="relative [perspective:1400px] min-h-[600px] w-full"
                 onMouseMove={(e) => handleCardMouseMove(e, proj.id)}
-                onMouseLeave={() => setHoveredProjectId(null)}
+                onMouseEnter={() => {
+                  setHoveredProjectId(proj.id);
+                  pausedProjectsRef.current[proj.id] = true;
+                }}
+                onMouseLeave={() => {
+                  setHoveredProjectId(null);
+                  pausedProjectsRef.current[proj.id] = false;
+                }}
+                onTouchStart={() => {
+                  pausedProjectsRef.current[proj.id] = true;
+                }}
+                onTouchEnd={() => {
+                  pausedProjectsRef.current[proj.id] = false;
+                }}
+                onTouchCancel={() => {
+                  pausedProjectsRef.current[proj.id] = false;
+                }}
               >
                 <motion.div
                   initial={{ opacity: 0, y: 40 }}

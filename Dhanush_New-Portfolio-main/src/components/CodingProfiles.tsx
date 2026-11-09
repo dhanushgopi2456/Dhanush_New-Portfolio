@@ -60,7 +60,9 @@ const Interactive3DTiltCard: React.FC<{
   onToggleFlip: () => void;
   onCopyUrl: (url: string, id: string) => void;
   copiedId: string | null;
-}> = ({ profile, isFlipped, onToggleFlip, onCopyUrl, copiedId }) => {
+  onPause?: () => void;
+  onResume?: () => void;
+}> = ({ profile, isFlipped, onToggleFlip, onCopyUrl, copiedId, onPause, onResume }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Mouse tilt motion values
@@ -108,8 +110,23 @@ const Interactive3DTiltCard: React.FC<{
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onPause?.();
+      }}
+      onMouseLeave={() => {
+        handleMouseLeave();
+        onResume?.();
+      }}
+      onTouchStart={() => {
+        onPause?.();
+      }}
+      onTouchEnd={() => {
+        onResume?.();
+      }}
+      onTouchCancel={() => {
+        onResume?.();
+      }}
       className="h-[440px] [perspective:1200px] relative select-none"
     >
       {/* 3D Tilt Rig */}
@@ -304,20 +321,21 @@ const Interactive3DTiltCard: React.FC<{
 
 export const CodingProfiles: React.FC = () => {
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  const pausedCodingRef = useRef<Record<string, boolean>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const toggleFlip = (id: string) => {
     setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // 10-Second Continuous Auto Flip Loop for all Coding Profile Cards
+  // 10-Second Continuous Auto Flip Loop for all Coding Profile Cards (Pauses on hover / touch)
   useEffect(() => {
     const flipInterval = setInterval(() => {
       setFlippedCards((prev) => {
-        const anyFlipped = Object.values(prev).some(Boolean);
-        const next: Record<string, boolean> = {};
+        const next: Record<string, boolean> = { ...prev };
         RESUME_DATA.codingProfiles.forEach((p) => {
-          next[p.id] = !anyFlipped;
+          if (pausedCodingRef.current[p.id]) return;
+          next[p.id] = !prev[p.id];
         });
         return next;
       });
@@ -400,6 +418,8 @@ export const CodingProfiles: React.FC = () => {
               onToggleFlip={() => toggleFlip(profile.id)}
               onCopyUrl={handleCopy}
               copiedId={copiedId}
+              onPause={() => { pausedCodingRef.current[profile.id] = true; }}
+              onResume={() => { pausedCodingRef.current[profile.id] = false; }}
             />
           ))}
         </div>

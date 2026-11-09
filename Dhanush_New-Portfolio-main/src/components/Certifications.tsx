@@ -28,6 +28,8 @@ interface HallmarkCardProps {
   onInspect: () => void;
   onCopyCode: (code: string) => void;
   copiedCode: string | null;
+  onPause?: () => void;
+  onResume?: () => void;
 }
 
 const HallmarkCard: React.FC<HallmarkCardProps> = ({
@@ -37,7 +39,9 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
   onToggleFlip,
   onInspect,
   onCopyCode,
-  copiedCode
+  copiedCode,
+  onPause,
+  onResume
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -78,8 +82,23 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onPause?.();
+      }}
+      onMouseLeave={() => {
+        handleMouseLeave();
+        onResume?.();
+      }}
+      onTouchStart={() => {
+        onPause?.();
+      }}
+      onTouchEnd={() => {
+        onResume?.();
+      }}
+      onTouchCancel={() => {
+        onResume?.();
+      }}
       onClick={onToggleFlip}
       className="h-[350px] [perspective:1400px] group cursor-pointer select-none"
     >
@@ -288,6 +307,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
 
 export const Certifications: React.FC = () => {
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const pausedCertsRef = useRef<Record<number, boolean>>({});
   const [inspectingCert, setInspectingCert] = useState<Certification | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [selectedIssuer, setSelectedIssuer] = useState<string>('all');
@@ -299,14 +319,14 @@ export const Certifications: React.FC = () => {
     setFlippedCards(prev => ({ ...prev, [index]: !prev[index] }));
   };
 
-  // 10-Second Continuous Auto Flip Loop for all Certification Cards
+  // 10-Second Continuous Auto Flip Loop for all Certification Cards (Pauses on hover / touch)
   useEffect(() => {
     const flipInterval = setInterval(() => {
       setFlippedCards((prev) => {
-        const anyFlipped = Object.values(prev).some(Boolean);
-        const next: Record<number, boolean> = {};
+        const next: Record<number, boolean> = { ...prev };
         filteredCerts.forEach((_, idx) => {
-          next[idx] = !anyFlipped;
+          if (pausedCertsRef.current[idx]) return;
+          next[idx] = !prev[idx];
         });
         return next;
       });
@@ -380,6 +400,8 @@ export const Certifications: React.FC = () => {
               onInspect={() => setInspectingCert(cert)}
               onCopyCode={handleCopyCode}
               copiedCode={copiedCode}
+              onPause={() => { pausedCertsRef.current[idx] = true; }}
+              onResume={() => { pausedCertsRef.current[idx] = false; }}
             />
           ))}
         </div>

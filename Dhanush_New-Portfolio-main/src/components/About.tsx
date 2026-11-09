@@ -205,16 +205,18 @@ export const About: React.FC = () => {
   const [cgpaInput, setCgpaInput] = useState<number>(9.04);
   const calculatedPercentage = (cgpaInput * 9.5).toFixed(2);
 
-  // Education 3D Flip State & 10-Second Auto Flip Loop
+  // Education 3D Flip State & 10-Second Auto Flip Loop (Pauses on hover / touch)
   const [educationFlipped, setEducationFlipped] = useState<Record<number, boolean>>({});
+  const pausedEduCardsRef = useRef<Record<number, boolean>>({});
 
   useEffect(() => {
     const eduInterval = setInterval(() => {
       setEducationFlipped(prev => {
-        const anyFlipped = Object.values(prev).some(Boolean);
-        const next: Record<number, boolean> = {};
+        const next: Record<number, boolean> = { ...prev };
         RESUME_DATA.education.forEach((_, idx) => {
-          next[idx] = !anyFlipped;
+          // If this individual card is hovered by cursor or touched by finger, freeze it!
+          if (pausedEduCardsRef.current[idx]) return;
+          next[idx] = !prev[idx];
         });
         return next;
       });
@@ -664,6 +666,11 @@ export const About: React.FC = () => {
               return (
                 <div
                   key={idx}
+                  onMouseEnter={() => { pausedEduCardsRef.current[idx] = true; }}
+                  onMouseLeave={() => { pausedEduCardsRef.current[idx] = false; }}
+                  onTouchStart={() => { pausedEduCardsRef.current[idx] = true; }}
+                  onTouchEnd={() => { pausedEduCardsRef.current[idx] = false; }}
+                  onTouchCancel={() => { pausedEduCardsRef.current[idx] = false; }}
                   className="relative [perspective:1400px] w-full min-h-[490px] sm:min-h-[510px]"
                 >
                   <motion.div
