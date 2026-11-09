@@ -87,7 +87,7 @@ export const RESUME_DATA = {
     location: "Tadepalligudem, Andhra Pradesh, India",
     github: "https://github.com/dhanushgopi2456",
     linkedin: "https://www.linkedin.com/in/dhanush-gopi-kavala",
-    portfolio: "https://harinew-portfolio-33.vercel.app/",
+    portfolio: "https://dhanush-new-portfolio.vercel.app/",
     careerObjective: "To leverage my technical foundation in Full Stack MERN Development, Data Structures, and AI to build scalable, high-performance web applications that solve real-world problems while driving technological innovation.",
     summary: "Results-driven Computer Science Graduate and Software Engineer specializing in Full Stack Development and the MERN Stack. Proficient in building scalable web applications and robust REST APIs using React.js, Node.js, Express.js, MongoDB, Java, and Python. Adept at problem solving with 900+ algorithmic problems solved across LeetCode, GeeksforGeeks, and Code360 to optimize system performance.",
     stats: [

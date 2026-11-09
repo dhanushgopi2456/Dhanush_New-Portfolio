@@ -254,7 +254,7 @@ export const About: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="py-24 relative z-10 bg-transparent overflow-hidden">
+    <section id="about" className="pt-24 pb-36 relative z-10 bg-transparent overflow-hidden">
       <SectionFlowingBackground variant="about" position="left" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
 
@@ -753,7 +753,7 @@ export const About: React.FC = () => {
 
                     {/* BACK FACE: Academic Honors, Distinctions & Credentials */}
                     <div 
-                      className="glass-card p-6 sm:p-7 rounded-[30px] border border-cyan-500/40 bg-slate-950/98 flex flex-col justify-between shadow-2xl absolute inset-0 w-full h-full min-h-[490px] sm:min-h-[510px] overflow-hidden"
+                      className="glass-card p-6 sm:p-7 rounded-[30px] border border-cyan-500/40 bg-slate-950/98 flex flex-col justify-between shadow-2xl absolute inset-0 w-full h-full min-h-[490px] sm:min-h-[510px] overflow-y-auto"
                       style={{
                         backfaceVisibility: 'hidden',
                         WebkitBackfaceVisibility: 'hidden',

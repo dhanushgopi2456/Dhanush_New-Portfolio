@@ -164,7 +164,7 @@ export const ExperienceTimeline: React.FC = () => {
   };
 
   return (
-    <section id="experience" className="py-24 relative z-10 bg-transparent overflow-hidden">
+    <section id="experience" className="pt-24 pb-36 relative z-10 bg-transparent overflow-hidden">
       <SectionFlowingBackground variant="experience" position="right" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       

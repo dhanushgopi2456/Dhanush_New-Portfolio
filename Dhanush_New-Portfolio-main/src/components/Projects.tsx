@@ -193,7 +193,7 @@ export const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 relative z-10 bg-transparent overflow-hidden">
+    <section id="projects" className="pt-24 pb-36 relative z-10 bg-transparent overflow-hidden">
       <SectionFlowingBackground variant="projects" position="left" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
       
