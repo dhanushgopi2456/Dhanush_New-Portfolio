@@ -241,10 +241,6 @@ export const ExperienceTimeline: React.FC = () => {
                   style={{
                     backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
-                    opacity: isExperienceFlipped ? 0 : 1,
-                    pointerEvents: isExperienceFlipped ? 'none' : 'auto',
-                    visibility: isExperienceFlipped ? 'hidden' : 'visible',
-                    transition: 'opacity 0.25s ease, visibility 0.25s ease'
                   }}
                 >
                   {/* 360-Degree Continuous Rotating Laser Border Beam */}
@@ -289,7 +285,7 @@ export const ExperienceTimeline: React.FC = () => {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => setIsExperienceFlipped(true)}
+                        onClick={() => setIsExperienceFlipped(prev => !prev)}
                         className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/50 text-amber-300 text-xs font-mono font-bold backdrop-blur-md flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"
                         title="Flip to inspect 3D Backend Pipeline & Production Architecture"
                       >
@@ -566,15 +562,11 @@ export const ExperienceTimeline: React.FC = () => {
 
             {/* BACK FACE: Production System Architecture & Enterprise Telemetry Deck */}
             <div
-              className="glass-panel p-6 sm:p-9 rounded-[32px] border border-cyan-500/40 bg-slate-950/98 relative overflow-y-auto shadow-2xl absolute inset-0 w-full h-full flex flex-col justify-between"
+              className="glass-panel p-6 sm:p-9 rounded-[32px] border border-cyan-500/40 bg-slate-950/98 overflow-y-auto shadow-2xl absolute inset-0 w-full h-full flex flex-col justify-between"
               style={{
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)',
-                opacity: isExperienceFlipped ? 1 : 0,
-                pointerEvents: isExperienceFlipped ? 'auto' : 'none',
-                visibility: isExperienceFlipped ? 'visible' : 'hidden',
-                transition: 'opacity 0.25s ease, visibility 0.25s ease'
               }}
             >
               {/* Background Circuit Grid */}
