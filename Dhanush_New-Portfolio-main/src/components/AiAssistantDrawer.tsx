@@ -59,10 +59,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
         reply = `VedaAI is Dhanush's AI-powered answer sheet evaluation platform built with Next.js, TypeScript, and Google Gemini Vision. It extracts questions from exam papers, maps handwritten answers with bounding boxes, and generates structured marks and constructive feedback.\nLive Demo: https://veda-ai-grader.vercel.app\nRepo: https://github.com/dhanushgopi2456/veda-ai-grader`;
       } else if (q.includes('freshmart') || q.includes('grocery')) {
         reply = `FreshMart is a full-stack MERN grocery e-commerce app featuring JWT authentication, dynamic cart management, and an admin inventory panel.\nLive Demo: https://fresh-mart-v2.vercel.app\nRepo: https://github.com/dhanushgopi2456/FreshMart-v2`;
+      } else if (q.includes('hos') || q.includes('route') || q.includes('eld') || q.includes('truck') || q.includes('logistics')) {
+        reply = `HOS Route Planner is Dhanush's commercial logistics web application built with React 19, TypeScript, Leaflet, and Node.js. It features FMCSA 11/14/30/70-hour compliance scheduling, automated rest/fuel stops, and 24-hour electronic driver log (ELD) generation.\nLive Demo: https://hos-route-planner-ruddy.vercel.app\nRepo: https://github.com/dhanushgopi2456/hos-route-planner`;
       } else if (q.includes('task') || q.includes('kanban')) {
         reply = `Team Task Manager is a collaborative Kanban workspace with Role-Based Access Controls (RBAC), real-time status updates, and custom Mongoose schemas.\nLive Demo: https://client-psi-three-59.vercel.app\nRepo: https://github.com/dhanushgopi2456/team-task-manager-v2`;
       } else if (q.includes('project')) {
-        reply = `Dhanush built 4 production software & AI projects:\n• VedaAI (Live: https://veda-ai-grader.vercel.app)\n• FreshMart (Live: https://fresh-mart-v2.vercel.app)\n• Team Task Manager (Live: https://client-psi-three-59.vercel.app)\n• Object Detection YOLOv9 (AIDE-2024 Research Paper)`;
+        reply = `Dhanush built 5 production software & AI projects:\n1. Team Task Manager (Live: https://client-psi-three-59.vercel.app)\n2. VedaAI Grader (Live: https://veda-ai-grader.vercel.app)\n3. FreshMart (Live: https://fresh-mart-v2.vercel.app)\n4. HOS Route Planner (Live: https://hos-route-planner-ruddy.vercel.app)\n5. Object Detection YOLOv9 (AIDE-2024 Research Paper)`;
       } else {
         reply = `Dhanush Gopi Kavala is a Computer Science Engineer specializing in Full Stack MERN development, Java/Python DSA, REST API design, and Computer Vision. You can reach him at ${RESUME_DATA.personal.email} or ${RESUME_DATA.personal.phone}!`;
       }

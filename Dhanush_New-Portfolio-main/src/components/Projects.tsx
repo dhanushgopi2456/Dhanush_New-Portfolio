@@ -14,7 +14,11 @@ import {
   Square,
   FileText,
   Award,
-  ExternalLink
+  ExternalLink,
+  Truck,
+  MapPin,
+  Navigation,
+  Clock
 } from 'lucide-react';
 import { RESUME_DATA, Project } from '../data/resumeData';
 import { speakProjectExplanation, stopSpeech, subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
@@ -91,6 +95,18 @@ export const Projects: React.FC = () => {
     }, 1200);
   };
 
+  // HOS Route Planner State
+  const [selectedRouteSample, setSelectedRouteSample] = useState<'chicago-dallas' | 'atlanta-miami'>('chicago-dallas');
+  const [routeActiveTab, setRouteActiveTab] = useState<'route' | 'eld' | 'compliance'>('route');
+  const [isRouteCalculating, setIsRouteCalculating] = useState(false);
+
+  const handleRecalculateRoute = () => {
+    setIsRouteCalculating(true);
+    setTimeout(() => {
+      setIsRouteCalculating(false);
+    }, 800);
+  };
+
   const toggleFreshMartItem = (id: number) => {
     setFreshMartItems(prev => prev.map(item => {
       if (item.id === id) {
@@ -141,12 +157,12 @@ export const Projects: React.FC = () => {
             <span className="liquid-gradient-text">Interactive Prototypes</span>
           </h2>
           <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
-            Click "Interactive Demo" to test dynamic REST API endpoints, JWT auth, and YOLOv9 vision models directly inside the browser.
+            Click "Interactive Demo" to test FMCSA route compliance, Gemini Vision AI, REST APIs, and YOLOv9 models directly inside the browser.
           </p>
         </motion.div>
 
         {/* Projects Cards Grid with 3D Tilt & Frosted Glass */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {RESUME_DATA.projects.map((proj, idx) => (
             <motion.div
               key={proj.id}
@@ -734,6 +750,300 @@ export const Projects: React.FC = () => {
                           <ButtonGlare radius={12} intensity={selectedGraderSample === 'dbms' ? 0.4 : 0.2} frontColor={{ r: 0.2, g: 0.9, b: 0.5, a: 1 }} />
                           <span className="relative z-10">Database Systems (CS304)</span>
                         </button>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {activeDemoProject.mockType === 'route' && (
+                    <div className="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 space-y-4">
+                      
+                      {/* Simulator Header */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                        <div className="flex items-center gap-2">
+                          <Truck className="w-5 h-5 text-cyan-400" />
+                          <div>
+                            <span className="font-bold text-sm text-white">HOS Trip Engine & ELD Daily Logs</span>
+                            <p className="text-[10px] text-slate-400 font-mono">FMCSA 49 CFR &bull; Leaflet Geospatial Routing &bull; 24-hr RODS</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handleRecalculateRoute}
+                            disabled={isRouteCalculating}
+                            className="relative overflow-hidden group px-3 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-md shadow-cyan-500/20 flex items-center gap-1.5"
+                          >
+                            <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.8, b: 0.9, a: 1 }} />
+                            <Navigation className={`w-3.5 h-3.5 ${isRouteCalculating ? 'animate-spin' : ''}`} />
+                            <span className="relative z-10">{isRouteCalculating ? 'Recalculating...' : 'Recalculate HOS'}</span>
+                          </button>
+                          <span className="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/30 font-bold">
+                            Live Simulation
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Route Preset Selector & Sub-Tabs */}
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        {/* Route Selector */}
+                        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+                          <button
+                            onClick={() => setSelectedRouteSample('chicago-dallas')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                              selectedRouteSample === 'chicago-dallas'
+                                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
+                                : 'text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            Chicago ➔ Dallas (925 mi)
+                          </button>
+                          <button
+                            onClick={() => setSelectedRouteSample('atlanta-miami')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                              selectedRouteSample === 'atlanta-miami'
+                                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
+                                : 'text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            Atlanta ➔ Miami (663 mi)
+                          </button>
+                        </div>
+
+                        {/* View Mode Tabs */}
+                        <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
+                          <button
+                            onClick={() => setRouteActiveTab('route')}
+                            className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
+                              routeActiveTab === 'route' ? 'bg-slate-800 text-cyan-300 font-bold' : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                          >
+                            Route & Stops
+                          </button>
+                          <button
+                            onClick={() => setRouteActiveTab('eld')}
+                            className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
+                              routeActiveTab === 'eld' ? 'bg-slate-800 text-cyan-300 font-bold' : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                          >
+                            24h ELD Grid
+                          </button>
+                          <button
+                            onClick={() => setRouteActiveTab('compliance')}
+                            className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
+                              routeActiveTab === 'compliance' ? 'bg-slate-800 text-cyan-300 font-bold' : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                          >
+                            HOS Check
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Tab 1: Route & Waypoints View */}
+                      {routeActiveTab === 'route' && (
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                              <span className="text-[10px] text-slate-400 block">Total Distance</span>
+                              <span className="text-sm font-bold text-cyan-400">
+                                {selectedRouteSample === 'chicago-dallas' ? '925 Miles' : '663 Miles'}
+                              </span>
+                            </div>
+                            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                              <span className="text-[10px] text-slate-400 block">Drive Time</span>
+                              <span className="text-sm font-bold text-amber-400">
+                                {selectedRouteSample === 'chicago-dallas' ? '13h 45m' : '9h 55m'}
+                              </span>
+                            </div>
+                            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                              <span className="text-[10px] text-slate-400 block">Required Rest</span>
+                              <span className="text-sm font-bold text-emerald-400">
+                                {selectedRouteSample === 'chicago-dallas' ? '1 Rest (30m)' : '1 Rest (30m)'}
+                              </span>
+                            </div>
+                            <div className="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                              <span className="text-[10px] text-slate-400 block">Fuel Stops</span>
+                              <span className="text-sm font-bold text-purple-400">
+                                {selectedRouteSample === 'chicago-dallas' ? '1 Stop (142 Gal)' : '1 Stop (102 Gal)'}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Interactive Waypoints Stepper */}
+                          <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+                            <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                              Automated Stop Schedule & Geocoded Waypoints
+                            </span>
+                            
+                            <div className="space-y-2 text-xs">
+                              <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                                  <div>
+                                    <p className="font-bold text-white">
+                                      {selectedRouteSample === 'chicago-dallas' ? 'Origin: Chicago Logistics Hub, IL' : 'Origin: Atlanta Freight Center, GA'}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">Depart 06:00 AM &bull; Pre-Trip Inspection (15 min)</p>
+                                  </div>
+                                </div>
+                                <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded">
+                                  On Duty
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                                <div className="flex items-center gap-2">
+                                  <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                  <div>
+                                    <p className="font-bold text-white">
+                                      {selectedRouteSample === 'chicago-dallas' ? 'Mandatory Rest Break (Effingham, IL)' : 'Mandatory Rest Break (Lake City, FL)'}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">Stop at 13:30 (30 min FMCSA break) &bull; Cumulative driving 7.5h</p>
+                                  </div>
+                                </div>
+                                <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded">
+                                  Off Duty
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                                  <div>
+                                    <p className="font-bold text-white">
+                                      {selectedRouteSample === 'chicago-dallas' ? 'Destination: Dallas Delivery Terminal, TX' : 'Destination: Port of Miami Terminal, FL'}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">Arrive 20:15 &bull; Post-trip inspection & delivery signoff</p>
+                                  </div>
+                                </div>
+                                <span className="text-[10px] font-mono text-cyan-400 font-bold bg-cyan-500/10 px-2 py-0.5 rounded">
+                                  Completed
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab 2: 24-Hour ELD Grid */}
+                      {routeActiveTab === 'eld' && (
+                        <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-3">
+                          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                            <div>
+                              <span className="font-bold text-xs text-white">Driver Daily Log (24-Hour RODS Grid)</span>
+                              <p className="text-[10px] text-slate-400 font-mono">FMCSA Rule 49 CFR Part 395.8 &bull; Date: Nov 9, 2026</p>
+                            </div>
+                            <span className="text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded font-bold">
+                              ELD Verified
+                            </span>
+                          </div>
+
+                          {/* Duty Status Breakdown Grid */}
+                          <div className="space-y-2 text-xs font-mono">
+                            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/60">
+                              <span className="text-slate-300">1. Off Duty (OFF):</span>
+                              <span className="font-bold text-emerald-400">10.0 hrs (Rest + 30m Break)</span>
+                            </div>
+                            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/60">
+                              <span className="text-slate-300">2. Sleeper Berth (SB):</span>
+                              <span className="font-bold text-slate-400">0.0 hrs</span>
+                            </div>
+                            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/60">
+                              <span className="text-slate-300">3. Driving (D):</span>
+                              <span className="font-bold text-cyan-400">10.5 hrs (Interstate Cruising)</span>
+                            </div>
+                            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/60">
+                              <span className="text-slate-300">4. On Duty Not Driving (ON):</span>
+                              <span className="font-bold text-amber-400">3.5 hrs (Inspections & Fuel)</span>
+                            </div>
+                          </div>
+
+                          {/* Visual 24h Bar */}
+                          <div>
+                            <div className="flex justify-between text-[9px] font-mono text-slate-500 mb-1">
+                              <span>00:00</span>
+                              <span>06:00</span>
+                              <span>12:00</span>
+                              <span>18:00</span>
+                              <span>24:00</span>
+                            </div>
+                            <div className="h-3 w-full rounded-md overflow-hidden flex border border-slate-800">
+                              <div className="h-full bg-emerald-500" style={{ width: '25%' }} title="Off Duty" />
+                              <div className="h-full bg-cyan-500" style={{ width: '45%' }} title="Driving" />
+                              <div className="h-full bg-amber-500" style={{ width: '15%' }} title="On Duty" />
+                              <div className="h-full bg-emerald-500" style={{ width: '15%' }} title="Off Duty" />
+                            </div>
+                            <div className="flex items-center gap-3 mt-1.5 text-[9px] font-mono text-slate-400">
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-emerald-500" /> Off Duty</span>
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-cyan-500" /> Driving</span>
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded bg-amber-500" /> On Duty</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tab 3: HOS Safety Compliance */}
+                      {routeActiveTab === 'compliance' && (
+                        <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2.5 text-xs font-mono">
+                          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                            <span className="font-bold text-white">FMCSA Hours of Service (HOS) Status</span>
+                            <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
+                              All Rules Compliant
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-slate-400 text-[11px]">11-Hour Driving Limit:</span>
+                                <span className="text-emerald-400 font-bold">10.5 / 11.0h</span>
+                              </div>
+                              <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-emerald-400 h-full rounded-full" style={{ width: '95%' }} />
+                              </div>
+                              <span className="text-[9px] text-slate-500 mt-1 block">30 min driving remaining</span>
+                            </div>
+
+                            <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-slate-400 text-[11px]">14-Hour Duty Window:</span>
+                                <span className="text-emerald-400 font-bold">13.5 / 14.0h</span>
+                              </div>
+                              <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div className="bg-emerald-400 h-full rounded-full" style={{ width: '96%' }} />
+                              </div>
+                              <span className="text-[9px] text-slate-500 mt-1 block">30 min window remaining</span>
+                            </div>
+
+                            <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-slate-400 text-[11px]">30-Minute Rest Break:</span>
+                                <span className="text-emerald-400 font-bold">COMPLIANT</span>
+                              </div>
+                              <span className="text-[10px] text-slate-300">Taken at 7.5h continuous driving window</span>
+                            </div>
+
+                            <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-slate-400 text-[11px]">70-Hour / 8-Day Cycle:</span>
+                                <span className="text-cyan-400 font-bold">48.5 / 70.0h</span>
+                              </div>
+                              <span className="text-[10px] text-slate-300">21.5h on-duty available before restart</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Tech Stack Footer Pills */}
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        <span className="text-[9px] font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-800/50 px-2 py-0.5 rounded">
+                          React 19 &bull; Leaflet Maps
+                        </span>
+                        <span className="text-[9px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 px-2 py-0.5 rounded">
+                          FMCSA Part 395
+                        </span>
+                        <span className="text-[9px] font-mono bg-purple-950/60 text-purple-300 border border-purple-800/50 px-2 py-0.5 rounded">
+                          jsPDF ELD Export
+                        </span>
                       </div>
 
                     </div>

@@ -22,7 +22,7 @@ export interface Project {
   demoLabel?: string;
   featured: boolean;
   image: string;
-  mockType: 'ecommerce' | 'kanban' | 'yolo' | 'grader';
+  mockType: 'ecommerce' | 'kanban' | 'yolo' | 'grader' | 'route';
 }
 
 export interface Experience {
@@ -205,6 +205,26 @@ export const RESUME_DATA = {
 
   projects: [
     {
+      id: "taskmanager",
+      title: "Team Task Manager",
+      subtitle: "Collaborative Board with Role-Based Access Control",
+      date: "Dec 2024 - Jan 2025",
+      category: "Full Stack",
+      description: "Architected a collaborative task management application built on MVC architecture with JWT-based Role-Based Access Controls (RBAC), real-time status updates, and custom Mongoose schemas.",
+      spokenSummary: "Team Task Manager is a collaborative Agile project board featuring role-based access control and live task tracking. Built with React and Express, it provides secure multi-user workflows with Mongoose schema validation.",
+      bulletPoints: [
+        "Architected a collaborative, multi-user task management system featuring JWT-based Role-Based Access Controls (RBAC) and a modular backend based on MVC architecture.",
+        "Designed a highly responsive UI with React.js and Tailwind CSS, integrating real-time state updates, custom filters, and robust Mongoose schemas."
+      ],
+      techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
+      repoUrl: "https://github.com/dhanushgopi2456/team-task-manager-v2",
+      demoUrl: "https://client-psi-three-59.vercel.app",
+      demoLabel: "Live Link",
+      featured: true,
+      image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
+      mockType: "kanban"
+    },
+    {
       id: "veda-ai-grader",
       title: "VedaAI - AI Answer Sheet Grader",
       subtitle: "Automated Document Evaluation & Visual Answer Mapping",
@@ -246,24 +266,25 @@ export const RESUME_DATA = {
       mockType: "ecommerce"
     },
     {
-      id: "taskmanager",
-      title: "Team Task Manager",
-      subtitle: "Collaborative Board with Role-Based Access Control",
-      date: "Dec 2024 - Jan 2025",
-      category: "Full Stack",
-      description: "Architected a collaborative task management application built on MVC architecture with JWT-based Role-Based Access Controls (RBAC), real-time status updates, and custom Mongoose schemas.",
-      spokenSummary: "Team Task Manager is a collaborative Agile project board featuring role-based access control and live task tracking. Built with React and Express, it provides secure multi-user workflows with Mongoose schema validation.",
+      id: "hos-route-planner",
+      title: "HOS Route Planner & ELD Log Generator",
+      subtitle: "FMCSA-Compliant Geospatial Routing & Electronic Logging",
+      date: "Oct 2025 - Present",
+      category: "Full Stack / Geospatial",
+      description: "A commercial logistics web application combining route planning, geospatial Leaflet mapping, FMCSA 11/14/30/70-hour Hours of Service (HOS) scheduling, automated rest/fuel stops, and 24-hour electronic driver log (ELD) generation.",
+      spokenSummary: "HOS Route Planner is a commercial logistics web platform built with React 19, TypeScript, Leaflet, and Node.js. It plans commercial truck routes with automated Hours of Service compliance, dynamic rest scheduling, and electronic driver log generation.",
       bulletPoints: [
-        "Architected a collaborative, multi-user task management system featuring JWT-based Role-Based Access Controls (RBAC) and a modular backend based on MVC architecture.",
-        "Designed a highly responsive UI with React.js and Tailwind CSS, integrating real-time state updates, custom filters, and robust Mongoose schemas."
+        "Engineered an interactive route planning engine with Leaflet geospatial mapping, real-time waypoint tracking, and dynamic fuel stop calculation.",
+        "Implemented FMCSA 11-hour driving, 14-hour on-duty window, and 30-minute rest break compliance scheduling with automated duty-status state machines.",
+        "Built a 24-hour Record of Duty Status (RODS) electronic logging device (ELD) grid generator with PDF export using jsPDF and Google GenAI assistance."
       ],
-      techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT Auth", "Tailwind CSS"],
-      repoUrl: "https://github.com/dhanushgopi2456/team-task-manager-v2",
-      demoUrl: "https://client-psi-three-59.vercel.app",
+      techStack: ["React 19", "TypeScript", "Tailwind CSS", "Leaflet", "Node.js", "Express.js", "jsPDF", "Google GenAI"],
+      repoUrl: "https://github.com/dhanushgopi2456/hos-route-planner",
+      demoUrl: "https://hos-route-planner-ruddy.vercel.app",
       demoLabel: "Live Link",
       featured: true,
-      image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&q=80&w=800",
-      mockType: "kanban"
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+      mockType: "route"
     },
     {
       id: "yolov9",
