@@ -416,7 +416,7 @@ export const ArchitectureBackDiagram: React.FC<ArchitectureDiagramProps> = ({ pr
   const dbTitle = isPython ? 'PyTorch & OpenCV Model Weights' : project.mockType === 'route' ? 'PostgreSQL & Geospatial Engine' : 'MongoDB Atlas & Mongoose';
 
   return (
-    <div className="relative h-full w-full bg-slate-950/95 p-6 rounded-[30px] flex flex-col justify-between overflow-hidden border border-cyan-500/30 font-mono text-left">
+    <div className="relative h-full w-full bg-slate-950/95 p-3.5 sm:p-6 rounded-2xl sm:rounded-[30px] flex flex-col justify-between overflow-hidden border border-cyan-500/30 font-mono text-left">
       {/* Background Circuit Grid */}
       <div 
         className="absolute inset-0 opacity-15 pointer-events-none"
@@ -477,7 +477,7 @@ export const ArchitectureBackDiagram: React.FC<ArchitectureDiagramProps> = ({ pr
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] border border-white"
           />
-          <span className="absolute right-4 text-[8px] text-slate-500 font-mono">
+          <span className="absolute right-2 sm:right-4 text-[8px] text-slate-500 font-mono">
             HTTPS / JWT Bearer
           </span>
         </div>
@@ -509,7 +509,7 @@ export const ArchitectureBackDiagram: React.FC<ArchitectureDiagramProps> = ({ pr
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_10px_#a855f7] border border-white"
           />
-          <span className="absolute right-4 text-[8px] text-slate-500 font-mono">
+          <span className="absolute right-2 sm:right-4 text-[8px] text-slate-500 font-mono">
             BSON / Tensor Stream
           </span>
         </div>
