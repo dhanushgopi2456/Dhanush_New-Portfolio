@@ -27,6 +27,8 @@ import {
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
 import { SectionFlowingBackground } from './SectionFlowingBackground';
+import { BentoTerminalPlayground } from './BentoTerminalPlayground';
+import { CircuitEnergyTraces } from './CircuitEnergyTraces';
 
 // Viewport-Triggered Animated Number Counter
 const ViewportCounter: React.FC<{ target: number; suffix?: string; decimals?: number; duration?: number }> = ({
@@ -186,6 +188,9 @@ export const About: React.FC = () => {
     <section id="about" className="py-24 relative z-10 bg-transparent overflow-hidden">
       <SectionFlowingBackground variant="about" position="left" particleCount={420} />
       <div className="gradient-wave-divider absolute top-0 inset-x-0" />
+
+      {/* Scroll-Driven SVG Circuit Energy Traces */}
+      <CircuitEnergyTraces />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -413,6 +418,24 @@ export const About: React.FC = () => {
             <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
               <span>Graduation: July 2026</span>
               <span className="text-emerald-400 font-bold">First Class with Distinction</span>
+            </div>
+          </BentoTiltCard>
+
+          {/* Bento Card: Cult-UI Interactive Terminal & AI Playground (8 Cols) */}
+          <BentoTiltCard
+            className="md:col-span-12 lg:col-span-8 min-h-[360px]"
+            glowColor="rgba(6, 182, 212, 0.28)"
+          >
+            <div className="h-full flex flex-col justify-between">
+              <div className="mb-3">
+                <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider block">
+                  Interactive Sandbox & Telemetry Stream
+                </span>
+                <h4 className="text-lg font-bold text-white">Live Developer Terminal & AI Playground</h4>
+              </div>
+              <div className="flex-1">
+                <BentoTerminalPlayground />
+              </div>
             </div>
           </BentoTiltCard>
 

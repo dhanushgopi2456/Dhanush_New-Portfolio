@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'motion/react';
-import { Navbar } from './components/Navbar';
+import { AppleFloatingDock } from './components/AppleFloatingDock';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { CodingProfiles } from './components/CodingProfiles';
@@ -148,8 +148,8 @@ export default function App() {
         <TerminalView onExitTerminal={() => setIsTerminalMode(false)} />
       ) : (
         <div className="relative z-10 min-h-screen text-slate-100 selection:bg-blue-600 selection:text-white font-sans antialiased">
-          {/* Navigation Header */}
-          <Navbar
+          {/* Floating Apple-Inspired Cult-UI Magnification Dock & Ambient Audio Synthesizer */}
+          <AppleFloatingDock
             activeSection={activeSection}
             setActiveSection={setActiveSection}
             isTerminalMode={isTerminalMode}

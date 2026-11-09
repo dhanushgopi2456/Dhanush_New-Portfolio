@@ -29,6 +29,7 @@ import { subscribeSpeechState, VoiceSpeakerState } from '../utils/speechUtils';
 import { ButtonGlare } from './ui/button-glare';
 import { MagneticButton } from './MagneticButton';
 import { SectionFlowingBackground } from './SectionFlowingBackground';
+import { LiquidMetalHeadline } from './LiquidMetalHeadline';
 
 interface HeroProps {
   onOpenPdfModal: () => void;
@@ -280,45 +281,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                 </button>
               </div>
 
-              {/* 3D Staggered Character Reveal Headline */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-tight [perspective:1000px]">
-                <span className="inline-block">
-                  {firstName.split('').map((char, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, y: 35, rotateX: 60, filter: 'blur(8px)' }}
-                      animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                      transition={{
-                        duration: 0.6,
-                        delay: 0.1 + index * 0.04,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      className="inline-block transform-gpu"
-                      style={{ whiteSpace: char === ' ' ? 'pre' : 'normal' }}
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
-                </span>
-                <br />
-                <span className="liquid-gradient-text inline-block">
-                  {lastName.split('').map((char, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, y: 35, rotateX: 60, filter: 'blur(8px)' }}
-                      animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                      transition={{
-                        duration: 0.6,
-                        delay: 0.6 + index * 0.05,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      className="inline-block transform-gpu"
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
-                </span>
-              </h1>
+              {/* Interactive Liquid-Metal Text Shader Headline */}
+              <LiquidMetalHeadline firstName={firstName} lastName={lastName} />
             </div>
 
             {/* Cycling Animated Role Text */}

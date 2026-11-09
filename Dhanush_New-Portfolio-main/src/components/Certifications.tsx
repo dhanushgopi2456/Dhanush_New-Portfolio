@@ -15,6 +15,8 @@ import {
 import { RESUME_DATA, Certification } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
 import { SectionFlowingBackground } from './SectionFlowingBackground';
+import { CertificationInspectModal } from './CertificationInspectModal';
+import { audioSynth } from '../utils/audioSynth';
 
 // Collectible Hallmark 3D Card with Iridescent CSS Foil Shader
 interface HallmarkCardProps {
@@ -22,6 +24,7 @@ interface HallmarkCardProps {
   index: number;
   isFlipped: boolean;
   onToggleFlip: () => void;
+  onInspect: () => void;
   onCopyCode: (code: string) => void;
   copiedCode: string | null;
 }
@@ -31,6 +34,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
   index,
   isFlipped,
   onToggleFlip,
+  onInspect,
   onCopyCode,
   copiedCode
 }) => {
@@ -153,19 +157,33 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
               ID: {cert.badgeCode}
             </span>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleFlip();
-              }}
-              className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-mono font-bold transition-all border border-emerald-500/30 shadow-md cursor-pointer"
-            >
-              <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.9, b: 0.6, a: 1 }} />
-              <span className="relative z-10 flex items-center gap-1.5">
-                <RotateCw className="w-3.5 h-3.5" />
-                <span>Flip Card 🔄</span>
-              </span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  audioSynth.playLaserBlip();
+                  onInspect();
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-300 text-xs font-mono font-bold transition-all border border-cyan-500/30 cursor-pointer"
+                title="Inspect in 3D"
+              >
+                Inspect 3D 🔍
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFlip();
+                }}
+                className="relative overflow-hidden group flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-emerald-600 text-emerald-300 hover:text-white text-xs font-mono font-bold transition-all border border-emerald-500/30 shadow-md cursor-pointer"
+              >
+                <ButtonGlare radius={12} intensity={0.4} frontColor={{ r: 0.1, g: 0.9, b: 0.6, a: 1 }} />
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <RotateCw className="w-3.5 h-3.5" />
+                  <span>Flip 🔄</span>
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -263,6 +281,7 @@ const HallmarkCard: React.FC<HallmarkCardProps> = ({
 
 export const Certifications: React.FC = () => {
   const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const [inspectingCert, setInspectingCert] = useState<Certification | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [selectedIssuer, setSelectedIssuer] = useState<string>('all');
 
@@ -351,11 +370,18 @@ export const Certifications: React.FC = () => {
               index={idx}
               isFlipped={!!flippedCards[idx]}
               onToggleFlip={() => toggleFlip(idx)}
+              onInspect={() => setInspectingCert(cert)}
               onCopyCode={handleCopyCode}
               copiedCode={copiedCode}
             />
           ))}
         </div>
+
+        {/* 360-Degree Hallmark 3D Badge Inspector Modal */}
+        <CertificationInspectModal
+          cert={inspectingCert}
+          onClose={() => setInspectingCert(null)}
+        />
 
       </div>
     </section>
