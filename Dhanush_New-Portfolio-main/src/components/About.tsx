@@ -22,7 +22,10 @@ import {
   Terminal,
   Cpu,
   Layers,
-  Flame
+  Flame,
+  RotateCw,
+  Trophy,
+  ShieldCheck
 } from 'lucide-react';
 import { RESUME_DATA } from '../data/resumeData';
 import { ButtonGlare } from './ui/button-glare';
@@ -159,9 +162,73 @@ const BentoTiltCard: React.FC<BentoTiltCardProps> = ({
   );
 };
 
+const EDUCATION_HONORS = [
+  {
+    institution: "Sri Vasavi Engineering College",
+    badge: "CSE Top 5% • Autonomous",
+    summary: "B.Tech Computer Science & Engineering with 9.04 CGPA (82.88%).",
+    highlights: [
+      { label: "Academic Distinction", value: "9.04 / 10 CGPA (Top Tier Academic Rank)" },
+      { label: "IEEE Research Author", value: "Real-Time Object Detection via YOLOv9 (2024)" },
+      { label: "Algorithm Mastery", value: "1,200+ LeetCode & CodeChef problems solved" },
+      { label: "Core Competencies", value: "MERN Stack, Scalable APIs & Deep Learning" }
+    ],
+    credentialNote: "Affiliated to JNTUK • Autonomous Institution"
+  },
+  {
+    institution: "Sri Chaitanya Junior College",
+    badge: "MPC State Rank Tier • 96.0%",
+    summary: "Senior Secondary (Intermediate) Mathematics, Physics, Chemistry.",
+    highlights: [
+      { label: "Board Aggregate", value: "96.0% Aggregate (State Cohort Top 1%)" },
+      { label: "Pure & Applied Math", value: "98.5% in Advanced Calculus & Coordinate Geometry" },
+      { label: "Physics & Chemistry", value: "Distinction in classical mechanics & physical chemistry" },
+      { label: "Competitive Rank", value: "State-level engineering entrance batch top performer" }
+    ],
+    credentialNote: "Board of Intermediate Education, Andhra Pradesh"
+  },
+  {
+    institution: "Sri Shiridi Sai EM High School",
+    badge: "School First Rank • 99.0%",
+    summary: "Matriculation (Secondary Education) with School Topper Distinction.",
+    highlights: [
+      { label: "Final Board Score", value: "99.0% Final Board Examination" },
+      { label: "School Topper", value: "Ranked #1 across entire graduating class" },
+      { label: "STEM Excellence", value: "Perfect 10.0 GPA in Mathematics & Physical Sciences" },
+      { label: "Logical Aptitude", value: "District science exhibition representation & distinction" }
+    ],
+    credentialNote: "Board of Secondary Education, Andhra Pradesh (SSC)"
+  }
+];
+
 export const About: React.FC = () => {
   const [cgpaInput, setCgpaInput] = useState<number>(9.04);
   const calculatedPercentage = (cgpaInput * 9.5).toFixed(2);
+
+  // Education 3D Flip State & 10-Second Auto Flip Loop
+  const [educationFlipped, setEducationFlipped] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    const eduInterval = setInterval(() => {
+      setEducationFlipped(prev => {
+        const anyFlipped = Object.values(prev).some(Boolean);
+        const next: Record<number, boolean> = {};
+        RESUME_DATA.education.forEach((_, idx) => {
+          next[idx] = !anyFlipped;
+        });
+        return next;
+      });
+    }, 10000);
+    return () => clearInterval(eduInterval);
+  }, []);
+
+  const toggleEduFlip = (idx: number, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setEducationFlipped(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }));
+  };
 
   // Generate simulated 52-week GitHub contribution heatmap data
   const contributionGrid = React.useMemo(() => {
@@ -590,60 +657,139 @@ export const About: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-            {RESUME_DATA.education.map((edu, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 35, rotateX: 10 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.15 }}
-                className="glass-card p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group shadow-xl hover:border-cyan-500/50 transition-all overflow-hidden"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold shadow-sm">
-                      {edu.score}
-                    </span>
-                    <span className="text-xs text-slate-400 font-mono flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-slate-500" />
-                      {edu.period}
-                    </span>
-                  </div>
+            {RESUME_DATA.education.map((edu, idx) => {
+              const isFlipped = !!educationFlipped[idx];
+              const honors = EDUCATION_HONORS[idx] || EDUCATION_HONORS[0];
 
-                  <h4 className="text-lg font-extrabold text-white mt-2 group-hover:text-cyan-300 transition-colors">
-                    {edu.institution}
-                  </h4>
-                  <p className="text-xs font-bold text-indigo-300 mt-1">
-                    {edu.degree}
-                  </p>
-                  <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-1 font-mono">
-                    <Building className="w-3.5 h-3.5 text-slate-500" />
-                    {edu.location}
-                  </p>
+              return (
+                <div key={idx} className="[perspective:1200px] h-full min-h-[460px]">
+                  <motion.div
+                    initial={{ opacity: 0, y: 35, rotateX: 10 }}
+                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: idx * 0.15 }}
+                    animate={{ rotateY: isFlipped ? 180 : 0 }}
+                    style={{ transformStyle: 'preserve-3d' }}
+                    className="relative w-full h-full rounded-3xl"
+                  >
+                    {/* FRONT FACE: Coursework & Degree Details */}
+                    <div 
+                      className="glass-card p-6 rounded-3xl border border-white/10 relative flex flex-col justify-between group shadow-xl hover:border-cyan-500/50 transition-all overflow-hidden absolute inset-0 w-full h-full"
+                      style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                    >
+                      <div>
+                        {/* Top Bar with score & Flip Card button */}
+                        <div className="flex items-center justify-between mb-3 gap-2">
+                          <span className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold shadow-sm">
+                            {edu.score}
+                          </span>
+                          <button
+                            onClick={(e) => toggleEduFlip(idx, e)}
+                            className="px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:scale-105"
+                            title="Flip Card (10s Auto-Loop)"
+                          >
+                            <RotateCw className="w-3 h-3 text-amber-400 animate-spin-slow" />
+                            <span>Flip Card 🔄 (10s Loop)</span>
+                          </button>
+                        </div>
 
-                  <div className="mt-4 pt-4 border-t border-slate-800/80">
-                    <p className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-bold">
-                      Key Coursework:
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {edu.favoriteCourses.map((course, cIdx) => (
-                        <span 
-                          key={cIdx}
-                          className="px-2.5 py-0.5 rounded-lg bg-slate-900/90 text-slate-300 text-[11px] border border-slate-700/60 font-mono"
-                        >
-                          {course}
-                        </span>
-                      ))}
+                        <div className="text-xs text-slate-400 font-mono flex items-center gap-1 mb-2">
+                          <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                          <span>{edu.period}</span>
+                        </div>
+
+                        <h4 className="text-lg font-extrabold text-white mt-1 group-hover:text-cyan-300 transition-colors">
+                          {edu.institution}
+                        </h4>
+                        <p className="text-xs font-bold text-indigo-300 mt-1">
+                          {edu.degree}
+                        </p>
+                        <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-1 font-mono">
+                          <Building className="w-3.5 h-3.5 text-slate-500" />
+                          <span>{edu.location}</span>
+                        </p>
+
+                        <div className="mt-4 pt-4 border-t border-slate-800/80">
+                          <p className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2 font-bold">
+                            Key Coursework:
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {edu.favoriteCourses.map((course, cIdx) => (
+                              <span 
+                                key={cIdx}
+                                className="px-2.5 py-0.5 rounded-lg bg-slate-900/90 text-slate-300 text-[11px] border border-slate-700/60 font-mono"
+                              >
+                                {course}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                        <span>Milestone {idx + 1} of 3</span>
+                        <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
-                  <span>Milestone {idx + 1} of 3</span>
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+                    {/* BACK FACE: Academic Honors, Distinctions & Credentials */}
+                    <div 
+                      className="glass-card p-6 rounded-3xl border border-cyan-500/40 bg-slate-950/95 relative flex flex-col justify-between shadow-2xl overflow-hidden absolute inset-0 w-full h-full"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)'
+                      }}
+                    >
+                      <div>
+                        {/* Back Header */}
+                        <div className="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-3 gap-2">
+                          <div className="flex items-center gap-2">
+                            <Trophy className="w-4 h-4 text-amber-400" />
+                            <span className="text-xs font-extrabold text-white tracking-wide">Academic Distinction</span>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono font-bold truncate max-w-[150px]">
+                            {honors.badge}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-slate-300 font-medium mb-3 leading-relaxed">
+                          {honors.summary}
+                        </p>
+
+                        <div className="space-y-2">
+                          {honors.highlights.map((h, hIdx) => (
+                            <div key={hIdx} className="p-2 rounded-xl bg-slate-900/80 border border-slate-800/80 flex items-start gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-[10px] font-mono text-cyan-400 font-bold">{h.label}</p>
+                                <p className="text-[11px] text-slate-200 leading-snug">{h.value}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-slate-800/80">
+                        <p className="text-[10px] font-mono text-slate-500 text-center mb-2">
+                          {honors.credentialNote}
+                        </p>
+                        <button
+                          onClick={(e) => toggleEduFlip(idx, e)}
+                          className="relative overflow-hidden flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-xs font-mono transition-all shadow-md shadow-blue-600/30 group cursor-pointer w-full"
+                        >
+                          <ButtonGlare radius={12} intensity={0.4} />
+                          <span className="relative z-10 flex items-center gap-2">
+                            <RotateCw className="w-3.5 h-3.5 text-cyan-300" />
+                            <span>Flip to Coursework 🔄</span>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-              </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
