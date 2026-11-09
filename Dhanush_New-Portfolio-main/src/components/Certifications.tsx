@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   Award, 
@@ -40,6 +40,21 @@ export const Certifications: React.FC = () => {
   const toggleFlip = (index: number) => {
     setFlippedCards(prev => ({ ...prev, [index]: !prev[index] }));
   };
+
+  // 10-Second Continuous Auto Flip Loop for all Certification Cards
+  useEffect(() => {
+    const flipInterval = setInterval(() => {
+      setFlippedCards((prev) => {
+        const anyFlipped = Object.values(prev).some(Boolean);
+        const next: Record<number, boolean> = {};
+        filteredCerts.forEach((_, idx) => {
+          next[idx] = !anyFlipped;
+        });
+        return next;
+      });
+    }, 10000);
+    return () => clearInterval(flipInterval);
+  }, [filteredCerts.length]);
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { 
   Code2, 
@@ -301,12 +301,27 @@ const Interactive3DTiltCard: React.FC<{
 };
 
 export const CodingProfiles: React.FC = () => {
-  const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const toggleFlip = (id: string) => {
-    setFlippedCardId((prev) => (prev === id ? null : id));
+    setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  // 10-Second Continuous Auto Flip Loop for all Coding Profile Cards
+  useEffect(() => {
+    const flipInterval = setInterval(() => {
+      setFlippedCards((prev) => {
+        const anyFlipped = Object.values(prev).some(Boolean);
+        const next: Record<string, boolean> = {};
+        RESUME_DATA.codingProfiles.forEach((p) => {
+          next[p.id] = !anyFlipped;
+        });
+        return next;
+      });
+    }, 10000);
+    return () => clearInterval(flipInterval);
+  }, []);
 
   const handleCopy = (url: string, id: string) => {
     navigator.clipboard.writeText(url);
@@ -378,7 +393,7 @@ export const CodingProfiles: React.FC = () => {
             <Interactive3DTiltCard
               key={profile.id}
               profile={profile}
-              isFlipped={flippedCardId === profile.id}
+              isFlipped={!!flippedCards[profile.id]}
               onToggleFlip={() => toggleFlip(profile.id)}
               onCopyUrl={handleCopy}
               copiedId={copiedId}

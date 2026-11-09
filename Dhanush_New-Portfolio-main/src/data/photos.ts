@@ -11,11 +11,21 @@ export interface PhotoItem {
   aspectRatio: string;
 }
 
+const dhanush_suit = `/dhanush_suit.jpg`;
 const dhanush_image4 = `/image 4.png`;
 const dhanush_photo_png = `/Dhanush_Gopi.png`;
 const dhanush_photo_svg = `/image9.png`;
 
 export const PORTFOLIO_PHOTOS: PhotoItem[] = [
+  {
+    id: "suit",
+    title: "Executive Portrait",
+    tagline: "Navy Blazer & Glasses",
+    url: dhanush_suit,
+    fallbackUrl: dhanush_photo_png,
+    caption: "Dhanush Gopi Kavala - Software Engineer & Full Stack Developer",
+    aspectRatio: "1:1"
+  },
   {
     id: "fullbody",
     title: "Standing Portrait",

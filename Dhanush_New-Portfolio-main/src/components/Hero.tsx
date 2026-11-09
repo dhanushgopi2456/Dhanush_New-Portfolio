@@ -148,6 +148,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
     return () => clearInterval(timer);
   }, []);
 
+  // Continuous Photo Carousel Loop Animation (Cycles every 4 seconds)
+  useEffect(() => {
+    if (isPhotoFlipped) return;
+    const photoLoopTimer = setInterval(() => {
+      setActivePhotoIndex((prev) => (prev + 1) % PORTFOLIO_PHOTOS.length);
+    }, 4000);
+    return () => clearInterval(photoLoopTimer);
+  }, [isPhotoFlipped]);
+
+  // Continuous Auto Flip Loop: Flips card every 10 seconds
+  useEffect(() => {
+    const autoFlipTimer = setInterval(() => {
+      setIsPhotoFlipped((prev) => !prev);
+    }, 10000);
+    return () => clearInterval(autoFlipTimer);
+  }, []);
+
   const currentPhoto = PORTFOLIO_PHOTOS[activePhotoIndex];
 
   const handleToggleAudio = () => {
@@ -461,20 +478,27 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                       }}
                     />
 
-                    {/* Photo Frame */}
+                    {/* Photo Frame with Animated Loop Motion */}
                     <div className="relative flex-1 w-full rounded-2xl overflow-hidden bg-slate-950/90 border border-slate-800/80 flex items-center justify-center p-1">
-                      <img
-                        src={currentPhoto.url}
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = currentPhoto.fallbackUrl;
-                        }}
-                        alt={currentPhoto.caption}
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full rounded-xl transition-all duration-700 object-cover object-[center_5%] scale-100 sm:scale-105 group-hover:scale-110"
-                      />
+                      <AnimatePresence mode="wait">
+                        <motion.img
+                          key={currentPhoto.id}
+                          src={currentPhoto.url}
+                          initial={{ opacity: 0, scale: 0.94, filter: 'blur(4px)' }}
+                          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                          exit={{ opacity: 0, scale: 1.05, filter: 'blur(4px)' }}
+                          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = currentPhoto.fallbackUrl;
+                          }}
+                          alt={currentPhoto.caption}
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full rounded-xl object-cover object-[center_12%]"
+                        />
+                      </AnimatePresence>
 
                       {/* Holographic Glare Overlay */}
-                      <div className="absolute inset-0 holographic-foil opacity-30 group-hover:opacity-60 transition-opacity" />
+                      <div className="absolute inset-0 holographic-foil opacity-30 group-hover:opacity-60 transition-opacity pointer-events-none" />
 
                       {/* Subtle Vignette Gradient */}
                       <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent pointer-events-none" />
@@ -487,8 +511,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                           onClick={() => setIsPhotoFlipped(true)}
                           className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/50 text-amber-300 text-[11px] font-mono font-bold backdrop-blur-md flex items-center gap-1.5 transition-all shadow-lg"
                         >
-                          <RotateCw className="w-3.5 h-3.5" />
-                          <span>Flip Card 🔄</span>
+                          <RotateCw className="w-3.5 h-3.5 animate-spin-slow" />
+                          <span>Flip Card 🔄 (10s Loop)</span>
                         </motion.button>
 
                         <div className="px-3 py-1 rounded-full bg-slate-950/90 border border-cyan-500/50 text-[11px] font-bold text-cyan-300 backdrop-blur-md flex items-center gap-1.5 shadow-md">
@@ -500,11 +524,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                       {/* Title Banner Overlay */}
                       <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-slate-950/85 border border-white/10 backdrop-blur-xl shadow-xl">
                         <div>
-                          <p className="text-xs font-extrabold text-white tracking-wide">
-                            Dhanush Gopi Kavala
-                          </p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-xs font-extrabold text-white tracking-wide">
+                              Dhanush Gopi Kavala
+                            </p>
+                            <span className="text-[10px] font-mono text-cyan-300 font-bold bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
+                              {currentPhoto.title}
+                            </span>
+                          </div>
                           <p className="text-[11px] text-cyan-400 font-mono">
-                            Software Engineer & Full Stack Developer
+                            {currentPhoto.tagline || 'Software Engineer & Full Stack Developer'}
                           </p>
                         </div>
                       </div>
@@ -512,9 +541,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
 
                     {/* Photo Switcher Bar */}
                     <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between px-1">
-                      <div className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
-                        <Camera className="w-3.5 h-3.5 text-blue-400" />
-                        <span>Asset Switcher:</span>
+                      <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
+                        <Camera className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                        <span>Asset Loop ({activePhotoIndex + 1}/{PORTFOLIO_PHOTOS.length}):</span>
                       </div>
                       
                       <div className="flex items-center gap-1.5">
@@ -524,7 +553,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPdfModal, onOpenAiDrawer, onEx
                             onClick={() => setActivePhotoIndex(index)}
                             className={`w-8 h-8 rounded-lg overflow-hidden border transition-all ${
                               activePhotoIndex === index 
-                                ? 'border-cyan-400 scale-110 shadow-lg shadow-cyan-500/40 ring-1 ring-cyan-400' 
+                                ? 'border-cyan-400 scale-110 shadow-lg shadow-cyan-500/40 ring-2 ring-cyan-400' 
                                 : 'border-slate-700 opacity-60 hover:opacity-100'
                             }`}
                             title={photo.title}
